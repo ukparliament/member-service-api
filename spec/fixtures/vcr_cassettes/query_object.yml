@@ -1,0 +1,57 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://51.140.190.95/repositories/IngestTest
+    body:
+      encoding: US-ASCII
+      string: query=%0A++++++++++PREFIX+parl%3A+%3Chttp%3A%2F%2Fid.ukpds.org%2Fschema%2F%3E%0A++++++++++PREFIX+schema%3A+%3Chttp%3A%2F%2Fschema.org%2F%3E%0A++++++++++PREFIX+xsd%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A++++++++++CONSTRUCT+%7B%0A++++++++++++++%3Fperson%0A++++++++++++++++++parl%3Aforename+%3Fforename+%3B%0A++++++++++++++++++parl%3AmiddleName+%3FmiddleName+%3B%0A++++++++++++++++++parl%3Asurname+%3Fsurname+.%0A++++++++++%7D%0A++++++++++where+%7B%0A++++++++++++%3Fperson%0A++++++++++++++++++a+schema%3APerson+%3B%0A++++++++++++++++++parl%3AdateOfBirth+%271925-02-28%27%5E%5Exsd%3Adate+%3B%0A++++++++++++++++++parl%3Aforename+%3Fforename+%3B%0A++++++++++++++++++parl%3AmiddleName+%3FmiddleName+%3B%0A++++++++++++++++++parl%3Asurname+%3Fsurname+.%0A+++++++++%7D
+    headers:
+      Accept:
+      - text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, application/n-triples,
+        text/plain, */*;q=0.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - 120
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - Apache-Coyote/1.1
+      Pragma:
+      - no-cache
+      Expires:
+      - Thu, 01 Jan 1970 00:00:00 GMT
+      Cache-Control:
+      - no-cache
+      - no-store
+      Vary:
+      - Accept
+      Content-Disposition:
+      - attachment; filename=query-result.nt
+      Content-Type:
+      - application/n-triples;charset=UTF-8
+      Content-Language:
+      - en-US
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Tue, 01 Nov 2016 15:04:21 GMT
+    body:
+      encoding: UTF-8
+      string: |
+        <http://id.ukpds.org/00c50187-a32d-43b3-b0b5-5f68a03a2b68> <http://id.ukpds.org/schema/forename> "Micheal" .
+        <http://id.ukpds.org/00c50187-a32d-43b3-b0b5-5f68a03a2b68> <http://id.ukpds.org/schema/middleName> "Edward" .
+        <http://id.ukpds.org/00c50187-a32d-43b3-b0b5-5f68a03a2b68> <http://id.ukpds.org/schema/surname> "Joicey" .
+    http_version: 
+  recorded_at: Tue, 01 Nov 2016 15:04:31 GMT
+recorded_with: VCR 3.0.3

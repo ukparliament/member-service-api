@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::API
+  include FormatHelper
+  include ActionController::MimeResponds
   def index
-    render json: {test: MemberServiceApi::Application.config.data_endpoint }
+    render json: {test: DATA_ENDPOINT }
   end
 end
