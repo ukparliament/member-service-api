@@ -1,7 +1,6 @@
 module FormatHelper
   def format(data)
     respond_to do |format|
-      format.rdf { render data }
       format.ttl { render :plain => convert_to_ttl(data)}
     end
   end
