@@ -9,8 +9,8 @@ describe 'PersonQueryObject' do
       VCR.insert_cassette("people_all")
     end
 
-    it 'returns 16911 statements' do
-      expect(result.count).to eq 16911
+    it 'returns 16910 statements' do
+      expect(result.count).to eq 16910
     end
 
     after(:each) do
