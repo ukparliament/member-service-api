@@ -9,20 +9,41 @@ class PersonQueryObject
               CONSTRUCT {
                 ?person
                   parl:forename ?forename ;
-                      parl:middleName ?middleName ;
-                      parl:surname ?surname ;
-                      parl:dateOfBirth ?dateOfBirth .
+                  parl:middleName ?middleName ;
+                  parl:surname ?surname ;
               }
               WHERE {
                 ?person
                   a schema:Person .
-                      OPTIONAL { ?person parl:forename ?forename . }
+                    OPTIONAL { ?person parl:forename ?forename } .
                     OPTIONAL { ?person parl:middleName ?middleName } .
                     OPTIONAL { ?person parl:surname ?surname } .
-                    OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth . }
                     OPTIONAL { ?person parl:middleName ?middleName } .
               }'
     )
+  end
+
+  def self.find(id)
+    self.query("
+               PREFIX parl: <http://id.ukpds.org/schema/>
+                PREFIX schema: <http://schema.org/>
+                CONSTRUCT {
+                    ?person
+                        parl:dateOfBirth ?dateOfBirth ;
+                        parl:forename ?forename ;
+                        parl:middleName ?middleName ;
+                        parl:surname ?surname .
+                }
+                where {
+                  ?person
+                        a schema:Person ;
+                        OPTIONAL { ?person parl:forename ?forename } .
+                      OPTIONAL { ?person parl:middleName ?middleName } .
+                      OPTIONAL { ?person parl:surname ?surname } .
+                      OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
+                    FILTER (?person = <http://id.ukpds.org/#{id}> )
+                }
+                ")
   end
 
 end
