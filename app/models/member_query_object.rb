@@ -1,4 +1,6 @@
 class MemberQueryObject
+  extend QueryObject
+
   def self.all
     self.query('
       PREFIX parl: <http://id.ukpds.org/schema/>
