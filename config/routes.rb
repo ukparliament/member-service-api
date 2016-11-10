@@ -5,5 +5,9 @@ Rails.application.routes.draw do
 
   get 'index', to: 'application#index', as: :index
 
-  resources :people, only: [:index, :show]
+  resources :people, only: [:index, :show] do
+    resources :members, only: [:index] do
+      get '/current(.:format)', to: 'members#current', as: 'members_current'
+    end
+  end
 end
