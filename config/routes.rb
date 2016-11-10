@@ -6,4 +6,6 @@ Rails.application.routes.draw do
   get 'index', to: 'application#index', as: :index
 
   resources :people, only: [:index, :show]
+
+  resources :contact_points, only: [:index, :show]
 end
