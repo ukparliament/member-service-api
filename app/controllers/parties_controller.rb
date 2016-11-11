@@ -16,13 +16,13 @@ class PartiesController < ApplicationController
   end
 
   def all_members
-    id = params[:id]
+    id = params[:party_id]
     data = PartyQueryObject.all_members(id)
     format(data)
   end
 
   def all_current_members
-    id = params[:id]
+    id = params[:party_id]
     data = PartyQueryObject.all_current_members(id)
     format(data)
   end
