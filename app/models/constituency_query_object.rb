@@ -101,7 +101,7 @@ class ConstituencyQueryObject
       WHERE {
     	  ?constituency parl:constituencyHasSeat ?seat .
     	  ?seat parl:seatHasSitting ?sitting .
-    	  MINUS { ?sitting a parl:PastSitting . }
+    	  FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
     	  ?sitting parl:sittingHasPerson ?member .
         OPTIONAL { ?sitting parl:endDate ?endDate . }
         OPTIONAL { ?sitting parl:startDate ?startDate . }
