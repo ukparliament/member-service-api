@@ -42,4 +42,61 @@ class PersonQueryObject
     ")
   end
 
+  def self.constituencies(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+        ?sitting parl:sittingStartDate ?sittingStartDate ;
+        		      parl:sittingEndDate ?sittingEndDate ;
+      	          parl:sittingHasSeat ?seat .
+    	  ?constituency parl:constituencyName ?constituencyName ;
+        		          parl:constituencyStartDate ?constituencyStartDate ;
+        		          parl:constituencyEndDate ?constituencyEndDate ;
+    				          parl:constituencyHasSeat ?seat .
+      }
+      WHERE {
+    	  ?member parl:personHasSitting ?sitting .
+    	  ?sitting parl:sittingHasSeat ?seat .
+    	  ?seat parl:seatHasConstituency ?constituency .
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?constituency parl:constituencyName ?name . }
+        OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
+		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
+
+        FILTER(?member=<http://id.ukpds.org/#{id}>)
+      }
+    ")
+  end
+
+  def self.current_constituencies(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+        ?sitting parl:sittingStartDate ?sittingStartDate ;
+        		      parl:sittingEndDate ?sittingEndDate ;
+      	          parl:sittingHasSeat ?seat .
+    	  ?constituency parl:constituencyName ?constituencyName ;
+        		          parl:constituencyStartDate ?constituencyStartDate ;
+        		          parl:constituencyEndDate ?constituencyEndDate ;
+    				          parl:constituencyHasSeat ?seat .
+      }
+      WHERE {
+    	  ?member parl:personHasSitting ?sitting .
+    	  ?sitting parl:sittingHasSeat ?seat .
+    	  MINUS { ?sitting a parl:PastSitting . }
+    	  ?seat parl:seatHasConstituency ?constituency .
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?constituency parl:constituencyName ?name . }
+        OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
+		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
+
+        FILTER(?member=<http://id.ukpds.org/#{id}>)
+      }
+    ")
+  end
+
 end

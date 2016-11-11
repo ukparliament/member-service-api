@@ -4,12 +4,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   get 'index', to: 'application#index', as: :index
+
   get '/people/members', to: 'members#index'
   get '/people/members/current', to: 'members#current'
-
   resources :people, only: [:index, :show] do
-    get '/constituencies', to: 'constituencies#people'
-    get '/constituencies/current', to: 'current_constituencies#people'
+    get '/constituencies', to: 'people#constituencies'
+    get '/constituencies/current', to: 'people#current_constituencies'
   end
 
   resources :contact_points, only: [:index, :show]
