@@ -45,4 +45,28 @@ class PartyQueryObject
     ")
   end
 
+
+  def self.all_current_members(id)
+    self.query("
+                PREFIX parl: <http://id.ukpds.org/schema/>
+                CONSTRUCT {
+                   ?member
+                           parl:forename ?forename ;
+                           parl:middleName ?middleName ;
+                           parl:surname ?surname ;
+                }
+
+                WHERE {
+                    ?party parl:partyHasPartyMembership ?partyMembership .
+                    ?partyMembership parl:partyMembershipHasPerson ?member .
+                    ?member
+                          a parl:Member .
+                            OPTIONAL { ?member parl:forename ?forename } .
+                            OPTIONAL { ?member parl:middleName ?middleName } .
+                            OPTIONAL { ?member parl:surname ?surname } .
+                    FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
+                }
+               ")
+  end
+
 end

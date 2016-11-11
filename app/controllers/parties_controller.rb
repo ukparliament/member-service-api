@@ -14,4 +14,16 @@ class PartiesController < ApplicationController
     data = PartyQueryObject.find(id)
     format(data)
   end
+
+  def all_members
+    id = params[:id]
+    data = PartyQueryObject.all_members(id)
+    format(data)
+  end
+
+  def all_current_members
+    id = params[:id]
+    data = PartyQueryObject.all_current_members(id)
+    format(data)
+  end
 end

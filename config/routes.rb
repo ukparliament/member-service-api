@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get '/people/members', to: 'members#index'
   get '/people/members/current', to: 'members#current'
   get '/parties/current', to: 'parties#current'
+  get '/parties/:party_id/members', to: 'parties#all_members'
+  get '/parties/:party_id/members/current', to: 'parties#all_current_members'
 
   resources :people, only: [:index, :show]
 
