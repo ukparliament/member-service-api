@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   resources :people, only: [:index, :show]
 
   resources :contact_points, only: [:index, :show]
+
+  resources :parties, only: [:index, :show]
 end
