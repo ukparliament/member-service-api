@@ -33,7 +33,7 @@ class PersonQueryObject
               parl:surname ?surname .
       }
       WHERE {
-        ?person a parl:Person .
+        ?person a schema:Person .
         OPTIONAL { ?person parl:forename ?forename } .
         OPTIONAL { ?person parl:middleName ?middleName } .
         OPTIONAL { ?person parl:surname ?surname } .
