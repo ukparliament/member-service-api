@@ -20,8 +20,8 @@ Rails.application.routes.draw do
   resources :contact_points, only: [:index, :show]
 
   resources :parties, only: [:index, :show] do
-    get 'members', to: 'parties#all_members'
-    get 'members/current', to: 'parties#all_current_members'
+    get 'members', to: 'parties#members'
+    get 'members/current', to: 'parties#current_members'
   end
 
   resources :constituencies, only: [:index, :show] do

@@ -15,15 +15,15 @@ class PartiesController < ApplicationController
     format(data)
   end
 
-  def all_members
+  def members
     id = params[:party_id]
-    data = PartyQueryObject.all_members(id)
+    data = PartyQueryObject.members(id)
     format(data)
   end
 
-  def all_current_members
+  def current_members
     id = params[:party_id]
-    data = PartyQueryObject.all_current_members(id)
+    data = PartyQueryObject.current_members(id)
     format(data)
   end
 end
