@@ -24,9 +24,9 @@ class PartyQueryObject
 
                 WHERE {
                     ?partyMembership a parl:PartyMembership .
-                    MINUS { ?partyMembership a parl:PastPartyMembership . }
-                    ?partyMembeship parl:partyMembershipHasParty ?party .
-                    ?party parl:partyName ?partyName .
+                    FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+                    OPTIONAL { ?partyMembership parl:partyMembershipHasParty ?party . }
+                    OPTIONAL { ?party parl:partyName ?partyName . }
                 }
                ')
   end
