@@ -37,7 +37,7 @@ class PersonQueryObject
         OPTIONAL { ?person parl:middleName ?middleName } .
         OPTIONAL { ?person parl:surname ?surname } .
         OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
-        FILTER (?person = <http://id.ukpds.org/#{id}> )
+        FILTER (?person = <#{DATA_URI_PREFIX}/#{id}> )
       }
     ")
   end
@@ -65,7 +65,7 @@ class PersonQueryObject
         OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
 		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
 
-        FILTER(?member=<http://id.ukpds.org/#{id}>)
+        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -94,7 +94,7 @@ class PersonQueryObject
         OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
 		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
 
-        FILTER(?member=<http://id.ukpds.org/#{id}>)
+        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end

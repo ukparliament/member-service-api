@@ -31,13 +31,14 @@ class ConstituencyQueryObject
           			parl:constituencyLongitude ?longitude .
       }
       WHERE {
+          ?constituency a parl:Constituency .
           OPTIONAL { ?constituency parl:constituencyEndDate ?endDate . }
           OPTIONAL { ?constituency parl:constituencyStartDate ?startDate . }
           OPTIONAL { ?constituency parl:constituencyName ?name . }
           OPTIONAL { ?constituency parl:constituencyLatitude ?latitude . }
           OPTIONAL { ?constituency parl:constituencyLongitude ?longitude . }
 
-          FILTER(?constituency=<http://id.ukpds.org/#{id}>)
+          FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -82,7 +83,7 @@ class ConstituencyQueryObject
         OPTIONAL { ?member parl:middleName ?middleName . }
         OPTIONAL { ?member parl:surname ?surname . }
 
-        FILTER(?constituency=<http://id.ukpds.org/#{id}>)
+        FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -109,7 +110,7 @@ class ConstituencyQueryObject
         OPTIONAL { ?member parl:middleName ?middleName . }
 		    OPTIONAL { ?member parl:surname ?surname . }
 
-        FILTER(?constituency=<http://id.ukpds.org/#{id}>)
+        FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
