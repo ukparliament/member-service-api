@@ -5,13 +5,17 @@ Rails.application.routes.draw do
 
   get 'index', to: 'application#index', as: :index
 
+  get '/people/members', to: 'members#index'
+  get '/people/members/current', to: 'members#current'
+
+  get '/constituencies/current', to: 'constituencies#current'
+
+  get '/parties/current', to: 'parties#current'
+
   resources :people, only: [:index, :show] do
     get '/constituencies', to: 'people#constituencies'
     get '/constituencies/current', to: 'people#current_constituencies'
   end
-
-  get '/people/members', to: 'members#index'
-  get '/people/members/current', to: 'members#current'
 
   resources :contact_points, only: [:index, :show]
 
@@ -20,13 +24,9 @@ Rails.application.routes.draw do
     get 'members/current', to: 'parties#all_current_members'
   end
 
-  get '/parties/current', to: 'parties#current'
-
   resources :constituencies, only: [:index, :show] do
     get '/members', to: 'constituencies#members'
     get '/members/current', to: 'constituencies#current_members'
   end
-
-  get '/constituencies/current', to: 'constituencies#current'
 
 end
