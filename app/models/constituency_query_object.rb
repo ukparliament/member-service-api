@@ -67,10 +67,12 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?sitting parl:startDate ?startDate ;
+          ?sitting a parl:Sitting ;
+                  parl:startDate ?startDate ;
         			     parl:endDate ?endDate ;
                     parl:sittingHasPerson ?member .
-    	    ?member parl:forename ?forename ;
+    	    ?member a parl:Member ;
+                  parl:forename ?forename ;
     			        parl:middleName ?middleName ;
         		      parl:surname ?surname .
       }
