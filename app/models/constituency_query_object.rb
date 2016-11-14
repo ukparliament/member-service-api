@@ -68,7 +68,8 @@ class ConstituencyQueryObject
 
       CONSTRUCT{
           ?sitting parl:startDate ?startDate ;
-        			     parl:endDate ?endDate .
+        			     parl:endDate ?endDate ;
+                    parl:sittingHasPerson ?member .
     	    ?member parl:forename ?forename ;
     			        parl:middleName ?middleName ;
         		      parl:surname ?surname .
