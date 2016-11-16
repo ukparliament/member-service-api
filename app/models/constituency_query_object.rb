@@ -68,8 +68,8 @@ class ConstituencyQueryObject
 
       CONSTRUCT{
           ?sitting a parl:Sitting ;
-                  parl:startDate ?startDate ;
-        			     parl:endDate ?endDate ;
+                  parl:startDate ?sittingStartDate ;
+        			     parl:endDate ?sittingEndDate ;
                     parl:sittingHasPerson ?member .
     	    ?member a parl:Member ;
                   parl:forename ?forename ;
@@ -80,8 +80,8 @@ class ConstituencyQueryObject
     	  ?constituency parl:constituencyHasSeat ?seat .
     	  ?seat parl:seatHasSitting ?sitting .
     	  ?sitting parl:sittingHasPerson ?member .
-        OPTIONAL { ?sitting parl:endDate ?endDate . }
-        OPTIONAL { ?sitting parl:startDate ?startDate . }
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
         OPTIONAL { ?member parl:forename ?forename . }
         OPTIONAL { ?member parl:middleName ?middleName . }
         OPTIONAL { ?member parl:surname ?surname . }
