@@ -101,4 +101,29 @@ class PersonQueryObject
     ")
   end
 
+  def self.contact_points(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?contactPoint parl:email ?email ;
+        			parl:telephone ?telephone ;
+        			parl:faxNumber ?faxNumber ;
+        			parl:streetAddress ?streetAddress ;
+        			parl:addressLocality ?addressLocality ;
+        			parl:postalCode ?postalCode .
+      }
+      WHERE {
+	      ?member parl:personHasSitting ?sitting .
+        ?sitting parl:sittingHasContactPoint ?contactPoint .
+        OPTIONAL{ ?contactPoint parl:email ?email . }
+        OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
+        OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+        OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
+        OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
+        OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
+
+        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
+      }
+    ")
+  end
 end
