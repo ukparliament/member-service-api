@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :people, only: [:index, :show] do
     get '/constituencies', to: 'people#constituencies'
     get '/constituencies/current', to: 'people#current_constituencies'
+    get '/parties', to: 'people#parties'
   end
 
   resources :contact_points, only: [:index, :show]

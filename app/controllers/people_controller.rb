@@ -21,4 +21,10 @@ class PeopleController < ApplicationController
     data = PersonQueryObject.current_constituencies(person_id)
     format(data)
   end
+
+  def parties
+    person_id = params[:person_id]
+    data = PersonQueryObject.parties(person_id)
+    format(data)
+  end
 end
