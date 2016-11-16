@@ -50,7 +50,8 @@ class PersonQueryObject
       CONSTRUCT {
         ?sitting a parl:Sitting ;
                   parl:sittingStartDate ?sittingStartDate ;
-        		      parl:sittingEndDate ?sittingEndDate .
+        		      parl:sittingEndDate ?sittingEndDate ;
+                  parl:sittingHasConstituency ?constituency .
     	  ?constituency a parl:Constituency ;
                       parl:constituencyName ?constituencyName ;
         		          parl:constituencyStartDate ?constituencyStartDate ;
