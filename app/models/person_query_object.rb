@@ -62,7 +62,7 @@ class PersonQueryObject
     	  ?seat parl:seatHasConstituency ?constituency .
         OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        OPTIONAL { ?constituency parl:constituencyName ?name . }
+        OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
         OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
 		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
 
