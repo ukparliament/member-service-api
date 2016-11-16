@@ -48,13 +48,13 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-        ?sitting parl:sittingStartDate ?sittingStartDate ;
-        		      parl:sittingEndDate ?sittingEndDate ;
-      	          parl:sittingHasSeat ?seat .
-    	  ?constituency parl:constituencyName ?constituencyName ;
+        ?sitting a parl:Sitting ;
+                  parl:sittingStartDate ?sittingStartDate ;
+        		      parl:sittingEndDate ?sittingEndDate .
+    	  ?constituency a parl:Constituency ;
+                      parl:constituencyName ?constituencyName ;
         		          parl:constituencyStartDate ?constituencyStartDate ;
-        		          parl:constituencyEndDate ?constituencyEndDate ;
-    				          parl:constituencyHasSeat ?seat .
+        		          parl:constituencyEndDate ?constituencyEndDate .
       }
       WHERE {
     	  ?member parl:personHasSitting ?sitting .
