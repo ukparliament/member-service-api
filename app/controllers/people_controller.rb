@@ -28,6 +28,12 @@ class PeopleController < ApplicationController
     format(data)
   end
 
+  def current_parties
+    person_id = params[:person_id]
+    data = PersonQueryObject.current_parties(person_id)
+    format(data)
+  end
+
   def contact_points
     person_id = params[:person_id]
     data = PersonQueryObject.contact_points(person_id)

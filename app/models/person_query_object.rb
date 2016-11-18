@@ -124,6 +124,28 @@ class PersonQueryObject
     ")
   end
 
+  def self.current_parties(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+        ?partyMembership a parl:PartyMembership ;
+                  parl:partyMembershipStartDate ?partyMembershipStartDate ;
+                  parl:partyMembershipHasParty ?party .
+    	  ?party a parl:Party ;
+                      parl:partyName ?partyName .
+      }
+      WHERE {
+    	  ?member parl:personHasPartyMembership ?partyMembership .
+    	  ?partyMembership parl:partyMembershipHasParty ?party .
+    		FILTER NOT EXISTS { ?partyMembership a parl:PastThing . }
+        	OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
+        	OPTIONAL { ?party parl:partyName ?partyName . }
+        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
+      }
+    ")
+  end
+
   def self.contact_points(id)
     self.query("
       PREFIX parl: <http://id.ukpds.org/schema/>

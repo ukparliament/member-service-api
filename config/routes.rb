@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get '/constituencies/current', to: 'people#current_constituencies'
 
     get '/parties', to: 'people#parties'
+    get '/parties/current', to: 'people#current_parties'
 
     get '/contact_points',to: 'people#contact_points'
   end
