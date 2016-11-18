@@ -117,4 +117,31 @@ class ConstituencyQueryObject
       }
     ")
   end
+
+  def self.contact_point(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?contactPoint parl:email ?email ;
+        			parl:telephone ?telephone ;
+        			parl:faxNumber ?faxNumber ;
+        			parl:streetAddress ?streetAddress ;
+        			parl:addressLocality ?addressLocality ;
+        			parl:postalCode ?postalCode .
+      }
+
+      WHERE {
+      	?constituency parl:constituencyHasConstituencyParty ?constituencyParty .
+        ?constituencyParty parl:constituencyPartyHasContactPoint ?contactPoint .
+        OPTIONAL{ ?contactPoint parl:email ?email . }
+        OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
+        OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+        OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
+        OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
+        OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
+
+      	FILTER(?constituency = <#{DATA_URI_PREFIX}/#{id}>)
+      }
+    ")
+  end
 end
