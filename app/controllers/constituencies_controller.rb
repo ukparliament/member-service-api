@@ -26,4 +26,10 @@ class ConstituenciesController < ApplicationController
     data = ConstituencyQueryObject.current_members(constituency_id)
     format(data)
   end
+
+  def contact_point
+    constituency_id = params[:constituency_id]
+    data = ConstituencyQueryObject.contact_point(constituency_id)
+    format(data)
+  end
 end
