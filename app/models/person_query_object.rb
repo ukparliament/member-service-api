@@ -25,12 +25,14 @@ class PersonQueryObject
     self.query("
       PREFIX parl: <http://id.ukpds.org/schema/>
       PREFIX schema: <http://schema.org/>
+      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       CONSTRUCT {
           ?person
               parl:dateOfBirth ?dateOfBirth ;
               parl:forename ?forename ;
               parl:middleName ?middleName ;
-              parl:surname ?surname .
+              parl:surname ?surname ;
+              parl:gender ?gender .
       }
       WHERE {
         ?person a schema:Person .
@@ -38,6 +40,9 @@ class PersonQueryObject
         OPTIONAL { ?person parl:middleName ?middleName } .
         OPTIONAL { ?person parl:surname ?surname } .
         OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
+          ?gender rdfs:subClassOf parl:HasGender .
+          ?person a ?gender .
+          FILTER NOT EXISTS { ?gender rdfs:seeAlso schema:GenderType } .
         FILTER (?person = <#{DATA_URI_PREFIX}/#{id}> )
       }
     ")
