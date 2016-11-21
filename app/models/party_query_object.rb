@@ -49,10 +49,14 @@ class PartyQueryObject
     self.query("
                 PREFIX parl: <http://id.ukpds.org/schema/>
                 CONSTRUCT {
-                   ?member
+                   ?member a parl:Member ;
                            parl:forename ?forename ;
                            parl:middleName ?middleName ;
-                           parl:surname ?surname ;
+                           parl:surname ?surname .
+                  ?partyMembership a parl:PartyMembership ;
+                           parl:partyMembershipStartDate ?partyMembershipStartDate ;
+                           parl:partyMembershipEndDate ?partyMembershipEndDate ;
+                           parl:partyMembershipHasParty ?party .
                 }
 
                 WHERE {
