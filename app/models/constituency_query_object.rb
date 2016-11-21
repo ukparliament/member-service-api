@@ -28,7 +28,8 @@ class ConstituencyQueryObject
           			parl:constituencyStartDate ?startDate ;
          				parl:constituencyName ?name ;
           			parl:constituencyLatitude ?latitude ;
-          			parl:constituencyLongitude ?longitude .
+          			parl:constituencyLongitude ?longitude ;
+        			  parl:constituencyExtent ?polygon .
       }
       WHERE {
           ?constituency a parl:Constituency .
@@ -37,6 +38,7 @@ class ConstituencyQueryObject
           OPTIONAL { ?constituency parl:constituencyName ?name . }
           OPTIONAL { ?constituency parl:constituencyLatitude ?latitude . }
           OPTIONAL { ?constituency parl:constituencyLongitude ?longitude . }
+    	    OPTIONAL { ?constituency parl:constituencyExtent ?polygon . }
 
           FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
