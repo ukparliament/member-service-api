@@ -80,7 +80,7 @@ class PartyQueryObject
                    ?member a parl:Member ;
                            parl:forename ?forename ;
                            parl:middleName ?middleName ;
-                           parl:surname ?surname ;
+                           parl:surname ?surname .
                    ?partyMembership a parl:PartyMembership ;
                            parl:partyMembershipStartDate ?partyMembershipStartDate ;
                            parl:partyMembershipHasParty ?member .
