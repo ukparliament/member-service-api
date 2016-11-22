@@ -37,7 +37,6 @@ class PartyQueryObject
               CONSTRUCT {
                  ?party parl:partyName ?partyName .
               }
-
               WHERE {
                   ?party parl:partyName ?partyName .
                   FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
@@ -62,12 +61,13 @@ class PartyQueryObject
                 WHERE {
                     ?party parl:partyHasPartyMembership ?partyMembership .
                     ?partyMembership parl:partyMembershipHasPerson ?member .
+                    OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
+        			      OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
                     ?member
                           a parl:Member .
-                    ?member parl:personHasSitting ?sitting .
-                            OPTIONAL { ?member parl:forename ?forename } .
-                            OPTIONAL { ?member parl:middleName ?middleName } .
-                            OPTIONAL { ?member parl:surname ?surname } .
+                          OPTIONAL { ?member parl:forename ?forename } .
+                          OPTIONAL { ?member parl:middleName ?middleName } .
+                          OPTIONAL { ?member parl:surname ?surname } .
                     FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
                 }
                ")
@@ -77,16 +77,20 @@ class PartyQueryObject
     self.query("
                 PREFIX parl: <http://id.ukpds.org/schema/>
                 CONSTRUCT {
-                   ?member
+                   ?member a parl:Member ;
                            parl:forename ?forename ;
                            parl:middleName ?middleName ;
                            parl:surname ?surname ;
+                   ?partyMembership a parl:PartyMembership ;
+                           parl:partyMembershipStartDate ?partyMembershipStartDate ;
+                           parl:partyMembershipHasParty ?member .
                 }
 
                 WHERE {
                     ?party parl:partyHasPartyMembership ?partyMembership .
                     FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
                     ?partyMembership parl:partyMembershipHasPerson ?member .
+                    OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
                     ?member
                           a parl:Member .
                     ?member parl:personHasSitting ?sitting .
