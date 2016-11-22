@@ -77,13 +77,12 @@ class PartyQueryObject
     self.query("
                 PREFIX parl: <http://id.ukpds.org/schema/>
                 CONSTRUCT {
-                   ?member
+                   ?member a parl:Member ;
                            parl:forename ?forename ;
                            parl:middleName ?middleName ;
                            parl:surname ?surname ;
                    ?partyMembership a parl:PartyMembership ;
                            parl:partyMembershipStartDate ?partyMembershipStartDate ;
-                           parl:partyMembershipEndDate ?partyMembershipEndDate ;
                            parl:partyMembershipHasParty ?member .
                 }
 
@@ -91,6 +90,7 @@ class PartyQueryObject
                     ?party parl:partyHasPartyMembership ?partyMembership .
                     FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
                     ?partyMembership parl:partyMembershipHasPerson ?member .
+                    OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
                     ?member
                           a parl:Member .
                     ?member parl:personHasSitting ?sitting .
