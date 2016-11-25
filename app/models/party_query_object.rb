@@ -83,7 +83,7 @@ class PartyQueryObject
                            parl:surname ?surname .
                    ?partyMembership a parl:PartyMembership ;
                            parl:partyMembershipStartDate ?partyMembershipStartDate ;
-                           parl:partyMembershipHasParty ?member .
+                           parl:partyMembershipHasPerson ?member .
                 }
 
                 WHERE {
@@ -93,8 +93,6 @@ class PartyQueryObject
                     OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
                     ?member
                           a parl:Member .
-                    ?member parl:personHasSitting ?sitting .
-                    FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
                             OPTIONAL { ?member parl:forename ?forename } .
                             OPTIONAL { ?member parl:middleName ?middleName } .
                             OPTIONAL { ?member parl:surname ?surname } .
