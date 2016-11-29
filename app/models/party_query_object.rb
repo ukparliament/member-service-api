@@ -54,8 +54,8 @@ class PartyQueryObject
                            parl:middleName ?middleName ;
                            parl:surname ?surname .
      					_:x
-                           parl:startDate ?partyMembershipStartDate ;
-        				           parl:endDate ?partyMembershipEndDate ;
+                           parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        				           parl:partyMembershipEndDate ?partyMembershipEndDate ;
        					           parl:connect ?member .
                 }
                 WHERE {
