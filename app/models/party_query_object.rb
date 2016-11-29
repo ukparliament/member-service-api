@@ -47,20 +47,20 @@ class PartyQueryObject
   def self.members(id)
     self.query("
                 PREFIX parl: <http://id.ukpds.org/schema/>
+                PREFIX : <http://www.ontotext.com/plugins/geosparql#>
                 CONSTRUCT {
                    ?member a parl:Member ;
                            parl:forename ?forename ;
                            parl:middleName ?middleName ;
                            parl:surname ?surname .
-                  ?partyMembership a parl:PartyMembership ;
-                           parl:partyMembershipStartDate ?partyMembershipStartDate ;
-                           parl:partyMembershipEndDate ?partyMembershipEndDate ;
-                           parl:partyMembershipHasPerson ?member .
+     					_:x
+                           parl:connect ?partyMembershipStartDate ;
+        				   parl:connect ?partyMembershipEndDate ;
+       					   parl:connect ?member .
                 }
-
                 WHERE {
                     ?party parl:partyHasPartyMembership ?partyMembership .
-                    ?partyMembership parl:partyMembershipHasPerson ?member .
+    				        ?partyMembership parl:partyMembershipHasPerson ?member .
                     OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
         			      OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
                     ?member
@@ -75,31 +75,27 @@ class PartyQueryObject
 
   def self.current_members(id)
     self.query("
-               PREFIX parl: <http://id.ukpds.org/schema/>
-               CONSTRUCT {
-                  ?member a parl:Member ;
-                          parl:forename ?forename ;
-                          parl:middleName ?middleName ;
-                          parl:surname ?surname .
-                  ?partyMembership a parl:PartyMembership ;
-                          parl:partyMembershipStartDate ?partyMembershipStartDate ;
-                          parl:partyMembershipHasParty ?member .
-               }
+                PREFIX parl: <http://id.ukpds.org/schema/>
+                CONSTRUCT {
+                   ?member a parl:Member ;
+                           parl:forename ?forename ;
+                           parl:middleName ?middleName ;
+                           parl:surname ?surname ;
+                           parl:partyMembershipStartDate ?partyMembershipStartDate .
+                }
 
-               WHERE {
-                   ?party parl:partyHasPartyMembership ?partyMembership .
-                   FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-                   ?partyMembership parl:partyMembershipHasPerson ?member .
-                   OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-                   ?member
-                         a parl:Member .
-                   ?member parl:personHasSitting ?sitting .
-                   FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
-                           OPTIONAL { ?member parl:forename ?forename } .
-                           OPTIONAL { ?member parl:middleName ?middleName } .
-                           OPTIONAL { ?member parl:surname ?surname } .
-                   FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
-               }
+                WHERE {
+                    ?party parl:partyHasPartyMembership ?partyMembership .
+                    FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+                    ?partyMembership parl:partyMembershipHasPerson ?member .
+                    OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
+                    ?member
+                          a parl:Member .
+                            OPTIONAL { ?member parl:forename ?forename } .
+                            OPTIONAL { ?member parl:middleName ?middleName } .
+                            OPTIONAL { ?member parl:surname ?surname } .
+                    FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
+                }
                ")
   end
 
