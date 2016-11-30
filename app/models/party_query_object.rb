@@ -56,7 +56,8 @@ class PartyQueryObject
      					_:x
                            parl:partyMembershipStartDate ?partyMembershipStartDate ;
         				           parl:partyMembershipEndDate ?partyMembershipEndDate ;
-       					           parl:connect ?member .
+       					           parl:connect ?member ;
+                           parl:partyMembershipId ?partyMembership .
                 }
                 WHERE {
                     ?party parl:partyHasPartyMembership ?partyMembership .
