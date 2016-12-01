@@ -71,14 +71,14 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?sitting a parl:Sitting ;
-                  parl:sittingStartDate ?sittingStartDate ;
-        			     parl:sittingEndDate ?sittingEndDate ;
-                    parl:sittingHasPerson ?member .
-    	    ?member a parl:Member ;
-                  parl:forename ?forename ;
-    			        parl:middleName ?middleName ;
-        		      parl:surname ?surname .
+    	   ?member a parl:Member ;
+                 parl:forename ?forename ;
+    		         parl:middleName ?middleName ;
+        	       parl:surname ?surname .
+    		  _:x parl:sittingStartDate ?sittingStartDate ;
+        		  parl:sittingEndDate ?sittingEndDate ;
+        		  parl:connect ?member ;
+        		  parl:objectId ?sitting .
       }
       WHERE {
     	  ?constituency parl:constituencyHasSeat ?seat .
@@ -100,14 +100,13 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-         ?sitting a parl:Sitting ;
-                  parl:sittingStartDate ?startDate ;
-        			    parl:sittingEndDate ?endDate ;
-                  parl:sittingHasPerson ?member .
-    	  ?member a parl:Member ;
-                parl:forename ?forename ;
-    			      parl:middleName ?middleName ;
-        		    parl:surname ?surname .
+         ?member a parl:Member ;
+                 parl:forename ?forename ;
+    			       parl:middleName ?middleName ;
+        		     parl:surname ?surname .
+    		_:x parl:sittingStartDate ?sittingStartDate ;
+        		parl:connect ?member ;
+        		parl:objectId ?sitting .
       }
       WHERE {
     	  ?constituency parl:constituencyHasSeat ?seat .
@@ -119,6 +118,7 @@ class ConstituencyQueryObject
         OPTIONAL { ?member parl:forename ?forename . }
         OPTIONAL { ?member parl:middleName ?middleName . }
 		    OPTIONAL { ?member parl:surname ?surname . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
 
         FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
