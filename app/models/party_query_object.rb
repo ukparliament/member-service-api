@@ -47,13 +47,12 @@ class PartyQueryObject
   def self.members(id)
     self.query("
                 PREFIX parl: <http://id.ukpds.org/schema/>
-                PREFIX : <http://www.ontotext.com/plugins/geosparql#>
                 CONSTRUCT {
                    ?member a parl:Member ;
                            parl:forename ?forename ;
                            parl:middleName ?middleName ;
                            parl:surname ?surname .
-     					_:x
+     					     _:x
                            parl:partyMembershipStartDate ?partyMembershipStartDate ;
         				           parl:partyMembershipEndDate ?partyMembershipEndDate ;
        					           parl:connect ?member ;
@@ -81,8 +80,11 @@ class PartyQueryObject
                    ?member a parl:Member ;
                            parl:forename ?forename ;
                            parl:middleName ?middleName ;
-                           parl:surname ?surname ;
-                           parl:partyMembershipStartDate ?partyMembershipStartDate .
+                           parl:surname ?surname .
+     					     _:x
+                           parl:partyMembershipStartDate ?partyMembershipStartDate ;
+       					           parl:connect ?member ;
+                           parl:objectId ?partyMembership .
                 }
 
                 WHERE {
