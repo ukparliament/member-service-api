@@ -51,24 +51,25 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-        ?sitting a parl:Sitting ;
-                  parl:sittingStartDate ?sittingStartDate ;
-        		      parl:sittingEndDate ?sittingEndDate ;
-                  parl:sittingHasConstituency ?constituency .
-    	  ?constituency a parl:Constituency ;
-                      parl:constituencyName ?constituencyName ;
-        		          parl:constituencyStartDate ?constituencyStartDate ;
-        		          parl:constituencyEndDate ?constituencyEndDate .
+    	 ?constituency a parl:Constituency ;
+                       parl:constituencyName ?constituencyName ;
+        		           parl:constituencyStartDate ?constituencyStartDate ;
+        		           parl:constituencyEndDate ?constituencyEndDate .
+    	_:x
+        	parl:sittingEndDate ?sittingEndDate ;
+        	parl:sittingStartDate ?sittingStartDate ;
+       		parl:connect ?constituency ;
+          parl:objectId ?sitting .
       }
       WHERE {
     	  ?member parl:personHasSitting ?sitting .
     	  ?sitting parl:sittingHasSeat ?seat .
     	  ?seat parl:seatHasConstituency ?constituency .
-        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
-        OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
-		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
+        	OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+        	OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        	OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
+        	OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
+		      OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
 
         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
@@ -146,7 +147,7 @@ class PersonQueryObject
     		FILTER NOT EXISTS { ?partyMembership a parl:PastThing . }
         	OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
         	OPTIONAL { ?party parl:partyName ?partyName . }
-            FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
+          FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
