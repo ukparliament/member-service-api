@@ -109,12 +109,13 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-        ?partyMembership a parl:PartyMembership ;
-                           parl:partyMembershipStartDate ?partyMembershipStartDate ;
-                           parl:partyMembershipEndDate ?partyMembershipEndDate ;
-                           parl:partyMembershipHasParty ?party .
         ?party a parl:Party ;
                  parl:partyName ?partyName .
+    	_:x
+        	parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        	parl:partyMembershipEndDate ?partyMembershipEndDate ;
+       		parl:connect ?party ;
+            parl:objectId ?partyMembership .
         }
         WHERE {
           ?member parl:personHasPartyMembership ?partyMembership .
