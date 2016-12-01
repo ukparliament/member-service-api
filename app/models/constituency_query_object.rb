@@ -6,14 +6,10 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency parl:constituencyEndDate ?endDate ;
-          			parl:constituencyStartDate ?startDate ;
-         				parl:constituencyName ?name ;
+          ?constituency parl:constituencyName ?name ;
       }
       WHERE {
       	?constituency a parl:Constituency .
-          OPTIONAL { ?constituency parl:constituencyEndDate ?endDate . }
-          OPTIONAL { ?constituency parl:constituencyStartDate ?startDate . }
           OPTIONAL { ?constituency parl:constituencyName ?name . }
       }
     ')
@@ -52,15 +48,11 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency parl:constituencyEndDate ?endDate ;
-          			parl:constituencyStartDate ?startDate ;
-         				parl:constituencyName ?name ;
+          ?constituency parl:constituencyName ?name ;
       }
       WHERE {
           ?constituency a parl:Constituency .
           MINUS { ?constituency a parl:PastConstituency . }
-          OPTIONAL { ?constituency parl:constituencyEndDate ?endDate . }
-          OPTIONAL { ?constituency parl:constituencyStartDate ?startDate . }
           OPTIONAL { ?constituency parl:constituencyName ?name . }
       }
     ')
