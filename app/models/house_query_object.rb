@@ -62,7 +62,7 @@ class HouseQueryObject
       	?house parl:houseHasSeat ?seat.
         ?seat parl:seatHasSitting ?sitting .
         ?sitting parl:sittingHasPerson ?member .
-        MINUS{ ?sitting a parl:PastSitting . }
+        FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
         OPTIONAL { ?member parl:forename ?forename . }
         OPTIONAL { ?member parl:surname ?surname . }
@@ -70,5 +70,51 @@ class HouseQueryObject
         FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
+  end
+
+  def self.parties(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?party parl:partyName ?partyName .
+      }
+      WHERE {
+        SELECT DISTINCT ?party ?partyName
+          WHERE {
+            ?house parl:houseHasSeat ?seat.
+            ?seat parl:seatHasSitting ?sitting .
+            ?sitting parl:sittingHasPerson ?member .
+            ?member parl:personHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?party parl:partyName ?partyName .
+
+            FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
+          }
+        }
+     ")
+  end
+
+  def self.current_parties(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?party parl:partyName ?partyName .
+      }
+      WHERE {
+        SELECT DISTINCT ?party ?partyName
+          WHERE {
+            ?house parl:houseHasSeat ?seat.
+            ?seat parl:seatHasSitting ?sitting .
+              FILTER NOT EXISTS { ?sitting a parl:PastThing . }
+            ?sitting parl:sittingHasPerson ?member .
+            ?member parl:personHasPartyMembership ?partyMembership .
+              FILTER NOT EXISTS { ?partyMembership a parl:PastThing . }
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?party parl:partyName ?partyName .
+
+            FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
+          }
+        }
+     ")
   end
 end
