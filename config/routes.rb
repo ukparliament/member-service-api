@@ -35,5 +35,8 @@ Rails.application.routes.draw do
     get '/contact_point', to: 'constituencies#contact_point'
   end
 
-  resources :houses, only: [:index, :show]
+  resources :houses, only: [:index, :show] do
+    get '/members', to: 'houses#members'
+    get '/members/current', to: 'houses#current_members'
+  end
 end
