@@ -21,4 +21,16 @@ class HousesController < ApplicationController
     data = HouseQueryObject.current_members(id)
     format(data)
   end
+
+  def parties
+    id = params[:house_id]
+    data = HouseQueryObject.parties(id)
+    format(data)
+  end
+
+  def current_parties
+    id = params[:house_id]
+    data = HouseQueryObject.current_parties(id)
+    format(data)
+  end
 end
