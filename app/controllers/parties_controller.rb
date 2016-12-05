@@ -26,4 +26,10 @@ class PartiesController < ApplicationController
     data = PartyQueryObject.current_members(id)
     format(data)
   end
+
+  def letters
+    letter = params[:letter]
+    data = PartyQueryObject.all_by_letter(letter)
+    format(data)
+  end
 end
