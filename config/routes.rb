@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get '/constituencies/current', to: 'constituencies#current'
 
   get '/parties/current', to: 'parties#current'
+  match 'parties/:letter', to: 'parties#letters', letter: /[a-z]/, via: [:get]
 
   resources :people, only: [:index, :show] do
     get '/constituencies', to: 'people#constituencies'

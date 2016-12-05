@@ -31,6 +31,20 @@ class PartyQueryObject
                ')
   end
 
+  def self.all_by_letter(letter)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         ?party parl:partyName ?partyName .
+      }
+      WHERE {
+          ?party a parl:Party ;
+          OPTIONAL{ ?party parl:partyName ?partyName . }
+          FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
+      }
+    ")
+  end
+
   def self.find(id)
     self.query("
               PREFIX parl: <http://id.ukpds.org/schema/>
