@@ -178,4 +178,28 @@ g        	parl:sittingStartDate ?sittingStartDate ;
       }
     ")
   end
+
+  def self.houses(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+    	 ?house a parl:House .
+    	_:x
+        	parl:sittingEndDate ?sittingEndDate ;
+        	parl:sittingStartDate ?sittingStartDate ;
+       		parl:connect ?house ;
+          parl:objectId ?house .
+      }
+      WHERE {
+    	  ?member parl:personHasSitting ?sitting .
+    	  ?sitting parl:sittingHasSeat ?seat .
+    	  ?seat parl:seatHasHouse ?house .
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+
+
+        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
+      }")
+  end
 end
