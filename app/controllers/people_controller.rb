@@ -39,4 +39,10 @@ class PeopleController < ApplicationController
     data = PersonQueryObject.contact_points(person_id)
     format(data)
   end
+
+  def houses
+    person_id = params[:person_id]
+    data = PersonQueryObject.houses(person_id)
+    format(data)
+  end
 end
