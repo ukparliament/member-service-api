@@ -11,12 +11,30 @@ class PersonQueryObject
           parl:surname ?surname ;
       }
       WHERE {
-        ?person
-          a schema:Person .
+        ?person a schema:Person .
         OPTIONAL { ?person parl:forename ?forename } .
         OPTIONAL { ?person parl:surname ?surname } .
       }'
     )
+  end
+
+  def self.all_by_letter(letter)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      PREFIX schema: <http://schema.org/>
+      CONSTRUCT {
+        ?person
+          parl:forename ?forename ;
+          parl:surname ?surname ;
+      }
+      WHERE {
+        ?person a schema:Person .
+        OPTIONAL { ?person parl:forename ?forename } .
+        OPTIONAL { ?person parl:surname ?surname } .
+
+    	  FILTER regex(str(?surname), \"^#{letter.upcase}\") .
+      }
+    ")
   end
 
   def self.find(id)
@@ -140,7 +158,7 @@ g        	parl:sittingStartDate ?sittingStartDate ;
     	_:x
         	parl:partyMembershipStartDate ?partyMembershipStartDate ;
        		parl:connect ?party ;
-          	parl:objectId ?partyMembership .
+          parl:objectId ?partyMembership .
         }
         WHERE {
           ?member parl:personHasPartyMembership ?partyMembership .

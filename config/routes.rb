@@ -1,14 +1,18 @@
 Rails.application.routes.draw do
-  get 'people/index'
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   get 'index', to: 'application#index', as: :index
 
+  match 'people/:letter', to: 'people#letters', letter: /[a-z]/, via: [:get]
+
   get '/people/members', to: 'members#index'
   get '/people/members/current', to: 'members#current'
+  match '/people/members/:letter', to: 'members#letters', letter: /[a-z]/, via: [:get]
+  match '/people/members/current/:letter', to: 'members#current_letters', letter: /[a-z]/, via: [:get]
 
   get '/constituencies/current', to: 'constituencies#current'
+  match '/constituencies/:letter', to: 'constituencies#letters', letter: /[a-z]/, via: [:get]
+  match '/constituencies/current/:letter', to: 'constituencies#current_letters', letter: /[a-z]/, via: [:get]
 
   get '/parties/current', to: 'parties#current'
   match 'parties/:letter', to: 'parties#letters', letter: /[a-z]/, via: [:get]
@@ -25,8 +29,10 @@ Rails.application.routes.draw do
   resources :contact_points, only: [:index, :show]
 
   resources :parties, only: [:index, :show] do
-    get 'members', to: 'parties#members'
-    get 'members/current', to: 'parties#current_members'
+    get '/members', to: 'parties#members'
+    get '/members/current', to: 'parties#current_members'
+    match '/members/:letter', to: 'parties#members_letters', letter: /[a-z]/, via: [:get]
+    match '/members/current/:letter', to: 'parties#members_letters', letter: /[a-z]/, via: [:get]
   end
 
   resources :constituencies, only: [:index, :show] do
@@ -38,8 +44,9 @@ Rails.application.routes.draw do
   resources :houses, only: [:index, :show] do
     get '/members', to: 'houses#members'
     get '/members/current', to: 'houses#current_members'
-
     get '/parties', to: 'houses#parties'
     get '/parties/current', to: 'houses#current_parties'
+    match '/members/:letter', to: 'houses#members_letters', letter: /[a-z]/, via: [:get]
+    match '/members/current/:letter', to: 'houses#current_members_letters', letter: /[a-z]/, via: [:get]
   end
 end

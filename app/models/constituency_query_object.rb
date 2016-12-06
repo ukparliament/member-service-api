@@ -58,6 +58,22 @@ class ConstituencyQueryObject
     ')
   end
 
+  def self.all_current_by_letter(letter)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT{
+          ?constituency parl:constituencyName ?name ;
+      }
+      WHERE {
+          ?constituency a parl:Constituency .
+          MINUS { ?constituency a parl:PastConstituency . }
+          OPTIONAL { ?constituency parl:constituencyName ?name . }
+    		  FILTER regex(str(?name), \"^#{letter.upcase}\") .
+      }
+    ")
+  end
+
   def self.members(id)
     self.query("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -65,7 +81,6 @@ class ConstituencyQueryObject
       CONSTRUCT{
     	   ?member a parl:Member ;
                  parl:forename ?forename ;
-    		         parl:middleName ?middleName ;
         	       parl:surname ?surname .
     		  _:x parl:sittingStartDate ?sittingStartDate ;
         		  parl:sittingEndDate ?sittingEndDate ;
@@ -79,10 +94,24 @@ class ConstituencyQueryObject
         OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
         OPTIONAL { ?member parl:forename ?forename . }
-        OPTIONAL { ?member parl:middleName ?middleName . }
         OPTIONAL { ?member parl:surname ?surname . }
 
         FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
+      }
+    ")
+  end
+
+  def self.all_by_letter(letter)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT{
+          ?constituency parl:constituencyName ?name ;
+      }
+      WHERE {
+      	?constituency a parl:Constituency .
+        OPTIONAL { ?constituency parl:constituencyName ?name . }
+    		FILTER regex(str(?name), \"^#{letter.upcase}\") .
       }
     ")
   end
@@ -94,7 +123,6 @@ class ConstituencyQueryObject
       CONSTRUCT{
          ?member a parl:Member ;
                  parl:forename ?forename ;
-    			       parl:middleName ?middleName ;
         		     parl:surname ?surname .
     		_:x parl:sittingStartDate ?sittingStartDate ;
         		parl:connect ?member ;
@@ -108,7 +136,6 @@ class ConstituencyQueryObject
         OPTIONAL { ?sitting parl:endDate ?endDate . }
         OPTIONAL { ?sitting parl:startDate ?startDate . }
         OPTIONAL { ?member parl:forename ?forename . }
-        OPTIONAL { ?member parl:middleName ?middleName . }
 		    OPTIONAL { ?member parl:surname ?surname . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
 
