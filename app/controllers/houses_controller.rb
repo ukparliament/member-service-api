@@ -33,4 +33,18 @@ class HousesController < ApplicationController
     data = HouseQueryObject.current_parties(id)
     format(data)
   end
+
+  def members_letters
+    letter = params[:letter]
+    id = params[:house_id]
+    data = HouseQueryObject.members_by_letter(id, letter)
+    format(data)
+  end
+
+  def current_members_letters
+    letter = params[:letter]
+    id = params[:house_id]
+    data = HouseQueryObject.current_members_by_letter(id, letter)
+    format(data)
+  end
 end
