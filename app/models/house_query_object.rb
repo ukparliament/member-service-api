@@ -44,7 +44,29 @@ class HouseQueryObject
         OPTIONAL { ?member parl:surname ?surname . }
 
         FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
-      }")
+      }
+    ")
+  end
+
+  def self.members_by_letter(id, letter)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+          ?member a parl:Member ;
+                  parl:forename ?forename ;
+              	  parl:surname ?surname .
+      }
+      WHERE {
+      	?house parl:houseHasSeat ?seat.
+        ?seat parl:seatHasSitting ?sitting .
+        ?sitting parl:sittingHasPerson ?member .
+        OPTIONAL { ?member parl:forename ?forename . }
+        OPTIONAL { ?member parl:surname ?surname . }
+
+        FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
+        FILTER regex(str(?surname), \"^#{letter.upcase}\") .
+      }
+    ")
   end
 
   def self.current_members(id)
@@ -68,6 +90,32 @@ class HouseQueryObject
         OPTIONAL { ?member parl:surname ?surname . }
 
         FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
+      }
+    ")
+  end
+
+  def self.current_members_by_letter(id, letter)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+          ?member a parl:Member ;
+                  parl:forename ?forename ;
+                  parl:surname ?surname .
+          _:x parl:sittingStartDate ?sittingStartDate ;
+              parl:connect ?member ;
+              parl:objectId ?sitting .
+      }
+      WHERE {
+      	?house parl:houseHasSeat ?seat.
+        ?seat parl:seatHasSitting ?sitting .
+        ?sitting parl:sittingHasPerson ?member .
+        FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?member parl:forename ?forename . }
+        OPTIONAL { ?member parl:surname ?surname . }
+
+        FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
+        FILTER regex(str(?surname), \"^#{letter.upcase}\") .
       }
     ")
   end

@@ -32,4 +32,16 @@ class ConstituenciesController < ApplicationController
     data = ConstituencyQueryObject.contact_point(constituency_id)
     format(data)
   end
+
+  def letters
+    letter = params[:letter]
+    data = ConstituencyQueryObject.all_by_letter(letter)
+    format(data)
+  end
+
+  def current_letters
+    letter = params[:letter]
+    data = ConstituencyQueryObject.all_current_by_letter(letter)
+    format(data)
+  end
 end
