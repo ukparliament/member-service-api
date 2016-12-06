@@ -51,4 +51,10 @@ class PeopleController < ApplicationController
     data = PersonQueryObject.all_by_letter(letter)
     format(data)
   end
+
+  def sittings
+    person_id = params[:person_id]
+    data = PersonQueryObject.sittings(person_id)
+    format(data)
+  end
 end
