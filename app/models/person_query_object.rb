@@ -131,21 +131,21 @@ g        	parl:sittingStartDate ?sittingStartDate ;
       CONSTRUCT {
         ?party a parl:Party ;
                  parl:partyName ?partyName .
-    	_:x
+    	  _:x
         	parl:partyMembershipStartDate ?partyMembershipStartDate ;
         	parl:partyMembershipEndDate ?partyMembershipEndDate ;
        		parl:connect ?party ;
           parl:objectId ?partyMembership .
-        }
-        WHERE {
-          ?member parl:personHasPartyMembership ?partyMembership .
-          ?partyMembership parl:partyMembershipHasParty ?party .
-            OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-            OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
-            OPTIONAL { ?party parl:partyName ?partyName . }
-            FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-      }
-    ")
+       }
+       WHERE {
+         ?member parl:personHasPartyMembership ?partyMembership .
+         ?partyMembership parl:partyMembershipHasParty ?party .
+         OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
+         OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+         OPTIONAL { ?party parl:partyName ?partyName . }
+         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
+       }
+     ")
   end
 
   def self.current_parties(id)
@@ -218,6 +218,24 @@ g        	parl:sittingStartDate ?sittingStartDate ;
 
 
         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-      }")
+      }
+    ")
+  end
+
+  def self.sittings(id)
+    self.query("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+          ?sitting parl:sittingStartDate ?sittingStartDate ;
+        			parl:sittingEndDate ?sittingEndDate .
+      }
+      WHERE {
+      	?member parl:personHasSitting ?sitting .
+        OPTIONAL { ?sitting parl:sittingStartDate ?sittingStartDate . }
+        OPTIONAL { ?sitting parl:sittingEndDate ?sittingEndDate . }
+
+        FILTER(?member = <#{DATA_URI_PREFIX}/#{id}>)
+      }
+    ")
   end
 end
