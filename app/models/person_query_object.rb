@@ -207,7 +207,7 @@ g        	parl:sittingStartDate ?sittingStartDate ;
         	parl:sittingEndDate ?sittingEndDate ;
         	parl:sittingStartDate ?sittingStartDate ;
        		parl:connect ?house ;
-          parl:objectId ?house .
+          parl:objectId ?sitting .
       }
       WHERE {
     	  ?member parl:personHasSitting ?sitting .
