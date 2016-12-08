@@ -45,8 +45,8 @@ class ContactPointQueryObject
                       OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
                       OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
                       OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
-                      OPTIONAL{ ?contactPoint parl:postalCode ?postalCode ;
-                                              parl:contactPointHasSitting ?sitting .
+                      OPTIONAL{ ?contactPoint parl:postalCode ?postalCode ; }
+                      OPTIONAL{ ?contactPoint parl:contactPointHasSitting ?sitting .
         				                ?sitting parl:sittingHasPerson ?person .
     					                  ?person parl:forename ?forename ;
     					  		                    parl:surname ?surname .
