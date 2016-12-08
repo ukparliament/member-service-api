@@ -54,7 +54,8 @@ class ContactPointQueryObject
    					          }
    						        OPTIONAL{ ?contactPoint parl:contactPointHasConstituencyParty ?cparty .
     					 		              ?cparty parl:constituencyPartyHasConstituency ?constituency .
-    							              ?constituency parl:constituencyName ?name . }
+    							              ?constituency parl:constituencyName ?name .
+                      }
                     FILTER (?contactPoint = <#{DATA_URI_PREFIX}/#{id}>)
                   }
                 ")
