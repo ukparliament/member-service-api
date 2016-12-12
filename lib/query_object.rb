@@ -1,7 +1,7 @@
 module QueryObject
 
-  def query(sparql)
-    RDF::Graph.new << SPARQL::Client.new(DATA_ENDPOINT).query(sparql)
+  def query(sparql_query)
+    SPARQL::Client.new(DATA_ENDPOINT).response(sparql_query, { content_type: 'text/turtle' }).body
   end
 
 end
