@@ -1,23 +1,23 @@
 class MembersController < ApplicationController
   def index
-    data = MemberQueryObject.all
-    format(data)
+    uri = MemberQueryObject.all
+    response_streamer(uri)
   end
 
   def current
-    data = MemberQueryObject.all_current
-    format(data)
+    uri = MemberQueryObject.all_current
+    response_streamer(uri)
   end
 
   def letters
     letter = params[:letter]
-    data = MemberQueryObject.all_by_letter(letter)
-    format(data)
+    uri = MemberQueryObject.all_by_letter(letter)
+    response_streamer(uri)
   end
 
   def current_letters
     letter = params[:letter]
-    data = MemberQueryObject.all_current_by_letter(letter)
-    format(data)
+    uri = MemberQueryObject.all_current_by_letter(letter)
+    response_streamer(uri)
   end
 end

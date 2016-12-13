@@ -2,7 +2,7 @@ class SittingQueryObject
   extend QueryObject
 
   def self.person(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -19,7 +19,7 @@ class SittingQueryObject
   end
 
   def self.house(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -35,7 +35,7 @@ class SittingQueryObject
   end
 
   def self.constituency(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {

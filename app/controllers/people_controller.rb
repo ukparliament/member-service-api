@@ -1,60 +1,63 @@
+require 'net/http'
+require 'uri'
+
 class PeopleController < ApplicationController
   def index
-    data = PersonQueryObject.all
-    format(data)
+    uri = PersonQueryObject.all
+    response_streamer(uri)
   end
 
   def show
     id = params[:id]
-    data = PersonQueryObject.find(id)
-    format(data)
+    uri = PersonQueryObject.find(id)
+    response_streamer(uri)
   end
 
   def constituencies
     person_id = params[:person_id]
-    data = PersonQueryObject.constituencies(person_id)
-    format(data)
+    uri = PersonQueryObject.constituencies(person_id)
+    response_streamer(uri)
   end
 
   def current_constituencies
     person_id = params[:person_id]
-    data = PersonQueryObject.current_constituencies(person_id)
-    format(data)
+    uri = PersonQueryObject.current_constituencies(person_id)
+    response_streamer(uri)
   end
 
   def parties
     person_id = params[:person_id]
-    data = PersonQueryObject.parties(person_id)
-    format(data)
+    uri = PersonQueryObject.parties(person_id)
+    response_streamer(uri)
   end
 
   def current_parties
     person_id = params[:person_id]
-    data = PersonQueryObject.current_parties(person_id)
-    format(data)
+    uri = PersonQueryObject.current_parties(person_id)
+    response_streamer(uri)
   end
 
   def contact_points
     person_id = params[:person_id]
-    data = PersonQueryObject.contact_points(person_id)
-    format(data)
+    uri = PersonQueryObject.contact_points(person_id)
+    response_streamer(uri)
   end
 
   def houses
     person_id = params[:person_id]
-    data = PersonQueryObject.houses(person_id)
-    format(data)
+    uri = PersonQueryObject.houses(person_id)
+    response_streamer(uri)
   end
 
   def letters
     letter = params[:letter]
-    data = PersonQueryObject.all_by_letter(letter)
-    format(data)
+    uri = PersonQueryObject.all_by_letter(letter)
+    response_streamer(uri)
   end
 
   def sittings
     person_id = params[:person_id]
-    data = PersonQueryObject.sittings(person_id)
-    format(data)
+    uri = PersonQueryObject.sittings(person_id)
+    response_streamer(uri)
   end
 end
