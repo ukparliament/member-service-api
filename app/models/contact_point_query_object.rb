@@ -2,7 +2,7 @@ class ContactPointQueryObject
   extend QueryObject
 
   def self.all
-    self.query('
+    self.uri_builder('
               PREFIX parl: <http://id.ukpds.org/schema/>
               CONSTRUCT {
                  ?contactPoint parl:email ?email ;
@@ -27,7 +27,7 @@ class ContactPointQueryObject
   end
 
   def self.find(id)
-    self.query("
+    self.uri_builder("
                 PREFIX parl: <http://id.ukpds.org/schema/>
                 CONSTRUCT {
                    ?contactPoint parl:email ?email ;

@@ -8,7 +8,7 @@ describe QueryObject do
   describe '#query' do
     it 'returns a graph with the right person when asked for a person by date of birth' do
       VCR.use_cassette("query_object") do
-        graph = extended_class.query("
+        graph = extended_class.uri_builder("
           PREFIX parl: <http://id.ukpds.org/schema/>
           PREFIX schema: <http://schema.org/>
           PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
