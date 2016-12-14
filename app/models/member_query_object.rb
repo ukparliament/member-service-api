@@ -42,6 +42,7 @@ class MemberQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT{
         ?member
+          a parl:Person ;
         	parl:forename ?forename ;
         	parl:surname ?surname .
     	?house a parl:House ;
@@ -76,6 +77,7 @@ class MemberQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT{
         ?member
+          a parl:Person ;
         	parl:forename ?forename ;
         	parl:surname ?surname .
     	?house a parl:House ;
