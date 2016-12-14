@@ -101,7 +101,6 @@ class MemberQueryObject
         	OPTIONAL { ?party parl:partyName ?partyName . }
         OPTIONAL { ?member parl:forename ?forename . }
         OPTIONAL { ?member parl:surname ?surname . }
-      }
     	  FILTER regex(str(?surname), \"^#{letter.upcase}\") .
       }
     ")
