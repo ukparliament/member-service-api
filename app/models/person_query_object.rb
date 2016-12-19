@@ -232,7 +232,7 @@ class PersonQueryObject
           FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
             ?sitting parl:sittingHasPerson <#{DATA_URI_PREFIX}/#{id}> .
           ?sitting parl:sittingHasSeat ?seat ;
-              parl:sittingStartDate ?startDate .
+              parl:sittingStartDate ?sittingStartDate .
           ?seat parl:seatHasHouse ?house .
           }
         ")
