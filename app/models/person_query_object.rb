@@ -217,6 +217,27 @@ class PersonQueryObject
     ")
   end
 
+  def self.current_house(id)
+    self.uri_builder("
+          PREFIX parl: <http://id.ukpds.org/schema/>
+          CONSTRUCT{
+          ?house a parl:House .
+          _:x
+            parl:sittingStartDate ?sittingStartDate ;
+            parl:connect ?house ;
+            parl:objectId ?sitting .
+          }
+          WHERE {
+            ?sitting a parl:Sitting .
+          FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
+            ?sitting parl:sittingHasPerson <#{DATA_URI_PREFIX}/#{id}> .
+          ?sitting parl:sittingHasSeat ?seat ;
+              parl:sittingStartDate ?startDate .
+          ?seat parl:seatHasHouse ?house .
+          }
+        ")
+  end
+
   def self.sittings(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>

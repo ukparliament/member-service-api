@@ -49,6 +49,12 @@ class PeopleController < ApplicationController
     response_streamer(uri)
   end
 
+  def current_house
+    person_id = params[:person_id]
+    uri = PersonQueryObject.current_house(person_id)
+    response_streamer(uri)
+  end
+
   def letters
     letter = params[:letter]
     uri = PersonQueryObject.all_by_letter(letter)
