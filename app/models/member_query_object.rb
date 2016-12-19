@@ -2,7 +2,7 @@ class MemberQueryObject
   extend QueryObject
 
   def self.all
-    self.query('
+    self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -20,7 +20,7 @@ class MemberQueryObject
   end
 
   def self.all_by_letter(letter)
-    self.query("
+    self.uri_builder("
        PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -38,7 +38,7 @@ class MemberQueryObject
   end
 
   def self.all_current
-    self.query('
+    self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT{
         ?member
@@ -56,7 +56,7 @@ class MemberQueryObject
   end
 
   def self.all_current_by_letter(letter)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT{
         ?member

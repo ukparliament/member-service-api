@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
-  include FormatHelper
-  include ActionController::MimeResponds
+  include ResponseStreamHelper
   def index
     render json: {test: DATA_ENDPOINT }
   end

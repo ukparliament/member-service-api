@@ -1,49 +1,49 @@
 class PartiesController < ApplicationController
   def index
-    data = PartyQueryObject.all
-    format(data)
+    uri = PartyQueryObject.all
+    response_streamer(uri)
   end
 
   def current
-    data = PartyQueryObject.all_current
-    format(data)
+    uri = PartyQueryObject.all_current
+    response_streamer(uri)
   end
 
   def show
     id = params[:id]
-    data = PartyQueryObject.find(id)
-    format(data)
+    uri = PartyQueryObject.find(id)
+    response_streamer(uri)
   end
 
   def members
     id = params[:party_id]
-    data = PartyQueryObject.members(id)
-    format(data)
+    uri = PartyQueryObject.members(id)
+    response_streamer(uri)
   end
 
   def current_members
     id = params[:party_id]
-    data = PartyQueryObject.current_members(id)
-    format(data)
+    uri = PartyQueryObject.current_members(id)
+    response_streamer(uri)
   end
 
   def letters
     letter = params[:letter]
-    data = PartyQueryObject.all_by_letter(letter)
-    format(data)
+    uri = PartyQueryObject.all_by_letter(letter)
+    response_streamer(uri)
   end
 
   def members_letters
     letter = params[:letter]
     id = params[:party_id]
-    data = PartyQueryObject.members_by_letter(id, letter)
-    format(data)
+    uri = PartyQueryObject.members_by_letter(id, letter)
+    response_streamer(uri)
   end
 
   def current_members_letters
     letter = params[:letter]
     id = params[:party_id]
-    data = PartyQueryObject.current_members_by_letter(id, letter)
-    format(data)
+    uri = PartyQueryObject.current_members_by_letter(id, letter)
+    response_streamer(uri)
   end
 end

@@ -1,7 +1,7 @@
 module QueryObject
 
-  def query(sparql_query)
-    SPARQL::Client.new(DATA_ENDPOINT).response(sparql_query, { content_type: 'text/turtle' }).body
+  def uri_builder(sparql_query)
+    URI("#{DATA_ENDPOINT}?query=#{URI.escape(sparql_query)}")
   end
 
 end

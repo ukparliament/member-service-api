@@ -2,16 +2,15 @@ class PersonQueryObject
   extend QueryObject
 
   def self.all
-    self.query('
+    self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
-      PREFIX schema: <http://schema.org/>
       CONSTRUCT {
         ?person
           parl:forename ?forename ;
           parl:surname ?surname ;
       }
       WHERE {
-        ?person a schema:Person .
+        ?person a parl:Person .
         OPTIONAL { ?person parl:forename ?forename } .
         OPTIONAL { ?person parl:surname ?surname } .
       }'
@@ -19,16 +18,15 @@ class PersonQueryObject
   end
 
   def self.all_by_letter(letter)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
-      PREFIX schema: <http://schema.org/>
       CONSTRUCT {
         ?person
           parl:forename ?forename ;
           parl:surname ?surname ;
       }
       WHERE {
-        ?person a schema:Person .
+        ?person a parl:Person .
         OPTIONAL { ?person parl:forename ?forename } .
         OPTIONAL { ?person parl:surname ?surname } .
 
@@ -38,7 +36,7 @@ class PersonQueryObject
   end
 
   def self.find(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       PREFIX schema: <http://schema.org/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -51,7 +49,7 @@ class PersonQueryObject
               parl:gender ?gender .
       }
       WHERE {
-        ?person a schema:Person .
+        ?person a parl:Person .
         OPTIONAL { ?person parl:forename ?forename } .
         OPTIONAL { ?person parl:middleName ?middleName } .
         OPTIONAL { ?person parl:surname ?surname } .
@@ -65,7 +63,7 @@ class PersonQueryObject
   end
 
   def self.constituencies(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -95,7 +93,7 @@ class PersonQueryObject
   end
 
   def self.current_constituencies(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -104,7 +102,7 @@ class PersonQueryObject
         		           parl:constituencyStartDate ?constituencyStartDate ;
         		           parl:constituencyEndDate ?constituencyEndDate .
     	_:x
-g        	parl:sittingStartDate ?sittingStartDate ;
+        	parl:sittingStartDate ?sittingStartDate ;
        		parl:connect ?constituency ;
           parl:objectId ?sitting .
       }
@@ -125,7 +123,7 @@ g        	parl:sittingStartDate ?sittingStartDate ;
   end
 
   def self.parties(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -149,7 +147,7 @@ g        	parl:sittingStartDate ?sittingStartDate ;
   end
 
   def self.current_parties(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -172,7 +170,7 @@ g        	parl:sittingStartDate ?sittingStartDate ;
   end
 
   def self.contact_points(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?contactPoint parl:email ?email ;
@@ -198,7 +196,7 @@ g        	parl:sittingStartDate ?sittingStartDate ;
   end
 
   def self.houses(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
@@ -223,7 +221,7 @@ g        	parl:sittingStartDate ?sittingStartDate ;
   end
 
   def self.sittings(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
           ?sitting parl:sittingStartDate ?sittingStartDate ;

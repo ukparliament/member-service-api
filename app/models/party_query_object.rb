@@ -2,7 +2,7 @@ class PartyQueryObject
   extend QueryObject
 
   def self.all
-    self.query('
+    self.uri_builder('
               PREFIX parl: <http://id.ukpds.org/schema/>
               CONSTRUCT {
                  ?party parl:partyName ?partyName .
@@ -16,7 +16,7 @@ class PartyQueryObject
   end
 
   def self.all_current
-    self.query('
+    self.uri_builder('
                 PREFIX parl: <http://id.ukpds.org/schema/>
                 CONSTRUCT {
                    ?party parl:partyName ?partyName .
@@ -32,7 +32,7 @@ class PartyQueryObject
   end
 
   def self.all_by_letter(letter)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
          ?party parl:partyName ?partyName .
@@ -46,7 +46,7 @@ class PartyQueryObject
   end
 
   def self.find(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
          ?party parl:partyName ?partyName .
@@ -59,7 +59,7 @@ class PartyQueryObject
   end
 
   def self.members(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?member a parl:Member ;
@@ -85,7 +85,7 @@ class PartyQueryObject
   end
 
   def self.members_by_letter(id, letter)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?member a parl:Member ;
@@ -112,7 +112,7 @@ class PartyQueryObject
   end
 
   def self.current_members(id)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
          ?member a parl:Member ;
@@ -136,7 +136,7 @@ class PartyQueryObject
   end
 
   def self.current_members_by_letter(id, letter)
-    self.query("
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
          ?member a parl:Member ;
