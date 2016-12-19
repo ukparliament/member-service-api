@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get '/parties/current', to: 'people#current_parties'
     get '/contact_points',to: 'people#contact_points'
     get '/houses',to: 'people#houses'
+    get '/houses/current', to: 'people#current_house'
     get '/sittings', to: 'people#sittings'
   end
 
