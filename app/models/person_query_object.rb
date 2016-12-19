@@ -102,7 +102,7 @@ class PersonQueryObject
         		           parl:constituencyStartDate ?constituencyStartDate ;
         		           parl:constituencyEndDate ?constituencyEndDate .
     	_:x
-g        	parl:sittingStartDate ?sittingStartDate ;
+        	parl:sittingStartDate ?sittingStartDate ;
        		parl:connect ?constituency ;
           parl:objectId ?sitting .
       }
