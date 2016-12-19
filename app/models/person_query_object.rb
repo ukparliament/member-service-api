@@ -99,8 +99,7 @@ class PersonQueryObject
       CONSTRUCT {
     	 ?constituency a parl:Constituency ;
                        parl:constituencyName ?constituencyName ;
-        		           parl:constituencyStartDate ?constituencyStartDate ;
-        		           parl:constituencyEndDate ?constituencyEndDate .
+        		           parl:constituencyStartDate ?constituencyStartDate .
     	_:x
         	parl:sittingStartDate ?sittingStartDate ;
        		parl:connect ?constituency ;
@@ -111,11 +110,9 @@ class PersonQueryObject
     	  ?sitting parl:sittingHasSeat ?seat .
     	  MINUS { ?sitting a parl:PastSitting . }
     	  ?seat parl:seatHasConstituency ?constituency .
-        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        OPTIONAL { ?constituency parl:constituencyName ?name . }
+        OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
         OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
-		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
 
         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
