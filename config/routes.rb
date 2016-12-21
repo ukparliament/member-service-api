@@ -19,9 +19,9 @@ Rails.application.routes.draw do
 
   resources :people, only: [:index, :show] do
     get '/constituencies', to: 'people#constituencies'
-    get '/constituencies/current', to: 'people#current_constituencies'
+    get '/constituencies/current', to: 'people#current_constituency'
     get '/parties', to: 'people#parties'
-    get '/parties/current', to: 'people#current_parties'
+    get '/parties/current', to: 'people#current_party'
     get '/contact_points',to: 'people#contact_points'
     get '/houses',to: 'people#houses'
     get '/houses/current', to: 'people#current_house'
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
   resources :constituencies, only: [:index, :show] do
     get '/members', to: 'constituencies#members'
-    get '/members/current', to: 'constituencies#current_members'
+    get '/members/current', to: 'constituencies#current_member'
     get '/contact_point', to: 'constituencies#contact_point'
   end
 
