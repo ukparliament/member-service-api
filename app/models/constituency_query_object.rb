@@ -116,7 +116,7 @@ class ConstituencyQueryObject
     ")
   end
 
-  def self.current_members(id)
+  def self.current_member(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 

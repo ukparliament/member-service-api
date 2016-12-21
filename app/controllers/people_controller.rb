@@ -4,7 +4,7 @@ require 'uri'
 class PeopleController < ApplicationController
   def index
     uri = PersonQueryObject.all
-    response_streamer(uri)
+    response_streamer_two(uri)
   end
 
   def show
@@ -19,9 +19,9 @@ class PeopleController < ApplicationController
     response_streamer(uri)
   end
 
-  def current_constituencies
+  def current_constituency
     person_id = params[:person_id]
-    uri = PersonQueryObject.current_constituencies(person_id)
+    uri = PersonQueryObject.current_constituency(person_id)
     response_streamer(uri)
   end
 
@@ -31,9 +31,9 @@ class PeopleController < ApplicationController
     response_streamer(uri)
   end
 
-  def current_parties
+  def current_party
     person_id = params[:person_id]
-    uri = PersonQueryObject.current_parties(person_id)
+    uri = PersonQueryObject.current_party(person_id)
     response_streamer(uri)
   end
 
@@ -46,6 +46,12 @@ class PeopleController < ApplicationController
   def houses
     person_id = params[:person_id]
     uri = PersonQueryObject.houses(person_id)
+    response_streamer(uri)
+  end
+
+  def current_house
+    person_id = params[:person_id]
+    uri = PersonQueryObject.current_house(person_id)
     response_streamer(uri)
   end
 
