@@ -21,9 +21,9 @@ class ConstituenciesController < ApplicationController
     response_streamer(uri)
   end
 
-  def current_members
+  def current_member
     constituency_id = params[:constituency_id]
-    uri = ConstituencyQueryObject.current_members(constituency_id)
+    uri = ConstituencyQueryObject.current_member(constituency_id)
     response_streamer(uri)
   end
 

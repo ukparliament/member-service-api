@@ -92,7 +92,7 @@ class PersonQueryObject
     ")
   end
 
-  def self.current_constituencies(id)
+  def self.current_constituency(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
@@ -143,7 +143,7 @@ class PersonQueryObject
      ")
   end
 
-  def self.current_parties(id)
+  def self.current_party(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
 
