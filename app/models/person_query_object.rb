@@ -42,12 +42,14 @@ class PersonQueryObject
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       CONSTRUCT {
           <#{DATA_URI_PREFIX}/#{id}>
+              a parl:Person ;
               parl:dateOfBirth ?dateOfBirth ;
               parl:forename ?forename ;
               parl:middleName ?middleName ;
               parl:surname ?surname ;
               parl:gender ?gender .
      	  ?contactPoint
+            a parl:ContactPoint ;
         	  parl:email ?email ;
         	  parl:telephone ?telephone ;
         	  parl:faxNumber ?faxNumber ;
@@ -56,23 +58,25 @@ class PersonQueryObject
         	  parl:postalCode ?postalCode .
     	  ?constituency
         	  a parl:Constituency ;
-              parl:constituencyName ?constituencyName ;
+             parl:constituencyName ?constituencyName ;
         	  parl:constituencyStartDate ?constituencyStartDate ;
         	  parl:constituencyEndDate ?constituencyEndDate .
     	  _:a
+            a parl:Sitting ;
         	  parl:sittingEndDate ?sittingEndDate ;
         	  parl:sittingStartDate ?sittingStartDate ;
        		  parl:connect ?constituency ;
         	  parl:connect ?house ;
-          	  parl:objectId ?sitting .
+          	 parl:objectId ?sitting .
     	?party
         	  a parl:Party ;
-              parl:partyName ?partyName .
+             parl:partyName ?partyName .
     	_:b
+            a parl:PartyMembership ;
         	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
         	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
        		  parl:connect ?party ;
-          	  parl:objectId ?partyMembership .
+          	parl:objectId ?partyMembership .
     	?house a parl:House .
       }
       WHERE {
