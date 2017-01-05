@@ -6,8 +6,9 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?person
+          a parl:Person ;
           parl:forename ?forename ;
-          parl:surname ?surname ;
+          parl:surname ?surname .
       }
       WHERE {
         ?person a parl:Person .
@@ -41,26 +42,104 @@ class PersonQueryObject
       PREFIX schema: <http://schema.org/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       CONSTRUCT {
-          ?person
+          <#{DATA_URI_PREFIX}/#{id}>
               parl:dateOfBirth ?dateOfBirth ;
               parl:forename ?forename ;
               parl:middleName ?middleName ;
               parl:surname ?surname ;
               parl:gender ?gender .
+     	  ?contactPoint
+        	  parl:email ?email ;
+        	  parl:telephone ?telephone ;
+        	  parl:faxNumber ?faxNumber ;
+        	  parl:streetAddress ?streetAddress ;
+        	  parl:addressLocality ?addressLocality ;
+        	  parl:postalCode ?postalCode .
+    	  ?constituency
+        	  a parl:Constituency ;
+              parl:constituencyName ?constituencyName ;
+        	  parl:constituencyStartDate ?constituencyStartDate ;
+        	  parl:constituencyEndDate ?constituencyEndDate .
+    	  _:a
+        	  parl:sittingEndDate ?sittingEndDate ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+       		  parl:connect ?constituency ;
+        	  parl:connect ?house ;
+          	  parl:objectId ?sitting .
+    	?party
+        	  a parl:Party ;
+              parl:partyName ?partyName .
+    	_:b
+        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
+       		  parl:connect ?party ;
+          	  parl:objectId ?partyMembership .
+    	?house a parl:House .
       }
       WHERE {
-        ?person a parl:Person .
+        <#{DATA_URI_PREFIX}/#{id}> a parl:Person .
         OPTIONAL { ?person parl:forename ?forename } .
         OPTIONAL { ?person parl:middleName ?middleName } .
         OPTIONAL { ?person parl:surname ?surname } .
         OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
-          ?gender rdfs:subClassOf parl:HasGender .
-          ?person a ?gender .
-          FILTER NOT EXISTS { ?gender rdfs:seeAlso schema:GenderType } .
-        FILTER (?person = <#{DATA_URI_PREFIX}/#{id}> )
-      }
-    ")
+        ?gender rdfs:subClassOf parl:HasGender .
+        <#{DATA_URI_PREFIX}/#{id}> a ?gender .
+        FILTER NOT EXISTS { ?gender rdfs:seeAlso schema:GenderType } .
+
+    	<#{DATA_URI_PREFIX}/#{id}> parl:personHasSitting ?sitting .
+    	?sitting parl:sittingHasSeat ?seat .
+    	?seat parl:seatHasConstituency ?constituency .
+        ?seat parl:seatHasHouse ?house .
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
+        OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
+		OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
+
+    	<#{DATA_URI_PREFIX}/#{id}> parl:personHasPartyMembership ?partyMembership .
+        ?partyMembership parl:partyMembershipHasParty ?party .
+        OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
+        OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+        OPTIONAL { ?party parl:partyName ?partyName . }
+
+    	OPTIONAL {
+        	?sitting parl:sittingHasContactPoint ?contactPoint .
+        	OPTIONAL{ ?contactPoint parl:email ?email . }
+        	OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
+        	OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+        	OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
+        	OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
+        	OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
+    	}
+      }")
   end
+
+  # def self.find(id)
+  #   self.uri_builder("
+  #     PREFIX parl: <http://id.ukpds.org/schema/>
+  #     PREFIX schema: <http://schema.org/>
+  #     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  #     CONSTRUCT {
+  #         ?person
+  #             parl:dateOfBirth ?dateOfBirth ;
+  #             parl:forename ?forename ;
+  #             parl:middleName ?middleName ;
+  #             parl:surname ?surname ;
+  #             parl:gender ?gender .
+  #     }
+  #     WHERE {
+  #       ?person a parl:Person .
+  #       OPTIONAL { ?person parl:forename ?forename } .
+  #       OPTIONAL { ?person parl:middleName ?middleName } .
+  #       OPTIONAL { ?person parl:surname ?surname } .
+  #       OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
+  #         ?gender rdfs:subClassOf parl:HasGender .
+  #         ?person a ?gender .
+  #         FILTER NOT EXISTS { ?gender rdfs:seeAlso schema:GenderType } .
+  #       FILTER (?person = <#{DATA_URI_PREFIX}/#{id}> )
+  #     }
+  #   ")
+  # end
 
   def self.constituencies(id)
     self.uri_builder("
