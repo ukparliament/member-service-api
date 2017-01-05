@@ -77,10 +77,10 @@ class PersonQueryObject
       }
       WHERE {
         <#{DATA_URI_PREFIX}/#{id}> a parl:Person .
-        OPTIONAL { ?person parl:forename ?forename } .
-        OPTIONAL { ?person parl:middleName ?middleName } .
-        OPTIONAL { ?person parl:surname ?surname } .
-        OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
+        OPTIONAL { <#{DATA_URI_PREFIX}/#{id}> parl:forename ?forename } .
+        OPTIONAL { <#{DATA_URI_PREFIX}/#{id}> parl:middleName ?middleName } .
+        OPTIONAL { <#{DATA_URI_PREFIX}/#{id}> parl:surname ?surname } .
+        OPTIONAL { <#{DATA_URI_PREFIX}/#{id}> parl:dateOfBirth ?dateOfBirth } .
         ?gender rdfs:subClassOf parl:HasGender .
         <#{DATA_URI_PREFIX}/#{id}> a ?gender .
         FILTER NOT EXISTS { ?gender rdfs:seeAlso schema:GenderType } .
