@@ -6,7 +6,6 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?person
-          a parl:Person ;
           parl:forename ?forename ;
           parl:surname ?surname .
       }
