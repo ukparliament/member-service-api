@@ -225,16 +225,24 @@ class PersonQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-        ?contactPoint parl:email ?email ;
-        			parl:telephone ?telephone ;
-        			parl:faxNumber ?faxNumber ;
-        			parl:streetAddress ?streetAddress ;
-        			parl:addressLocality ?addressLocality ;
-        			parl:postalCode ?postalCode .
+        ?person
+          a parl:Person ;
+          parl:forename ?forename ;
+          parl:surname ?surname .
+        ?contactPoint
+          a parl:ContactPoint ;
+          parl:email ?email ;
+          parl:telephone ?telephone ;
+          parl:faxNumber ?faxNumber ;
+          parl:streetAddress ?streetAddress ;
+          parl:addressLocality ?addressLocality ;
+          parl:postalCode ?postalCode .
       }
       WHERE {
-	      ?member parl:personHasSitting ?sitting .
+	      ?person parl:personHasSitting ?sitting .
         ?sitting parl:sittingHasContactPoint ?contactPoint .
+        OPTIONAL { ?person parl:forename ?forename } .
+        OPTIONAL { ?person parl:surname ?surname } .
         OPTIONAL{ ?contactPoint parl:email ?email . }
         OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
         OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
@@ -242,7 +250,7 @@ class PersonQueryObject
         OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
         OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
 
-        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
+        FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
