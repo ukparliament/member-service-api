@@ -20,7 +20,9 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency parl:constituencyEndDate ?endDate ;
+          ?constituency
+            a parl:Constituency ;
+            parl:constituencyEndDate ?endDate ;
             parl:constituencyStartDate ?startDate ;
          		parl:constituencyName ?name ;
          		parl:constituencyLatitude ?latitude ;
