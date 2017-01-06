@@ -71,7 +71,7 @@ class PersonQueryObject
     	?party
         	  a parl:Party ;
              parl:partyName ?partyName .
-    	?partymembership
+    	?partyMembership
             a parl:PartyMembership ;
         	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
         	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
