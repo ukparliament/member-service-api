@@ -47,14 +47,16 @@ class ConstituencyQueryObject
           OPTIONAL { ?constituency parl:constituencyLongitude ?longitude . }
     	    OPTIONAL { ?constituency parl:constituencyExtent ?polygon . }
           OPTIONAL { ?constituency parl:constituencyOnsCode ?onsCode . }
-          ?constituency parl:constituencyHasSeat ?seat .
-          ?seat parl:seatHasSitting ?sitting .
-    	  ?sitting a parl:Sitting ;
-          parl:sittingHasPerson ?member .
-          OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-          OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-          OPTIONAL { ?member parl:forename ?forename . }
-          OPTIONAL { ?member parl:surname ?surname . }
+          OPTIONAL {
+            ?constituency parl:constituencyHasSeat ?seat .
+            ?seat parl:seatHasSitting ?sitting .
+    	      ?sitting a parl:Sitting ;
+            OPTIONAL { ?sitting parl:sittingHasPerson ?member . }
+            OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+            OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+            OPTIONAL { ?member parl:forename ?forename . }
+            OPTIONAL { ?member parl:surname ?surname . }
+          }
 
           FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
