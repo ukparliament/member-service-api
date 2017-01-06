@@ -21,12 +21,19 @@ class ConstituencyQueryObject
 
       CONSTRUCT{
           ?constituency parl:constituencyEndDate ?endDate ;
-          			parl:constituencyStartDate ?startDate ;
-         				parl:constituencyName ?name ;
-          			parl:constituencyLatitude ?latitude ;
-          			parl:constituencyLongitude ?longitude ;
-        			  parl:constituencyExtent ?polygon ;
-                parl:constituencyOnsCode ?onsCode .
+            parl:constituencyStartDate ?startDate ;
+         		parl:constituencyName ?name ;
+         		parl:constituencyLatitude ?latitude ;
+         		parl:constituencyLongitude ?longitude ;
+        	  parl:constituencyExtent ?polygon ;
+            parl:constituencyOnsCode ?onsCode .
+    			?member a parl:Member ;
+            parl:forename ?forename ;
+        	  parl:surname ?surname .
+    		  ?sitting parl:sittingStartDate ?sittingStartDate ;
+        		parl:sittingEndDate ?sittingEndDate ;
+        		parl:connect ?member ;
+        		parl:relationship \"through\" .
       }
       WHERE {
           ?constituency a parl:Constituency .
@@ -37,6 +44,13 @@ class ConstituencyQueryObject
           OPTIONAL { ?constituency parl:constituencyLongitude ?longitude . }
     	    OPTIONAL { ?constituency parl:constituencyExtent ?polygon . }
           OPTIONAL { ?constituency parl:constituencyOnsCode ?onsCode . }
+          ?constituency parl:constituencyHasSeat ?seat .
+          ?seat parl:seatHasSitting ?sitting .
+    	  ?sitting parl:sittingHasPerson ?member .
+          OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+          OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+          OPTIONAL { ?member parl:forename ?forename . }
+          OPTIONAL { ?member parl:surname ?surname . }
 
           FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
