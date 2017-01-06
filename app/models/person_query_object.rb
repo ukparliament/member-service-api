@@ -61,22 +61,22 @@ class PersonQueryObject
              parl:constituencyName ?constituencyName ;
         	  parl:constituencyStartDate ?constituencyStartDate ;
         	  parl:constituencyEndDate ?constituencyEndDate .
-    	  _:a
+    	  ?sitting
             a parl:Sitting ;
         	  parl:sittingEndDate ?sittingEndDate ;
         	  parl:sittingStartDate ?sittingStartDate ;
        		  parl:connect ?constituency ;
         	  parl:connect ?house ;
-          	 parl:objectId ?sitting .
+            parl:relationship \"through\" .
     	?party
         	  a parl:Party ;
              parl:partyName ?partyName .
-    	_:b
+    	?partymembership
             a parl:PartyMembership ;
         	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
         	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
        		  parl:connect ?party ;
-          	parl:objectId ?partyMembership .
+            parl:relationship \"through\" .
     	?house a parl:House .
       }
       WHERE {
@@ -116,33 +116,6 @@ class PersonQueryObject
     	}
       }")
   end
-
-  # def self.find(id)
-  #   self.uri_builder("
-  #     PREFIX parl: <http://id.ukpds.org/schema/>
-  #     PREFIX schema: <http://schema.org/>
-  #     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-  #     CONSTRUCT {
-  #         ?person
-  #             parl:dateOfBirth ?dateOfBirth ;
-  #             parl:forename ?forename ;
-  #             parl:middleName ?middleName ;
-  #             parl:surname ?surname ;
-  #             parl:gender ?gender .
-  #     }
-  #     WHERE {
-  #       ?person a parl:Person .
-  #       OPTIONAL { ?person parl:forename ?forename } .
-  #       OPTIONAL { ?person parl:middleName ?middleName } .
-  #       OPTIONAL { ?person parl:surname ?surname } .
-  #       OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
-  #         ?gender rdfs:subClassOf parl:HasGender .
-  #         ?person a ?gender .
-  #         FILTER NOT EXISTS { ?gender rdfs:seeAlso schema:GenderType } .
-  #       FILTER (?person = <#{DATA_URI_PREFIX}/#{id}> )
-  #     }
-  #   ")
-  # end
 
   def self.constituencies(id)
     self.uri_builder("
