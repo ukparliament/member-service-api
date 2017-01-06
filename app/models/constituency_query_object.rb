@@ -32,7 +32,8 @@ class ConstituencyQueryObject
     			?member a parl:Member ;
             parl:forename ?forename ;
         	  parl:surname ?surname .
-    		  ?sitting parl:sittingStartDate ?sittingStartDate ;
+    		  ?sitting a parl:Sitting ;
+            parl:sittingStartDate ?sittingStartDate ;
         		parl:sittingEndDate ?sittingEndDate ;
         		parl:connect ?member ;
         		parl:relationship \"through\" .
@@ -48,7 +49,8 @@ class ConstituencyQueryObject
           OPTIONAL { ?constituency parl:constituencyOnsCode ?onsCode . }
           ?constituency parl:constituencyHasSeat ?seat .
           ?seat parl:seatHasSitting ?sitting .
-    	  ?sitting parl:sittingHasPerson ?member .
+    	  ?sitting a parl:Sitting ;
+          parl:sittingHasPerson ?member .
           OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
           OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
           OPTIONAL { ?member parl:forename ?forename . }
