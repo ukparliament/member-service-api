@@ -179,13 +179,18 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-        ?party a parl:Party ;
-                 parl:partyName ?partyName .
-    	  _:x
-        	parl:partyMembershipStartDate ?partyMembershipStartDate ;
-        	parl:partyMembershipEndDate ?partyMembershipEndDate ;
-       		parl:connect ?party ;
-          parl:objectId ?partyMembership .
+    	?member a parl:Person ;
+              parl:forename ?forename ;
+              parl:surname ?surname .
+      ?party
+        	  a parl:Party ;
+             parl:partyName ?partyName .
+    	?partyMembership
+            a parl:PartyMembership ;
+        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
+       		  parl:connect ?party ;
+            parl:relationship \"through\" .
        }
        WHERE {
          ?member parl:personHasPartyMembership ?partyMembership .
@@ -193,6 +198,8 @@ class PersonQueryObject
          OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
          OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
          OPTIONAL { ?party parl:partyName ?partyName . }
+    	   OPTIONAL { ?member parl:forename ?forename } .
+         OPTIONAL { ?member parl:surname ?surname } .
          FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
        }
      ")
