@@ -33,8 +33,15 @@ class HouseQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
           ?member a parl:Member ;
-                  parl:forename ?forename ;
-              	  parl:surname ?surname .
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	  ?house a parl:House .
+    	  ?sitting
+            a parl:Sitting ;
+        	  parl:sittingEndDate ?sittingEndDate ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+        	  parl:connect ?house ;
+            parl:relationship \"through\" .
       }
       WHERE {
       	?house parl:houseHasSeat ?seat.
@@ -42,6 +49,8 @@ class HouseQueryObject
         ?sitting parl:sittingHasPerson ?member .
         OPTIONAL { ?member parl:forename ?forename . }
         OPTIONAL { ?member parl:surname ?surname . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
 
         FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
       }
@@ -53,8 +62,15 @@ class HouseQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
           ?member a parl:Member ;
-                  parl:forename ?forename ;
-              	  parl:surname ?surname .
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	  ?house a parl:House .
+    	  ?sitting
+            a parl:Sitting ;
+        	  parl:sittingEndDate ?sittingEndDate ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+        	  parl:connect ?house ;
+            parl:relationship \"through\" .
       }
       WHERE {
       	?house parl:houseHasSeat ?seat.
@@ -62,6 +78,8 @@ class HouseQueryObject
         ?sitting parl:sittingHasPerson ?member .
         OPTIONAL { ?member parl:forename ?forename . }
         OPTIONAL { ?member parl:surname ?surname . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
 
         FILTER(?house = <#{DATA_URI_PREFIX}/#{id}>)
         FILTER regex(str(?surname), \"^#{letter.upcase}\") .
@@ -74,11 +92,14 @@ class HouseQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
           ?member a parl:Member ;
-                  parl:forename ?forename ;
-                  parl:surname ?surname .
-          _:x parl:sittingStartDate ?sittingStartDate ;
-              parl:connect ?member ;
-              parl:objectId ?sitting .
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	  ?house a parl:House .
+    	  ?sitting
+            a parl:Sitting ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+        	  parl:connect ?house ;
+            parl:relationship \"through\" .
       }
       WHERE {
       	?house parl:houseHasSeat ?seat.
@@ -99,11 +120,14 @@ class HouseQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
           ?member a parl:Member ;
-                  parl:forename ?forename ;
-                  parl:surname ?surname .
-          _:x parl:sittingStartDate ?sittingStartDate ;
-              parl:connect ?member ;
-              parl:objectId ?sitting .
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	  ?house a parl:House .
+    	  ?sitting
+            a parl:Sitting ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+        	  parl:connect ?house ;
+            parl:relationship \"through\" .
       }
       WHERE {
       	?house parl:houseHasSeat ?seat.
@@ -124,6 +148,7 @@ class HouseQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
+        ?house a parl:House .
         ?party parl:partyName ?partyName .
       }
       WHERE {
@@ -146,6 +171,7 @@ class HouseQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
+        ?house a parl:House .
         ?party parl:partyName ?partyName .
       }
       WHERE {
