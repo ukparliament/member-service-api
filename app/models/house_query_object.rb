@@ -40,7 +40,7 @@ class HouseQueryObject
             a parl:Sitting ;
         	  parl:sittingEndDate ?sittingEndDate ;
         	  parl:sittingStartDate ?sittingStartDate ;
-        	  parl:connect ?house ;
+        	  parl:connect ?member ;
             parl:relationship \"through\" .
       }
       WHERE {
@@ -69,7 +69,7 @@ class HouseQueryObject
             a parl:Sitting ;
         	  parl:sittingEndDate ?sittingEndDate ;
         	  parl:sittingStartDate ?sittingStartDate ;
-        	  parl:connect ?house ;
+        	  parl:connect ?member ;
             parl:relationship \"through\" .
       }
       WHERE {
@@ -98,7 +98,7 @@ class HouseQueryObject
     	  ?sitting
             a parl:Sitting ;
         	  parl:sittingStartDate ?sittingStartDate ;
-        	  parl:connect ?house ;
+        	  parl:connect ?member ;
             parl:relationship \"through\" .
       }
       WHERE {
@@ -126,7 +126,7 @@ class HouseQueryObject
     	  ?sitting
             a parl:Sitting ;
         	  parl:sittingStartDate ?sittingStartDate ;
-        	  parl:connect ?house ;
+        	  parl:connect ?member ;
             parl:relationship \"through\" .
       }
       WHERE {
