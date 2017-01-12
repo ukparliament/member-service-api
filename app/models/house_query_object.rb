@@ -154,7 +154,7 @@ class HouseQueryObject
           parl:partyName ?partyName .
       }
       WHERE {
-        SELECT DISTINCT ?party ?partyName
+        SELECT DISTINCT ?party ?partyName ?house
           WHERE {
             ?house parl:houseHasSeat ?seat.
             ?seat parl:seatHasSitting ?sitting .
@@ -179,7 +179,7 @@ class HouseQueryObject
           parl:partyName ?partyName .
       }
       WHERE {
-        SELECT DISTINCT ?party ?partyName
+        SELECT DISTINCT ?party ?partyName ?house
           WHERE {
             ?house parl:houseHasSeat ?seat.
             ?seat parl:seatHasSitting ?sitting .
