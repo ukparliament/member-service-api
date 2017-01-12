@@ -149,7 +149,9 @@ class HouseQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?house a parl:House .
-        ?party parl:partyName ?partyName .
+        ?party
+          a parl:Party ;
+          parl:partyName ?partyName .
       }
       WHERE {
         SELECT DISTINCT ?party ?partyName
@@ -172,7 +174,9 @@ class HouseQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?house a parl:House .
-        ?party parl:partyName ?partyName .
+        ?party
+          a parl:Party ;
+          parl:partyName ?partyName .
       }
       WHERE {
         SELECT DISTINCT ?party ?partyName
