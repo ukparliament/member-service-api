@@ -49,7 +49,9 @@ class PartyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-         ?party parl:partyName ?partyName .
+         ?party
+            a parl:Party ;
+            parl:partyName ?partyName .
       }
       WHERE {
           ?party parl:partyName ?partyName .
