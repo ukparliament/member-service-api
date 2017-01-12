@@ -242,6 +242,8 @@ class PersonQueryObject
     		  FILTER NOT EXISTS { ?partyMembership a parl:PastThing . }
         	OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
         	OPTIONAL { ?party parl:partyName ?partyName . }
+    	    OPTIONAL { ?member parl:forename ?forename } .
+          OPTIONAL { ?member parl:surname ?surname } .
           FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
