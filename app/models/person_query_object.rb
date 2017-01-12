@@ -286,12 +286,16 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-    	 ?house a parl:House .
-    	_:x
-        	parl:sittingEndDate ?sittingEndDate ;
-        	parl:sittingStartDate ?sittingStartDate ;
-       		parl:connect ?house ;
-          parl:objectId ?sitting .
+        ?member a parl:Person ;
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	  ?house a parl:House .
+    	  ?sitting
+            a parl:Sitting ;
+        	  parl:sittingEndDate ?sittingEndDate ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+        	  parl:connect ?house ;
+            parl:relationship \"through\" .
       }
       WHERE {
     	  ?member parl:personHasSitting ?sitting .
@@ -299,7 +303,8 @@ class PersonQueryObject
     	  ?seat parl:seatHasHouse ?house .
         OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-
+        OPTIONAL { ?member parl:forename ?forename } .
+        OPTIONAL { ?member parl:surname ?surname } .
 
         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
@@ -310,19 +315,27 @@ class PersonQueryObject
     self.uri_builder("
           PREFIX parl: <http://id.ukpds.org/schema/>
           CONSTRUCT{
-          ?house a parl:House .
-          _:x
-            parl:sittingStartDate ?sittingStartDate ;
-            parl:connect ?house ;
-            parl:objectId ?sitting .
+            ?member a parl:Person ;
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	      ?house a parl:House .
+    	      ?sitting
+              a parl:Sitting ;
+        	    parl:sittingStartDate ?sittingStartDate ;
+        	    parl:connect ?house ;
+              parl:relationship \"through\" .
           }
           WHERE {
             ?sitting a parl:Sitting .
-          FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
-            ?sitting parl:sittingHasPerson <#{DATA_URI_PREFIX}/#{id}> .
-          ?sitting parl:sittingHasSeat ?seat ;
-              parl:sittingStartDate ?sittingStartDate .
-          ?seat parl:seatHasHouse ?house .
+            FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
+            ?sitting parl:sittingHasPerson ?member .
+            ?sitting parl:sittingHasSeat ?seat ;
+                      parl:sittingStartDate ?sittingStartDate .
+            ?seat parl:seatHasHouse ?house .
+            OPTIONAL { ?member parl:forename ?forename } .
+            OPTIONAL { ?member parl:surname ?surname } .
+
+            FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
           }
         ")
   end
