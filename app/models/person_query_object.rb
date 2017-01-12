@@ -122,25 +122,32 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-    	 ?constituency a parl:Constituency ;
-                       parl:constituencyName ?constituencyName ;
-        		           parl:constituencyStartDate ?constituencyStartDate ;
-        		           parl:constituencyEndDate ?constituencyEndDate .
-    	_:x
-        	parl:sittingEndDate ?sittingEndDate ;
-        	parl:sittingStartDate ?sittingStartDate ;
-       		parl:connect ?constituency ;
-          parl:objectId ?sitting .
+        ?member a parl:Person ;
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	 ?constituency
+        	  a parl:Constituency ;
+            parl:constituencyName ?constituencyName ;
+        	  parl:constituencyStartDate ?constituencyStartDate ;
+        	  parl:constituencyEndDate ?constituencyEndDate .
+    	  ?sitting
+            a parl:Sitting ;
+        	  parl:sittingEndDate ?sittingEndDate ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+       		  parl:connect ?constituency ;
+            parl:relationship \"through\" .
       }
       WHERE {
     	  ?member parl:personHasSitting ?sitting .
     	  ?sitting parl:sittingHasSeat ?seat .
     	  ?seat parl:seatHasConstituency ?constituency .
-        	OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-        	OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        	OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
-        	OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
-		      OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
+        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
+        OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
+		    OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
+        OPTIONAL { ?member parl:forename ?forename } .
+        OPTIONAL { ?member parl:surname ?surname } .
 
         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
@@ -152,13 +159,18 @@ class PersonQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-    	 ?constituency a parl:Constituency ;
-                       parl:constituencyName ?constituencyName ;
-        		           parl:constituencyStartDate ?constituencyStartDate .
-    	_:x
-        	parl:sittingStartDate ?sittingStartDate ;
-       		parl:connect ?constituency ;
-          parl:objectId ?sitting .
+    	 ?member a parl:Person ;
+              parl:forename ?forename ;
+              parl:surname ?surname .
+    	 ?constituency
+        	  a parl:Constituency ;
+            parl:constituencyName ?constituencyName ;
+        	  parl:constituencyStartDate ?constituencyStartDate .
+    	  ?sitting
+            a parl:Sitting ;
+        	  parl:sittingStartDate ?sittingStartDate ;
+       		  parl:connect ?constituency ;
+            parl:relationship \"through\" .
       }
       WHERE {
     	  ?member parl:personHasSitting ?sitting .
@@ -168,6 +180,8 @@ class PersonQueryObject
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
         OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
         OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
+        OPTIONAL { ?member parl:forename ?forename } .
+        OPTIONAL { ?member parl:surname ?surname } .
 
         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
       }
