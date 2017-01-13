@@ -6,7 +6,9 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency parl:constituencyName ?name ;
+          ?constituency
+            a parl:Constituency ;
+            parl:constituencyName ?name .
       }
       WHERE {
       	?constituency a parl:Constituency .
@@ -48,14 +50,14 @@ class ConstituencyQueryObject
     	    OPTIONAL { ?constituency parl:constituencyExtent ?polygon . }
           OPTIONAL { ?constituency parl:constituencyOnsCode ?onsCode . }
           OPTIONAL {
-            ?constituency parl:constituencyHasSeat ?seat .
-            ?seat parl:seatHasSitting ?sitting .
-    	      ?sitting a parl:Sitting ;
-            OPTIONAL { ?sitting parl:sittingHasPerson ?member . }
-            OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-            OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-            OPTIONAL { ?member parl:forename ?forename . }
-            OPTIONAL { ?member parl:surname ?surname . }
+          ?constituency parl:constituencyHasSeat ?seat .
+          ?seat parl:seatHasSitting ?sitting .
+    	    ?sitting a parl:Sitting ;
+          OPTIONAL { ?sitting parl:sittingHasPerson ?member . }
+          OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
+          OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+          OPTIONAL { ?member parl:forename ?forename . }
+          OPTIONAL { ?member parl:surname ?surname . }
           }
 
           FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
@@ -68,7 +70,9 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency parl:constituencyName ?name ;
+          ?constituency
+              a parl:Constituency ;
+              parl:constituencyName ?name .
       }
       WHERE {
           ?constituency a parl:Constituency .
@@ -83,7 +87,9 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency parl:constituencyName ?name ;
+          ?constituency
+              a parl:Constituency ;
+              parl:constituencyName ?name .
       }
       WHERE {
           ?constituency a parl:Constituency .
@@ -99,13 +105,17 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-    	   ?member a parl:Member ;
-                 parl:forename ?forename ;
-        	       parl:surname ?surname .
-    		  _:x parl:sittingStartDate ?sittingStartDate ;
-        		  parl:sittingEndDate ?sittingEndDate ;
-        		  parl:connect ?member ;
-        		  parl:objectId ?sitting .
+    	   ?constituency
+            a parl:Constituency ;
+         		parl:constituencyName ?name .
+    		 ?member a parl:Member ;
+            parl:forename ?forename ;
+        	  parl:surname ?surname .
+    		 ?sitting a parl:Sitting ;
+            parl:sittingStartDate ?sittingStartDate ;
+        		parl:sittingEndDate ?sittingEndDate ;
+        		parl:connect ?member ;
+        		parl:relationship \"through\" .
       }
       WHERE {
     	  ?constituency parl:constituencyHasSeat ?seat .
@@ -113,6 +123,7 @@ class ConstituencyQueryObject
     	  ?sitting parl:sittingHasPerson ?member .
         OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?constituency parl:constituencyName ?name . }
         OPTIONAL { ?member parl:forename ?forename . }
         OPTIONAL { ?member parl:surname ?surname . }
 
@@ -126,7 +137,9 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency parl:constituencyName ?name ;
+          ?constituency
+            a parl:Constituency ;
+            parl:constituencyName ?name .
       }
       WHERE {
       	?constituency a parl:Constituency .
@@ -141,23 +154,27 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-         ?member a parl:Member ;
-                 parl:forename ?forename ;
-        		     parl:surname ?surname .
-    		_:x parl:sittingStartDate ?sittingStartDate ;
+         ?constituency
+            a parl:Constituency ;
+         		parl:constituencyName ?name .
+    		 ?member a parl:Member ;
+            parl:forename ?forename ;
+        	  parl:surname ?surname .
+    		 ?sitting a parl:Sitting ;
+            parl:sittingStartDate ?sittingStartDate ;
         		parl:connect ?member ;
-        		parl:objectId ?sitting .
+        		parl:relationship \"through\" .
       }
       WHERE {
     	  ?constituency parl:constituencyHasSeat ?seat .
     	  ?seat parl:seatHasSitting ?sitting .
     	  FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
     	  ?sitting parl:sittingHasPerson ?member .
-        OPTIONAL { ?sitting parl:endDate ?endDate . }
         OPTIONAL { ?sitting parl:startDate ?startDate . }
         OPTIONAL { ?member parl:forename ?forename . }
 		    OPTIONAL { ?member parl:surname ?surname . }
         OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        OPTIONAL { ?constituency parl:constituencyName ?name . }
 
         FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
       }
@@ -168,7 +185,12 @@ class ConstituencyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-        ?contactPoint parl:email ?email ;
+        ?constituency
+            a parl:Constituency ;
+         		parl:constituencyName ?name .
+        ?contactPoint
+              a parl:ContactPoint ;
+              parl:email ?email ;
         			parl:telephone ?telephone ;
         			parl:faxNumber ?faxNumber ;
         			parl:streetAddress ?streetAddress ;
@@ -185,6 +207,7 @@ class ConstituencyQueryObject
         OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
         OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
         OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
+        OPTIONAL { ?constituency parl:constituencyName ?name . }
 
       	FILTER(?constituency = <#{DATA_URI_PREFIX}/#{id}>)
       }
