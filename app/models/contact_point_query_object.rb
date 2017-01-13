@@ -5,23 +5,25 @@ class ContactPointQueryObject
     self.uri_builder('
               PREFIX parl: <http://id.ukpds.org/schema/>
               CONSTRUCT {
-                 ?contactPoint parl:email ?email ;
-                                parl:telephone ?telephone ;
-                                parl:faxNumber ?faxNumber ;
-                                parl:streetAddress ?streetAddress ;
-                                parl:addressLocality ?addressLocality ;
-                                parl:postalCode ?postalCode .
+                 ?contactPoint
+                    a parl:ContactPoint ;
+                    parl:email ?email ;
+                    parl:telephone ?telephone ;
+                    parl:faxNumber ?faxNumber ;
+                    parl:streetAddress ?streetAddress ;
+                    parl:addressLocality ?addressLocality ;
+                    parl:postalCode ?postalCode .
               }
 
               WHERE {
                   ?contactPoint a parl:ContactPoint ;
-                      MINUS { ?contactPoint a parl:Postal}
-                    OPTIONAL{ ?contactPoint parl:email ?email . }
-                    OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
-                    OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-                    OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
-                    OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
-                    OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
+                  MINUS { ?contactPoint a parl:Postal}
+                  OPTIONAL{ ?contactPoint parl:email ?email . }
+                  OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
+                  OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+                  OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
+                  OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
+                  OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
               }'
     )
   end
@@ -30,13 +32,15 @@ class ContactPointQueryObject
     self.uri_builder("
                 PREFIX parl: <http://id.ukpds.org/schema/>
                 CONSTRUCT {
-                   ?contactPoint parl:email ?email ;
-                                 parl:telephone ?telephone ;
-                                 parl:faxNumber ?faxNumber ;
-                                 parl:streetAddress ?streetAddress ;
-                                 parl:addressLocality ?addressLocality ;
-                                 parl:postalCode ?postalCode ;
-    						                 parl:owner ?name .
+                   ?contactPoint
+                      a parl:ContactPoint ;
+                      parl:email ?email ;
+                      parl:telephone ?telephone ;
+                      parl:faxNumber ?faxNumber ;
+                      parl:streetAddress ?streetAddress ;
+                      parl:addressLocality ?addressLocality ;
+                      parl:postalCode ?postalCode ;
+    						      parl:owner ?name .
                 }
                 WHERE {
                     ?contactPoint a parl:ContactPoint ;
@@ -60,5 +64,4 @@ class ContactPointQueryObject
                   }
                 ")
   end
-
 end
