@@ -3,36 +3,35 @@ class PartyQueryObject
 
   def self.all
     self.uri_builder('
-             PREFIX parl: <http://id.ukpds.org/schema/>
+      PREFIX parl: <http://id.ukpds.org/schema/>
 
-             CONSTRUCT {
-                ?party a parl:Party ;
-                        parl:partyName ?partyName .
-              }
-
-             WHERE {
-	              ?party a parl:Party ;
-                        parl:partyName ?partyName .
-              }
+      CONSTRUCT {
+        ?party a parl:Party ;
+                parl:partyName ?partyName .
+      }
+      WHERE {
+	      ?party a parl:Party ;
+                parl:partyName ?partyName .
+      }
     ')
   end
 
   def self.all_current
     self.uri_builder('
-              PREFIX parl: <http://id.ukpds.org/schema/>
-              CONSTRUCT {
-                  ?party a parl:Party ;
-                      	parl:partyName ?partyName .
-              }
-              WHERE {
-              	?seatIncumbency a parl:SeatIncumbency .
-                FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
-                ?seatIncumbency parl:seatIncumbencyHasMember ?person .
-                ?person parl:partyMemberHasPartyMembership ?partyMembership .
-                FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-                ?partyMembership parl:partyMembershipHasParty ?party .
-                ?party parl:partyName ?partyName .
-              }
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?party a parl:Party ;
+            	parl:partyName ?partyName .
+      }
+      WHERE {
+      	?seatIncumbency a parl:SeatIncumbency .
+        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+        ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+        ?person parl:partyMemberHasPartyMembership ?partyMembership .
+        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+        ?partyMembership parl:partyMembershipHasParty ?party .
+        ?party parl:partyName ?partyName .
+      }
     ')
   end
 
@@ -40,14 +39,14 @@ class PartyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-         ?party
-            a parl:Party ;
-            parl:partyName ?partyName .
+        ?party
+           a parl:Party ;
+           parl:partyName ?partyName .
       }
       WHERE {
-          ?party a parl:Party ;
-                parl:partyName ?partyName .
-          FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
+        ?party a parl:Party ;
+              parl:partyName ?partyName .
+        FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
       }
     ")
   end
@@ -57,11 +56,10 @@ class PartyQueryObject
      PREFIX parl: <http://id.ukpds.org/schema/>
      CONSTRUCT {
 	      ?party a parl:Party;
-            parl:partyName ?name
+               parl:partyName ?name
      }
      WHERE {
-	      ?party a parl:Party;
-	             parl:partyName ?name
+	      ?party parl:partyName ?name
 
         FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
       }
