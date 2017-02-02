@@ -12,7 +12,7 @@ class ConstituencyQueryObject
       }
       WHERE {
       	?constituencyGroup a parl:ConstituencyGroup .
-          OPTIONAL { ?constituency parl:constituencyGroupName ?name . }
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
       }
     ')
   end
@@ -82,8 +82,8 @@ class ConstituencyQueryObject
       }
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
-          FILTER NOT EXISTS { ?constituency a parl:PastConstituencyGroup . }
-          OPTIONAL { ?constituency parl:constituencyGroupName ?name . }
+          FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
       }
     ')
   end
@@ -190,31 +190,47 @@ class ConstituencyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-        ?constituency
-            a parl:Constituency ;
-         		parl:constituencyName ?name .
-        ?contactPoint
-              a parl:ContactPoint ;
-              parl:email ?email ;
-        			parl:telephone ?telephone ;
-        			parl:faxNumber ?faxNumber ;
-        			parl:streetAddress ?streetAddress ;
-        			parl:addressLocality ?addressLocality ;
-        			parl:postalCode ?postalCode .
+      	?constituencyGroup a parl:ConstituencyGroup ;
+        				parl:constituencyGroupHasHouseSeat ?houseSeat ;
+        				parl:constituencyGroupName ?name .
+        ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
+        ?contactPoint a parl:ContactPoint ;
+        			  parl:email ?email ;
+                      parl:phoneNumber ?phoneNumber ;
+        			  parl:faxNumber ?faxNumber ;
+    			      parl:contactForm ?contactForm ;
+    	              parl:contactPointHasPostalAddress ?postalAddress .
+        ?postalAddress a parl:PostalAddress ;
+        			   parl:postCode ?postCode ;
+       				   parl:addressLine1 ?addressLine1 ;
+    				   parl:addressLine2 ?addressLine2 ;
+    				   parl:addressLine3 ?addressLine3 ;
+    				   parl:addressLine4 ?addressLine4 ;
+    				   parl:addressLine5 ?addressLine5 .
       }
-
       WHERE {
-      	?constituency parl:constituencyHasConstituencyParty ?constituencyParty .
-        ?constituencyParty parl:constituencyPartyHasContactPoint ?contactPoint .
-        OPTIONAL{ ?contactPoint parl:email ?email . }
-        OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
-        OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-        OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
-        OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
-        OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
-        OPTIONAL { ?constituency parl:constituencyName ?name . }
+      	?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+            OPTIONAL { ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+                OPTIONAL{ ?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
+                OPTIONAL{ ?contactPoint parl:email ?email . }
+                OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
+                OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+                OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
+                OPTIONAL{ ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+                    OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
+                    OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
+                    OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
+                    OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
+                    OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
+                    OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
+                }
+            }
+        }
+        OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
 
-      	FILTER(?constituency = <#{DATA_URI_PREFIX}/#{id}>)
+      	FILTER(?constituencyGroup = <#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
