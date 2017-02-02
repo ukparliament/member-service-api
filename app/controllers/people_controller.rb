@@ -60,10 +60,4 @@ class PeopleController < ApplicationController
     uri = PersonQueryObject.all_by_letter(letter)
     response_streamer(uri)
   end
-
-  def sittings
-    person_id = params[:person_id]
-    uri = PersonQueryObject.sittings(person_id)
-    response_streamer(uri)
-  end
 end
