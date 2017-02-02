@@ -44,6 +44,7 @@ class ConstituencyQueryObject
                     parl:personFamilyName ?familyName .
       }
       WHERE {
+          BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
           ?constituencyGroup a parl:ConstituencyGroup .
           OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?endDate . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?startDate . }
@@ -65,8 +66,6 @@ class ConstituencyQueryObject
             OPTIONAL { ?member parl:personGivenName ?givenName . }
             OPTIONAL { ?member parl:personFamilyName ?familyName . }
           }
-
-          FILTER(?constituencyGroup=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -123,6 +122,7 @@ class ConstituencyQueryObject
         			    parl:personFamilyName ?familyName .
       }
       WHERE {
+        BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
     	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
     	  ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
@@ -131,8 +131,6 @@ class ConstituencyQueryObject
         	OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
         	OPTIONAL { ?member parl:personGivenName ?givenName . }
         	OPTIONAL { ?member parl:personFamilyName ?familyName . }
-
-        FILTER(?constituencyGroup=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -171,6 +169,7 @@ class ConstituencyQueryObject
         			    parl:personFamilyName ?familyName .
       }
       WHERE {
+        BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
     	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
     	  ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
@@ -180,8 +179,6 @@ class ConstituencyQueryObject
         	OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
         	OPTIONAL { ?member parl:personGivenName ?givenName . }
         	OPTIONAL { ?member parl:personFamilyName ?familyName . }
-
-        FILTER(?constituencyGroup=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -210,27 +207,30 @@ class ConstituencyQueryObject
     				   parl:addressLine5 ?addressLine5 .
       }
       WHERE {
-      	?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
-            OPTIONAL { ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-            FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
-                OPTIONAL{ ?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
-                OPTIONAL{ ?contactPoint parl:email ?email . }
-                OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
-                OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-                OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
-                OPTIONAL{ ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
-                    OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
-                    OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
-                    OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
-                    OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
-                    OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
-                    OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
-                }
-            }
-        }
+    	BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
+      	 OPTIONAL {
+        	?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+        	OPTIONAL {
+        		?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+        		FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+        		OPTIONAL {
+            		?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
+                    OPTIONAL{ ?contactPoint parl:email ?email . }
+                    	OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
+                    	OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+                    	OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
+                    	OPTIONAL{ ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+                        	OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
+                        	OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
+                        	OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
+                        	OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
+                        	OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
+                        	OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
+                    	}
+                	}
+        		}
+    		}
         OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-
-      	FILTER(?constituencyGroup = <#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
