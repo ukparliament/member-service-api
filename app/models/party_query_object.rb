@@ -139,10 +139,10 @@ class PartyQueryObject
             parl:partyName ?partyName .
         ?person a parl:Person ;
             parl:personGivenName ?givenName ;
-            parl:personFamilyName ?familyName .
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership .
         ?partyMembership a parl:PartyMembership ;
-            parl:partyMembershipStartDate ?startDate ;
-            parl:partyMembershipHasPartyMember ?person .
+            parl:partyMembershipStartDate ?startDate .
       }
       WHERE {
       	?party parl:partyName ?partyName ;
@@ -167,10 +167,10 @@ class PartyQueryObject
             parl:partyName ?partyName .
         ?person a parl:Person ;
             parl:personGivenName ?givenName ;
-            parl:personFamilyName ?familyName .
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership .
         ?partyMembership a parl:PartyMembership ;
-            parl:partyMembershipStartDate ?startDate ;
-            parl:partyMembershipHasPartyMember ?person .
+            parl:partyMembershipStartDate ?startDate .
       }
       WHERE {
       	?party parl:partyName ?partyName ;
