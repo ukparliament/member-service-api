@@ -3,65 +3,86 @@ class ContactPointQueryObject
 
   def self.all
     self.uri_builder('
-              PREFIX parl: <http://id.ukpds.org/schema/>
-              CONSTRUCT {
-                 ?contactPoint
-                    a parl:ContactPoint ;
-                    parl:email ?email ;
-                    parl:telephone ?telephone ;
-                    parl:faxNumber ?faxNumber ;
-                    parl:streetAddress ?streetAddress ;
-                    parl:addressLocality ?addressLocality ;
-                    parl:postalCode ?postalCode .
-              }
-
-              WHERE {
-                  ?contactPoint a parl:ContactPoint ;
-                  MINUS { ?contactPoint a parl:Postal}
-                  OPTIONAL{ ?contactPoint parl:email ?email . }
-                  OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
-                  OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-                  OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
-                  OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
-                  OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
-              }'
+        PREFIX parl: <http://id.ukpds.org/schema/>
+        CONSTRUCT {
+           ?contactPoint
+               a parl:ContactPoint ;
+               parl:email ?email ;
+               parl:phoneNumber ?phoneNumber ;
+               parl:faxNumber ?faxNumber ;
+               parl:contactForm ?contactForm ;
+               parl:addressLocality ?addressLocality ;
+               parl:contactPointHasPostalAddress ?postalAddress .
+            ?postalAddress parl:postCode ?postCode ;
+               			   parl:addressLine1 ?addressLine1 ;
+               			   parl:addressLine2 ?addressLine2 ;
+               			   parl:addressLine3 ?addressLine3 ;
+               			   parl:addressLine4 ?addressLine4 ;
+               			   parl:addressLine5 ?addressLine5 .
+        }
+        WHERE {
+        	?contactPoint a parl:ContactPoint ;
+        	OPTIONAL{ ?contactPoint parl:email ?email . }
+        	OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
+        	OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+        	OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
+        	OPTIONAL{
+                ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+                OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
+               	OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
+          	}
+      }'
     )
   end
 
   def self.find(id)
     self.uri_builder("
-                PREFIX parl: <http://id.ukpds.org/schema/>
-                CONSTRUCT {
-                   ?contactPoint
-                      a parl:ContactPoint ;
-                      parl:email ?email ;
-                      parl:telephone ?telephone ;
-                      parl:faxNumber ?faxNumber ;
-                      parl:streetAddress ?streetAddress ;
-                      parl:addressLocality ?addressLocality ;
-                      parl:postalCode ?postalCode ;
-    						      parl:owner ?name .
-                }
-                WHERE {
-                    ?contactPoint a parl:ContactPoint ;
-                      OPTIONAL{ ?contactPoint parl:email ?email . }
-                      OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
-                      OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-                      OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
-                      OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
-                      OPTIONAL{ ?contactPoint parl:postalCode ?postalCode ; }
-                      OPTIONAL{ ?contactPoint parl:contactPointHasSitting ?sitting .
-        				                ?sitting parl:sittingHasPerson ?person .
-    					                  ?person parl:forename ?forename ;
-    					  		                    parl:surname ?surname .
-    					                  BIND(CONCAT(?forename, ' ', ?surname) AS ?name)
-   					          }
-   						        OPTIONAL{ ?contactPoint parl:contactPointHasConstituencyParty ?cparty .
-    					 		              ?cparty parl:constituencyPartyHasConstituency ?constituency .
-    							              ?constituency parl:constituencyName ?name .
-                      }
-                    FILTER (?contactPoint = <#{DATA_URI_PREFIX}/#{id}>)
-                  }
-                ")
+        PREFIX parl: <http://id.ukpds.org/schema/>
+        CONSTRUCT {
+           ?contactPoint
+               a parl:ContactPoint ;
+               parl:email ?email ;
+               parl:phoneNumber ?phoneNumber ;
+               parl:faxNumber ?faxNumber ;
+               parl:contactForm ?contactForm ;
+               parl:addressLocality ?addressLocality ;
+               parl:contactPointHasPostalAddress ?postalAddress ;
+    		   parl:contactPointHasPerson ?person .
+            ?postalAddress parl:postCode ?postCode ;
+               			   parl:addressLine1 ?addressLine1 ;
+               			   parl:addressLine2 ?addressLine2 ;
+               			   parl:addressLine3 ?addressLine3 ;
+               			   parl:addressLine4 ?addressLine4 ;
+               			   parl:addressLine5 ?addressLine5 .
+    		?person parl:personGivenName ?givenName ;
+        			parl:personFamilyName ?familyName .
+        }
+        WHERE {
+    		BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?contactPoint )
+        	?contactPoint a parl:ContactPoint ;
+        	OPTIONAL{ ?contactPoint parl:email ?email . }
+        	OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
+        	OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+        	OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
+        	OPTIONAL{
+                ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+                OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
+               	OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
+               	OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
+          	}
+            OPTIONAL{
+				?contactPoint parl:contactPointHasPerson ?person .
+        		OPTIONAL { ?person parl:personFamilyName ?familyName . }
+        		OPTIONAL { ?person parl:personGivenName ?givenName . }
+            }
+      }
+    ")
   end
 end
