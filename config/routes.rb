@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     get '/members', to: 'parties#members'
     get '/members/current', to: 'parties#current_members'
     match '/members/:letter', to: 'parties#members_letters', letter: /[a-z]/, via: [:get]
-    match '/members/current/:letter', to: 'parties#members_letters', letter: /[a-z]/, via: [:get]
+    match '/members/current/:letter', to: 'parties#current_members_letters', letter: /[a-z]/, via: [:get]
   end
 
   resources :constituencies, only: [:index, :show] do

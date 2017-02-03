@@ -3,65 +3,69 @@ class PartyQueryObject
 
   def self.all
     self.uri_builder('
-              PREFIX parl: <http://id.ukpds.org/schema/>
-              CONSTRUCT {
-                 ?party
-                    a parl:Party ;
-                    parl:partyName ?partyName .
-              }
+      PREFIX parl: <http://id.ukpds.org/schema/>
 
-              WHERE {
-                  ?party a parl:Party ;
-                  OPTIONAL{ ?party parl:partyName ?partyName . }
-              }'
-    )
+      CONSTRUCT {
+        ?party
+           a parl:Party ;
+           parl:partyName ?partyName .
+      }
+      WHERE {
+	      ?party
+          a parl:Party ;
+          parl:partyName ?partyName .
+      }
+    ')
   end
 
   def self.all_current
     self.uri_builder('
-                PREFIX parl: <http://id.ukpds.org/schema/>
-                CONSTRUCT {
-                   ?party
-                      a parl:Party ;
-                      parl:partyName ?partyName .
-                }
-
-                WHERE {
-                    ?partyMembership a parl:PartyMembership .
-                    FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-                    OPTIONAL { ?partyMembership parl:partyMembershipHasParty ?party . }
-                    OPTIONAL { ?party parl:partyName ?partyName . }
-                }
-               ')
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?party
+              a parl:Party ;
+            	parl:partyName ?partyName .
+      }
+      WHERE {
+      	?seatIncumbency a parl:SeatIncumbency .
+        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+        ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+        ?person parl:partyMemberHasPartyMembership ?partyMembership .
+        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+        ?partyMembership parl:partyMembershipHasParty ?party .
+        ?party parl:partyName ?partyName .
+      }
+    ')
   end
 
   def self.all_by_letter(letter)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-         ?party
-            a parl:Party ;
-            parl:partyName ?partyName .
+        ?party
+           a parl:Party ;
+           parl:partyName ?partyName .
       }
       WHERE {
-          ?party a parl:Party ;
-          OPTIONAL{ ?party parl:partyName ?partyName . }
-          FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
+        ?party a parl:Party ;
+              parl:partyName ?partyName .
+
+        FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
       }
     ")
   end
 
   def self.find(id)
     self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
-         ?party
-            a parl:Party ;
-            parl:partyName ?partyName .
-      }
-      WHERE {
-          ?party parl:partyName ?partyName .
-          FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
+     PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+	      ?party a parl:Party;
+               parl:partyName ?name
+     }
+     WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
+	      ?party parl:partyName ?name
       }
     ")
   end
@@ -70,29 +74,27 @@ class PartyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-        ?member a parl:Member ;
-              parl:forename ?forename ;
-              parl:surname ?surname .
-        ?party
-        	  a parl:Party ;
-             parl:partyName ?partyName .
-    	  ?partyMembership
-            a parl:PartyMembership ;
-        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
-        	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
-       		  parl:connect ?party ;
-            parl:relationship \"through\" .
+        ?party a parl:Party ;
+            parl:partyName ?partyName .
+        ?person a parl:Person ;
+            parl:personGivenName ?givenName ;
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership a parl:PartyMembership ;
+            parl:partyMembershipStartDate ?startDate ;
+            parl:partyMembershipEndDate ?endDate .
       }
       WHERE {
-        ?party parl:partyHasPartyMembership ?partyMembership .
-        ?partyMembership parl:partyMembershipHasPerson ?member .
-        OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-        OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
-        ?member a parl:Member .
-        OPTIONAL { ?party parl:partyName ?partyName } .
-        OPTIONAL { ?member parl:forename ?forename } .
-        OPTIONAL { ?member parl:surname ?surname } .
-        FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
+      	?party parl:partyName ?partyName ;
+          		parl:partyHasPartyMembership ?partyMembership .
+        ?partyMembership parl:partyMembershipHasPartyMember ?person .
+        ?partyMembership parl:partyMembershipStartDate ?startDate .
+        OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?endDate . }
+
+        OPTIONAL { ?person parl:personGivenName ?givenName . }
+        OPTIONAL { ?person parl:personFamilyName ?familyName . }
       }
     ")
   end
@@ -101,61 +103,60 @@ class PartyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-        ?member a parl:Member ;
-              parl:forename ?forename ;
-              parl:surname ?surname .
-        ?party
-        	  a parl:Party ;
-             parl:partyName ?partyName .
-    	  ?partyMembership
-            a parl:PartyMembership ;
-        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
-        	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
-       		  parl:connect ?party ;
-            parl:relationship \"through\" .
+        ?party a parl:Party ;
+            parl:partyName ?partyName .
+        ?person a parl:Person ;
+            parl:personGivenName ?givenName ;
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership a parl:PartyMembership ;
+            parl:partyMembershipStartDate ?startDate ;
+            parl:partyMembershipEndDate ?endDate .
       }
       WHERE {
-        ?party parl:partyHasPartyMembership ?partyMembership .
-        ?partyMembership parl:partyMembershipHasPerson ?member .
-        OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-        OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
-        ?member a parl:Member .
-        OPTIONAL { ?party parl:partyName ?partyName } .
-        OPTIONAL { ?member parl:forename ?forename } .
-        OPTIONAL { ?member parl:surname ?surname } .
-        FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
-        FILTER regex(str(?surname), \"^#{letter.upcase}\") .
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
+      	?party parl:partyName ?partyName ;
+          		parl:partyHasPartyMembership ?partyMembership .
+        ?partyMembership parl:partyMembershipHasPartyMember ?person .
+        ?partyMembership parl:partyMembershipStartDate ?startDate .
+        OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?endDate . }
+
+        OPTIONAL { ?person parl:personGivenName ?givenName . }
+        OPTIONAL { ?person parl:personFamilyName ?familyName . }
+
+        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
       }
     ")
   end
+
+  # TODO: Once the full data is populated run this query to check number of party memberships is correct
 
   def self.current_members(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-         ?member a parl:Member ;
-              parl:forename ?forename ;
-              parl:surname ?surname .
-        ?party
-        	  a parl:Party ;
-             parl:partyName ?partyName .
-    	  ?partyMembership
-            a parl:PartyMembership ;
-        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
-       		  parl:connect ?party ;
-            parl:relationship \"through\" .
+        ?party a parl:Party ;
+            parl:partyName ?partyName .
+        ?person a parl:Person ;
+            parl:personGivenName ?givenName ;
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership a parl:PartyMembership ;
+            parl:partyMembershipStartDate ?startDate .
       }
       WHERE {
-          ?party parl:partyHasPartyMembership ?partyMembership .
-          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-          ?partyMembership parl:partyMembershipHasPerson ?member .
-          OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-          ?member a parl:Member .
-          OPTIONAL { ?party parl:partyName ?partyName } .
-          OPTIONAL { ?member parl:forename ?forename } .
-          OPTIONAL { ?member parl:surname ?surname } .
-          FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
-        }
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
+      	?party parl:partyName ?partyName ;
+          		parl:partyHasPartyMembership ?partyMembership .
+        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+        ?partyMembership parl:partyMembershipHasPartyMember ?person .
+        ?partyMembership parl:partyMembershipStartDate ?startDate .
+
+        OPTIONAL { ?person parl:personGivenName ?givenName . }
+        OPTIONAL { ?person parl:personFamilyName ?familyName . }
+      }
       ")
   end
 
@@ -163,31 +164,30 @@ class PartyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-         ?member a parl:Member ;
-              parl:forename ?forename ;
-              parl:surname ?surname .
-        ?party
-        	  a parl:Party ;
-             parl:partyName ?partyName .
-    	  ?partyMembership
-            a parl:PartyMembership ;
-        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
-       		  parl:connect ?party ;
-            parl:relationship \"through\" .
+        ?party a parl:Party ;
+            parl:partyName ?partyName .
+        ?person a parl:Person ;
+            parl:personGivenName ?givenName ;
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership a parl:PartyMembership ;
+            parl:partyMembershipStartDate ?startDate .
       }
       WHERE {
-          ?party parl:partyHasPartyMembership ?partyMembership .
-          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-          ?partyMembership parl:partyMembershipHasPerson ?member .
-          OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-          ?member a parl:Member .
-          OPTIONAL { ?party parl:partyName ?partyName } .
-          OPTIONAL { ?member parl:forename ?forename } .
-          OPTIONAL { ?member parl:surname ?surname } .
-          FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
-          FILTER regex(str(?surname), \"^#{letter.upcase}\") .
-        }
-      ")
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
+      	?party parl:partyName ?partyName ;
+          		parl:partyHasPartyMembership ?partyMembership .
+        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+        ?partyMembership parl:partyMembershipHasPartyMember ?person .
+        ?partyMembership parl:partyMembershipStartDate ?startDate .
+
+        OPTIONAL { ?person parl:personGivenName ?givenName . }
+        OPTIONAL { ?person parl:personFamilyName ?familyName . }
+
+        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+       }
+     ")
   end
 
 end
