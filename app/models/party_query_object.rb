@@ -6,12 +6,14 @@ class PartyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT {
-        ?party a parl:Party ;
-                parl:partyName ?partyName .
+        ?party
+           a parl:Party ;
+           parl:partyName ?partyName .
       }
       WHERE {
-	      ?party a parl:Party ;
-                parl:partyName ?partyName .
+	      ?party
+          a parl:Party ;
+          parl:partyName ?partyName .
       }
     ')
   end
@@ -20,7 +22,8 @@ class PartyQueryObject
     self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-        ?party a parl:Party ;
+        ?party
+              a parl:Party ;
             	parl:partyName ?partyName .
       }
       WHERE {
@@ -46,6 +49,7 @@ class PartyQueryObject
       WHERE {
         ?party a parl:Party ;
               parl:partyName ?partyName .
+
         FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
       }
     ")
@@ -59,9 +63,9 @@ class PartyQueryObject
                parl:partyName ?name
      }
      WHERE {
-	      ?party parl:partyName ?name
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
 
-        FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
+	      ?party parl:partyName ?name
       }
     ")
   end
@@ -74,13 +78,15 @@ class PartyQueryObject
             parl:partyName ?partyName .
         ?person a parl:Person ;
             parl:personGivenName ?givenName ;
-            parl:personFamilyName ?familyName .
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership ?partyMembership .
         ?partyMembership a parl:PartyMembership ;
             parl:partyMembershipStartDate ?startDate ;
-            parl:partyMembershipEndDate ?endDate ;
-            parl:partyMembershipHasPartyMember ?person .
+            parl:partyMembershipEndDate ?endDate .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
       	?party parl:partyName ?partyName ;
           		parl:partyHasPartyMembership ?partyMembership .
         ?partyMembership parl:partyMembershipHasPartyMember ?person .
@@ -89,8 +95,6 @@ class PartyQueryObject
 
         OPTIONAL { ?person parl:personGivenName ?givenName . }
         OPTIONAL { ?person parl:personFamilyName ?familyName . }
-
-      	FILTER (?party = <#{DATA_URI_PREFIX}/#{id}> )
       }
     ")
   end
@@ -103,11 +107,11 @@ class PartyQueryObject
             parl:partyName ?partyName .
         ?person a parl:Person ;
             parl:personGivenName ?givenName ;
-            parl:personFamilyName ?familyName .
+            parl:personFamilyName ?familyName ;
+            parl:partyMemberHasPartyMembership .
         ?partyMembership a parl:PartyMembership ;
             parl:partyMembershipStartDate ?startDate ;
-            parl:partyMembershipEndDate ?endDate ;
-            parl:partyMembershipHasPartyMember ?person .
+            parl:partyMembershipEndDate ?endDate .
       }
       WHERE {
       	?party parl:partyName ?partyName ;
