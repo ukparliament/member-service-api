@@ -49,7 +49,10 @@ class PersonQueryObject
               parl:personGivenName ?givenName ;
               parl:personOtherName ?otherName ;
               parl:personFamilyName ?familyName ;
-    		      parl:personHasGenderIdentiy ?genderIdentity .
+    		      parl:personHasGenderIdentity ?genderIdentity ;
+              parl:partyMemberHasPartyMembership ?partyMembership ;
+              parl:personHasContactPoint ?contactPoint ;
+              parl:memberHasSeatIncumbency ?seatIncumbency .
     		?genderIdentity
         		a parl:GenderIdentity ;
         		parl:genderIdentityHasGender ?gender .
@@ -94,6 +97,8 @@ class PersonQueryObject
             	parl:houseName ?houseName .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
         ?person a parl:Person .
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personOtherName ?otherName } .
@@ -137,8 +142,6 @@ class PersonQueryObject
         		  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
         	}
     	  }
-
-        FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -167,6 +170,8 @@ class PersonQueryObject
             parl:seatIncumbencyHasHouseSeat ?seat .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
     	  ?person parl:memberHasSeatIncumbency ?seatIncumbency .
     	  ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
     	  ?seat parl:houseSeatHasConstituencyGroup ?constituency .
@@ -177,8 +182,6 @@ class PersonQueryObject
 		    OPTIONAL { ?constituency parl:constituencyGroupEndDate ?constituencyEndDate . }
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
-
-        FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -206,6 +209,8 @@ class PersonQueryObject
             parl:seatIncumbencyHasHouseSeat ?seat .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
     	  ?person parl:memberHasSeatIncumbency ?seatIncumbency .
     	  FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
     	  ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
@@ -215,8 +220,6 @@ class PersonQueryObject
         ?constituency parl:constituencyGroupStartDate ?constituencyStartDate .
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
-
-        FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -240,6 +243,8 @@ class PersonQueryObject
         	  parl:partyMembershipHasParty ?party .
        }
        WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
          ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
          ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
@@ -247,8 +252,6 @@ class PersonQueryObject
          ?party parl:partyName ?partyName .
     	    OPTIONAL { ?person parl:personGivenName ?givenName } .
          OPTIONAL { ?person parl:personFamilyName ?familyName } .
-
-         FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
        }
      ")
   end
@@ -271,6 +274,8 @@ class PersonQueryObject
         	  parl:partyMembershipHasParty ?party .
        }
        WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
          ?person parl:partyMemberHasPartyMembership ?partyMembership .
     	    FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
          ?partyMembership parl:partyMembershipHasParty ?party .
@@ -278,7 +283,6 @@ class PersonQueryObject
          ?party parl:partyName ?partyName .
     	    OPTIONAL { ?person parl:personGivenName ?givenName } .
          OPTIONAL { ?person parl:personFamilyName ?familyName } .
-         FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
        }
     ")
   end
@@ -308,6 +312,8 @@ class PersonQueryObject
         	  parl:postCode ?postCode .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
     	  OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
 	      ?person parl:personHasContactPoint ?contactPoint .
@@ -324,8 +330,6 @@ class PersonQueryObject
         		  OPTIONAL { ?postalAddress parl:addressLine5 ?addressLine5 . }
         		  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
         	}
-
-        FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -353,6 +357,8 @@ class PersonQueryObject
         		parl:houseSeatHasHouse ?house .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
     	  ?person parl:memberHasSeatIncumbency ?seatIncumbency .
     	  ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
     	  ?houseSeat parl:houseSeatHasHouse ?house .
@@ -361,8 +367,6 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         ?house parl:houseName ?houseName .
-
-        FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
@@ -389,6 +393,8 @@ class PersonQueryObject
         		parl:houseSeatHasHouse ?house .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
     	  ?person parl:memberHasSeatIncumbency ?seatIncumbency .
     	  FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
     	  ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
@@ -397,8 +403,6 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         ?house parl:houseName ?houseName .
-
-        FILTER(?person=<#{DATA_URI_PREFIX}/#{id}>)
       }
     ")
   end
