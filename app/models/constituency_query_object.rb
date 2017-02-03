@@ -6,13 +6,13 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency
-            a parl:Constituency ;
-            parl:constituencyName ?name .
+          ?constituencyGroup
+            a parl:ConstituencyGroup ;
+            parl:constituencyGroupName ?name .
       }
       WHERE {
-      	?constituency a parl:Constituency .
-          OPTIONAL { ?constituency parl:constituencyName ?name . }
+      	?constituencyGroup a parl:ConstituencyGroup .
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
       }
     ')
   end
@@ -22,45 +22,51 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency
-            a parl:Constituency ;
-            parl:constituencyEndDate ?endDate ;
-            parl:constituencyStartDate ?startDate ;
-         		parl:constituencyName ?name ;
-         		parl:constituencyLatitude ?latitude ;
-         		parl:constituencyLongitude ?longitude ;
-        	  parl:constituencyExtent ?polygon ;
-            parl:constituencyOnsCode ?onsCode .
-    			?member a parl:Member ;
-            parl:forename ?forename ;
-        	  parl:surname ?surname .
-    		  ?sitting a parl:Sitting ;
-            parl:sittingStartDate ?sittingStartDate ;
-        		parl:sittingEndDate ?sittingEndDate ;
-        		parl:connect ?member ;
-        		parl:relationship \"through\" .
+          ?constituencyGroup
+            a parl:ConstituencyGroup ;
+            parl:constituencyGroupEndDate ?endDate ;
+            parl:constituencyGroupStartDate ?startDate ;
+         		parl:constituencyGroupName ?name ;
+        	parl:constituencyGroupOnsCode ?onsCode ;
+            parl:constituencyGroupHasConstituencyArea ?constituencyArea .
+         	?constituencyArea
+            a parl:ConstituencyArea ;
+            parl:constituencyAreaLatitude ?latitude ;
+         		parl:constituencyAreaLongitude ?longitude ;
+        	  parl:constituencyAreaExtent ?polygon .
+            ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+            ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            ?seatIncumbency a parl:SeatIncumbency ;
+                            parl:seatIncumbencyHasMember ?member ;
+                            parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
+                            parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
+            ?member parl:personGivenName ?givenName ;
+                    parl:personFamilyName ?familyName .
       }
       WHERE {
-          ?constituency a parl:Constituency .
-          OPTIONAL { ?constituency parl:constituencyEndDate ?endDate . }
-          OPTIONAL { ?constituency parl:constituencyStartDate ?startDate . }
-          OPTIONAL { ?constituency parl:constituencyName ?name . }
-          OPTIONAL { ?constituency parl:constituencyLatitude ?latitude . }
-          OPTIONAL { ?constituency parl:constituencyLongitude ?longitude . }
-    	    OPTIONAL { ?constituency parl:constituencyExtent ?polygon . }
-          OPTIONAL { ?constituency parl:constituencyOnsCode ?onsCode . }
+          BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
+          ?constituencyGroup a parl:ConstituencyGroup .
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?endDate . }
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?startDate . }
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+    	    OPTIONAL { ?constituencyGroup parl:constituencyGroupOnsCode ?onsCode . }
           OPTIONAL {
-          ?constituency parl:constituencyHasSeat ?seat .
-          ?seat parl:seatHasSitting ?sitting .
-    	    ?sitting a parl:Sitting ;
-          OPTIONAL { ?sitting parl:sittingHasPerson ?member . }
-          OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-          OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-          OPTIONAL { ?member parl:forename ?forename . }
-          OPTIONAL { ?member parl:surname ?surname . }
+            ?constituencyGroup parl:constituencyGroupHasConstituencyArea ?constituencyArea .
+            ?constituencyArea a parl:ConstituencyArea .
+            OPTIONAL { ?constituencyArea parl:constituencyAreaLatitude ?latitude . }
+            OPTIONAL { ?constituencyArea parl:constituencyAreaLongitude ?longitude . }
+            OPTIONAL { ?constituencyArea parl:constituencyAreaExtent ?polygon . }
           }
-
-          FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
+          OPTIONAL {
+            ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+            ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+      	    ?seatIncumbency a parl:SeatIncumbency ;
+            OPTIONAL { ?seatIncumbency parl:seatIncumbencyHasMember ?member . }
+            OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
+            OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
+            OPTIONAL { ?member parl:personGivenName ?givenName . }
+            OPTIONAL { ?member parl:personFamilyName ?familyName . }
+          }
       }
     ")
   end
@@ -70,14 +76,14 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency
-              a parl:Constituency ;
-              parl:constituencyName ?name .
+          ?constituencyGroup
+              a parl:ConstituencyGroup ;
+              parl:constituencyGroupName ?name .
       }
       WHERE {
-          ?constituency a parl:Constituency .
-          MINUS { ?constituency a parl:PastConstituency . }
-          OPTIONAL { ?constituency parl:constituencyName ?name . }
+          ?constituencyGroup a parl:ConstituencyGroup .
+          FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
       }
     ')
   end
@@ -87,14 +93,14 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency
-              a parl:Constituency ;
-              parl:constituencyName ?name .
+          ?constituencyGroup
+              a parl:ConstituencyGroup ;
+              parl:constituencyGroupName ?name .
       }
       WHERE {
-          ?constituency a parl:Constituency .
-          MINUS { ?constituency a parl:PastConstituency . }
-          OPTIONAL { ?constituency parl:constituencyName ?name . }
+          ?constituencyGroup a parl:ConstituencyGroup .
+          FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
     		  FILTER regex(str(?name), \"^#{letter.upcase}\") .
       }
     ")
@@ -105,29 +111,31 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-    	   ?constituency
-            a parl:Constituency ;
-         		parl:constituencyName ?name .
-    		 ?member a parl:Member ;
-            parl:forename ?forename ;
-        	  parl:surname ?surname .
-    		 ?sitting a parl:Sitting ;
-            parl:sittingStartDate ?sittingStartDate ;
-        		parl:sittingEndDate ?sittingEndDate ;
-        		parl:connect ?member ;
-        		parl:relationship \"through\" .
+    	   	?constituencyGroup
+            a parl:ConstituencyGroup ;
+         		parl:constituencyGroupName ?name ;
+         		parl:constituencyGroupHasHouseSeat ?houseSeat .
+         	?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	  	?seatIncumbency parl:seatIncumbencyHasMember ?member ;
+          					      parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
+        					        parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
+        	?member parl:personGivenName ?givenName ;
+        			    parl:personFamilyName ?familyName .
       }
       WHERE {
-    	  ?constituency parl:constituencyHasSeat ?seat .
-    	  ?seat parl:seatHasSitting ?sitting .
-    	  ?sitting parl:sittingHasPerson ?member .
-        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        OPTIONAL { ?constituency parl:constituencyName ?name . }
-        OPTIONAL { ?member parl:forename ?forename . }
-        OPTIONAL { ?member parl:surname ?surname . }
-
-        FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
+        BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
+    	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+    	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+    	  OPTIONAL {
+          ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          OPTIONAL {
+    	      ?seatIncumbency parl:seatIncumbencyHasMember ?member .
+              OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
+        	    OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
+        	    OPTIONAL { ?member parl:personGivenName ?givenName . }
+        	    OPTIONAL { ?member parl:personFamilyName ?familyName . }
+          }
+        }
       }
     ")
   end
@@ -137,14 +145,14 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-          ?constituency
-            a parl:Constituency ;
-            parl:constituencyName ?name .
+          ?constituencyGroup
+              a parl:ConstituencyGroup ;
+              parl:constituencyGroupName ?name .
       }
       WHERE {
-      	?constituency a parl:Constituency .
-        OPTIONAL { ?constituency parl:constituencyName ?name . }
-    		FILTER regex(str(?name), \"^#{letter.upcase}\") .
+          ?constituencyGroup a parl:ConstituencyGroup .
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+    		  FILTER regex(str(?name), \"^#{letter.upcase}\") .
       }
     ")
   end
@@ -154,29 +162,32 @@ class ConstituencyQueryObject
       PREFIX parl: <http://id.ukpds.org/schema/>
 
       CONSTRUCT{
-         ?constituency
-            a parl:Constituency ;
-         		parl:constituencyName ?name .
-    		 ?member a parl:Member ;
-            parl:forename ?forename ;
-        	  parl:surname ?surname .
-    		 ?sitting a parl:Sitting ;
-            parl:sittingStartDate ?sittingStartDate ;
-        		parl:connect ?member ;
-        		parl:relationship \"through\" .
+    	   	?constituencyGroup
+            	a parl:ConstituencyGroup ;
+         		  parl:constituencyGroupName ?name ;
+         		  parl:constituencyGroupHasHouseSeat ?houseSeat .
+         	?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	  	?seatIncumbency parl:seatIncumbencyHasMember ?member ;
+          				        parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
+        					        parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
+        	?member parl:personGivenName ?givenName ;
+        			    parl:personFamilyName ?familyName .
       }
       WHERE {
-    	  ?constituency parl:constituencyHasSeat ?seat .
-    	  ?seat parl:seatHasSitting ?sitting .
-    	  FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
-    	  ?sitting parl:sittingHasPerson ?member .
-        OPTIONAL { ?sitting parl:startDate ?startDate . }
-        OPTIONAL { ?member parl:forename ?forename . }
-		    OPTIONAL { ?member parl:surname ?surname . }
-        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        OPTIONAL { ?constituency parl:constituencyName ?name . }
-
-        FILTER(?constituency=<#{DATA_URI_PREFIX}/#{id}>)
+        BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
+    	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+    	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+    	  OPTIONAL {
+          ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          OPTIONAL {
+    	      ?seatIncumbency parl:seatIncumbencyHasMember ?member .
+            FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+            OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
+        	  OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
+        	  OPTIONAL { ?member parl:personGivenName ?givenName . }
+        	  OPTIONAL { ?member parl:personFamilyName ?familyName . }
+          }
+        }
       }
     ")
   end
@@ -185,31 +196,50 @@ class ConstituencyQueryObject
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
-        ?constituency
-            a parl:Constituency ;
-         		parl:constituencyName ?name .
-        ?contactPoint
-              a parl:ContactPoint ;
-              parl:email ?email ;
-        			parl:telephone ?telephone ;
-        			parl:faxNumber ?faxNumber ;
-        			parl:streetAddress ?streetAddress ;
-        			parl:addressLocality ?addressLocality ;
-        			parl:postalCode ?postalCode .
+      	?constituencyGroup a parl:ConstituencyGroup ;
+        				parl:constituencyGroupHasHouseSeat ?houseSeat ;
+        				parl:constituencyGroupName ?name .
+        ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
+        ?contactPoint a parl:ContactPoint ;
+        			  parl:email ?email ;
+                      parl:phoneNumber ?phoneNumber ;
+        			  parl:faxNumber ?faxNumber ;
+    			      parl:contactForm ?contactForm ;
+    	              parl:contactPointHasPostalAddress ?postalAddress .
+        ?postalAddress a parl:PostalAddress ;
+        			   parl:postCode ?postCode ;
+       				   parl:addressLine1 ?addressLine1 ;
+    				   parl:addressLine2 ?addressLine2 ;
+    				   parl:addressLine3 ?addressLine3 ;
+    				   parl:addressLine4 ?addressLine4 ;
+    				   parl:addressLine5 ?addressLine5 .
       }
-
       WHERE {
-      	?constituency parl:constituencyHasConstituencyParty ?constituencyParty .
-        ?constituencyParty parl:constituencyPartyHasContactPoint ?contactPoint .
-        OPTIONAL{ ?contactPoint parl:email ?email . }
-        OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
-        OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-        OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
-        OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
-        OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
-        OPTIONAL { ?constituency parl:constituencyName ?name . }
-
-      	FILTER(?constituency = <#{DATA_URI_PREFIX}/#{id}>)
+    	BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
+      	 OPTIONAL {
+        	?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+        	OPTIONAL {
+        		?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+        		FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+        		OPTIONAL {
+            		?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
+                    OPTIONAL{ ?contactPoint parl:email ?email . }
+                    OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
+                    OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+                    OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
+                    OPTIONAL{ ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+                        OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
+                        OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
+                    }
+                }
+        		}
+    		}
+        OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
       }
     ")
   end
