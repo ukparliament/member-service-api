@@ -52,10 +52,4 @@ Rails.application.routes.draw do
     match '/members/current/:letter', to: 'houses#current_members_letters', letter: /[a-z]/, via: [:get]
   end
 
-  resources :sittings, only: [:index] do
-    get '/person', to: 'sittings#person'
-    get '/house', to: 'sittings#house'
-    get '/constituency', to: 'sittings#constituency'
-  end
-
 end
