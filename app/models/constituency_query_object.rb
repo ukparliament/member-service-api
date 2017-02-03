@@ -49,8 +49,9 @@ class ConstituencyQueryObject
           OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?endDate . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?startDate . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    	  OPTIONAL { ?constituencyGroup parl:constituencyGroupOnsCode ?onsCode . }
-          OPTIONAL { ?constituencyGroup parl:constituencyGroupHasConstituencyArea ?constituencyArea .
+    	    OPTIONAL { ?constituencyGroup parl:constituencyGroupOnsCode ?onsCode . }
+          OPTIONAL {
+            ?constituencyGroup parl:constituencyGroupHasConstituencyArea ?constituencyArea .
             ?constituencyArea a parl:ConstituencyArea .
             OPTIONAL { ?constituencyArea parl:constituencyAreaLatitude ?latitude . }
             OPTIONAL { ?constituencyArea parl:constituencyAreaLongitude ?longitude . }
@@ -111,7 +112,7 @@ class ConstituencyQueryObject
 
       CONSTRUCT{
     	   	?constituencyGroup
-            	a parl:ConstituencyGroup ;
+            a parl:ConstituencyGroup ;
          		parl:constituencyGroupName ?name ;
          		parl:constituencyGroupHasHouseSeat ?houseSeat .
          	?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
@@ -125,12 +126,16 @@ class ConstituencyQueryObject
         BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
     	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    	  ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  ?seatIncumbency parl:seatIncumbencyHasMember ?member .
-          OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
-        	OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
-        	OPTIONAL { ?member parl:personGivenName ?givenName . }
-        	OPTIONAL { ?member parl:personFamilyName ?familyName . }
+    	  OPTIONAL {
+          ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          OPTIONAL {
+    	      ?seatIncumbency parl:seatIncumbencyHasMember ?member .
+              OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
+        	    OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
+        	    OPTIONAL { ?member parl:personGivenName ?givenName . }
+        	    OPTIONAL { ?member parl:personFamilyName ?familyName . }
+          }
+        }
       }
     ")
   end
@@ -159,8 +164,8 @@ class ConstituencyQueryObject
       CONSTRUCT{
     	   	?constituencyGroup
             	a parl:ConstituencyGroup ;
-         		parl:constituencyGroupName ?name ;
-         		parl:constituencyGroupHasHouseSeat ?houseSeat .
+         		  parl:constituencyGroupName ?name ;
+         		  parl:constituencyGroupHasHouseSeat ?houseSeat .
          	?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
     	  	?seatIncumbency parl:seatIncumbencyHasMember ?member ;
           				        parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
@@ -172,13 +177,17 @@ class ConstituencyQueryObject
         BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
     	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    	  ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  ?seatIncumbency parl:seatIncumbencyHasMember ?member .
-        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
-          OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
-        	OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
-        	OPTIONAL { ?member parl:personGivenName ?givenName . }
-        	OPTIONAL { ?member parl:personFamilyName ?familyName . }
+    	  OPTIONAL {
+          ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          OPTIONAL {
+    	      ?seatIncumbency parl:seatIncumbencyHasMember ?member .
+            FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+            OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
+        	  OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
+        	  OPTIONAL { ?member parl:personGivenName ?givenName . }
+        	  OPTIONAL { ?member parl:personFamilyName ?familyName . }
+          }
+        }
       }
     ")
   end
@@ -216,18 +225,18 @@ class ConstituencyQueryObject
         		OPTIONAL {
             		?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
                     OPTIONAL{ ?contactPoint parl:email ?email . }
-                    	OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
-                    	OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-                    	OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
-                    	OPTIONAL{ ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
-                        	OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
-                        	OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
-                        	OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
-                        	OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
-                        	OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
-                        	OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
-                    	}
-                	}
+                    OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
+                    OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
+                    OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
+                    OPTIONAL{ ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+                        OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
+                        OPTIONAL{ ?postalAddress parl:addressLine1 ?addressLine1 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine2 ?addressLine2 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine3 ?addressLine3 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine4 ?addressLine4 . }
+                        OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
+                    }
+                }
         		}
     		}
         OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
