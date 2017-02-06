@@ -25,3 +25,6 @@ passenger.3000.pid
 /spec/fixtures/*
 
 /config/environment_variables.yml
+
+.env
+.env.sample.*

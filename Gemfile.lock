@@ -38,15 +38,14 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.4.0)
     arel (7.1.4)
     builder (3.2.2)
     byebug (9.0.6)
     concurrent-ruby (1.0.2)
-    crack (0.4.3)
-      safe_yaml (~> 1.0.0)
-    diff-lcs (1.2.5)
-    docile (1.1.5)
+    dotenv (2.1.1)
+    dotenv-rails (2.1.1)
+      dotenv (= 2.1.1)
+      railties (>= 4.0, < 5.1)
     ebnf (1.0.1)
       rdf (~> 2.0)
       sxp (~> 1.0)
@@ -56,9 +55,8 @@ GEM
       activesupport (>= 4.1.0)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
-    hashdiff (0.3.0)
     i18n (0.7.0)
-    json (2.0.2)
+    libv8 (3.16.14.17-x86_64-darwin-15)
     link_header (0.0.8)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -77,6 +75,9 @@ GEM
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
+    passenger (5.1.1)
+      rack
+      rake (>= 0.8.1)
     puma (3.6.0)
     rack (2.0.1)
     rack-test (0.6.3)
@@ -118,29 +119,7 @@ GEM
       rdf (~> 2.0)
     rdf-xsd (2.0.0)
       rdf (~> 2.0)
-    rspec-core (3.5.4)
-      rspec-support (~> 3.5.0)
-    rspec-expectations (3.5.0)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.5.0)
-    rspec-mocks (3.5.0)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.5.0)
-    rspec-rails (3.5.2)
-      actionpack (>= 3.0)
-      activesupport (>= 3.0)
-      railties (>= 3.0)
-      rspec-core (~> 3.5.0)
-      rspec-expectations (~> 3.5.0)
-      rspec-mocks (~> 3.5.0)
-      rspec-support (~> 3.5.0)
-    rspec-support (3.5.0)
-    safe_yaml (1.0.4)
-    simplecov (0.12.0)
-      docile (~> 1.1.0)
-      json (>= 1.8, < 3)
-      simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.0)
+    ref (2.0.0)
     sparql (2.0.0)
       builder (~> 3.2)
       ebnf (~> 1.0, >= 1.0.1)
@@ -166,15 +145,13 @@ GEM
       sprockets (>= 3.0.0)
     sxp (1.0.0)
       rdf (~> 2.0)
+    therubyracer (0.12.3)
+      libv8 (~> 3.16.14.15)
+      ref
     thor (0.19.1)
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    vcr (3.0.3)
-    webmock (2.0.1)
-      addressable (>= 2.3.6)
-      crack (>= 0.3.2)
-      hashdiff
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -184,19 +161,18 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  dotenv-rails
   listen (~> 3.0.5)
+  passenger
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
   rdf
   rdf-turtle
-  rspec-rails
-  simplecov
   sparql
   spring
   spring-watcher-listen (~> 2.0.0)
+  therubyracer
   tzinfo-data
-  vcr
-  webmock
 
 BUNDLED WITH
-   1.13.6
+   1.14.3
