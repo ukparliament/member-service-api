@@ -103,13 +103,13 @@ class MemberQueryObject
       CONSTRUCT{
          ?seatIncumbency
            a parl:SeatIncumbency ;
-           parl:seatIncumbencyHasMember ?member ;
            parl:seatIncumbencyHasHouseSeat ?houseSeat .
          ?member
            a parl:Person ;
            parl:personGivenName ?givenName ;
            parl:personFamilyName ?familyName ;
-           parl:partyMemberHasPartyMembership ?partyMembership .
+           parl:partyMemberHasPartyMembership ?partyMembership ;
+           parl:memberHasSeatIncumbency ?seatIncumbency .
          ?partyMembership
            a parl:PartyMembership ;
            parl:partyMembershipHasParty ?party .
