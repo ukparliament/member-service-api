@@ -10,19 +10,25 @@ class MemberQueryObject
            parl:seatIncumbencyHasMember ?member ;
            parl:seatIncumbencyHasHouseSeat ?houseSeat .
          ?member
+           a parl:Person ;
            parl:personGivenName ?givenName ;
            parl:personFamilyName ?familyName ;
            parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership
+           a parl:PartyMembership ;
            parl:partyMembershipHasParty ?party .
          ?party
+           a parl:Party ;
            parl:partyName ?partyName .
          ?houseSeat
+           a parl:HouseSeat ;
            parl:houseSeatHasHouse ?house ;
            parl:houseSeatHasConstituencyGroup ?constituencyGroup .
          ?house
+           a parl:House ;
            parl:houseName ?houseName .
          ?constituencyGroup
+           a parl:ConstituencyGroup ;
            parl:constituencyGroupName ?constituencyGroupName .
       }
       WHERE {
@@ -51,19 +57,25 @@ class MemberQueryObject
            parl:seatIncumbencyHasMember ?member ;
            parl:seatIncumbencyHasHouseSeat ?houseSeat .
          ?member
+           a parl:Person ;
            parl:personGivenName ?givenName ;
            parl:personFamilyName ?familyName ;
            parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership
+           a parl:PartyMembership ;
            parl:partyMembershipHasParty ?party .
          ?party
+           a parl:Party ;
            parl:partyName ?partyName .
          ?houseSeat
+           a parl:HouseSeat ;
            parl:houseSeatHasHouse ?house ;
            parl:houseSeatHasConstituencyGroup ?constituencyGroup .
          ?house
+           a parl:House ;
            parl:houseName ?houseName .
          ?constituencyGroup
+           a parl:ConstituencyGroup ;
            parl:constituencyGroupName ?constituencyGroupName .
 
       }
@@ -94,19 +106,25 @@ class MemberQueryObject
            parl:seatIncumbencyHasMember ?member ;
            parl:seatIncumbencyHasHouseSeat ?houseSeat .
          ?member
+           a parl:Person ;
            parl:personGivenName ?givenName ;
            parl:personFamilyName ?familyName ;
            parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership
+           a parl:PartyMembership ;
            parl:partyMembershipHasParty ?party .
          ?party
+           a parl:Party ;
            parl:partyName ?partyName .
          ?houseSeat
+           a parl:HouseSeat ;
            parl:houseSeatHasHouse ?house ;
            parl:houseSeatHasConstituencyGroup ?constituencyGroup .
          ?house
+           a parl:House ;
            parl:houseName ?houseName .
          ?constituencyGroup
+           a parl:ConstituencyGroup ;
            parl:constituencyGroupName ?constituencyGroupName .
       }
       WHERE {
@@ -137,19 +155,25 @@ class MemberQueryObject
                parl:seatIncumbencyHasMember ?member ;
                parl:seatIncumbencyHasHouseSeat ?houseSeat .
              ?member
+               a parl:Person ;
                parl:personGivenName ?givenName ;
                parl:personFamilyName ?familyName ;
                parl:partyMemberHasPartyMembership ?partyMembership .
              ?partyMembership
+               a parl:PartyMembership ;
                parl:partyMembershipHasParty ?party .
              ?party
+               a parl:Party ;
                parl:partyName ?partyName .
              ?houseSeat
+               a parl:HouseSeat ;
                parl:houseSeatHasHouse ?house ;
                parl:houseSeatHasConstituencyGroup ?constituencyGroup .
              ?house
+               a parl:House ;
                parl:houseName ?houseName .
              ?constituencyGroup
+               a parl:ConstituencyGroup ;
                parl:constituencyGroupName ?constituencyGroupName .
           }
           WHERE {
