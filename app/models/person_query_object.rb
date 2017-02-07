@@ -235,12 +235,12 @@ class PersonQueryObject
         	    parl:partyMemberHasPartyMembership ?partyMembership .
       ?party
         	  a parl:Party ;
-            parl:partyName ?partyName .
+            parl:partyName ?partyName ;
+            parl:partyHasPartyMembership ?partyMembership .
     	?partyMembership
             a parl:PartyMembership ;
         	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
-        	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
-        	  parl:partyMembershipHasParty ?party .
+        	  parl:partyMembershipEndDate ?partyMembershipEndDate .
        }
        WHERE {
           BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
