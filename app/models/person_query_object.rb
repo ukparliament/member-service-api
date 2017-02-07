@@ -231,8 +231,7 @@ class PersonQueryObject
       CONSTRUCT {
     	?person a parl:Person ;
               parl:personGivenName ?givenName ;
-              parl:personFamilyName ?familyName ;
-        	    parl:partyMemberHasPartyMembership ?partyMembership .
+              parl:personFamilyName ?familyName .
       ?party
         	  a parl:Party ;
             parl:partyName ?partyName ;
