@@ -101,7 +101,7 @@ class PersonQueryObject
 
         ?person a parl:Person .
         OPTIONAL { ?person parl:personGivenName ?givenName } .
-        OPTIONAL { ?person parl:personOtherName ?otherName } .
+        OPTIONAL { ?person parl:personOtherNames ?otherName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         OPTIONAL { ?person parl:personDateOfBirth ?dateOfBirth } .
         ?person parl:personHasGenderIdentity ?genderIdentity .
