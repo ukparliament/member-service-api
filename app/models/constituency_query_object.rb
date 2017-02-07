@@ -27,7 +27,7 @@ class ConstituencyQueryObject
             parl:constituencyGroupEndDate ?endDate ;
             parl:constituencyGroupStartDate ?startDate ;
          		parl:constituencyGroupName ?name ;
-        	parl:constituencyGroupOnsCode ?onsCode ;
+        	  parl:constituencyGroupOnsCode ?onsCode ;
             parl:constituencyGroupHasConstituencyArea ?constituencyArea .
          	?constituencyArea
             a parl:ConstituencyArea ;
@@ -35,12 +35,14 @@ class ConstituencyQueryObject
          		parl:constituencyAreaLongitude ?longitude ;
         	  parl:constituencyAreaExtent ?polygon .
             ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
-            ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            ?houseSeat a parl:HouseSeat ;
+              parl:houseSeatHasSeatIncumbency ?seatIncumbency .
             ?seatIncumbency a parl:SeatIncumbency ;
                             parl:seatIncumbencyHasMember ?member ;
                             parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
                             parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
-            ?member parl:personGivenName ?givenName ;
+            ?member a parl:Person ;
+                    parl:personGivenName ?givenName ;
                     parl:personFamilyName ?familyName .
       }
       WHERE {
@@ -115,11 +117,14 @@ class ConstituencyQueryObject
             a parl:ConstituencyGroup ;
          		parl:constituencyGroupName ?name ;
          		parl:constituencyGroupHasHouseSeat ?houseSeat .
-         	?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  	?seatIncumbency parl:seatIncumbencyHasMember ?member ;
+         	?houseSeat a parl:HouseSeat ;
+            parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	  	?seatIncumbency a parl:SeatIncumbency ;
+                          parl:seatIncumbencyHasMember ?member ;
           					      parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
         					        parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
-        	?member parl:personGivenName ?givenName ;
+        	?member a parl:Person ;
+                  parl:personGivenName ?givenName ;
         			    parl:personFamilyName ?familyName .
       }
       WHERE {
@@ -166,11 +171,14 @@ class ConstituencyQueryObject
             	a parl:ConstituencyGroup ;
          		  parl:constituencyGroupName ?name ;
          		  parl:constituencyGroupHasHouseSeat ?houseSeat .
-         	?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  	?seatIncumbency parl:seatIncumbencyHasMember ?member ;
+         	?houseSeat a parl:HouseSeat ;
+                     parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	  	?seatIncumbency a parl:SeatIncumbency ;
+                          parl:seatIncumbencyHasMember ?member ;
           				        parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
         					        parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
-        	?member parl:personGivenName ?givenName ;
+        	?member a parl:Person ;
+                  parl:personGivenName ?givenName ;
         			    parl:personFamilyName ?familyName .
       }
       WHERE {
@@ -179,9 +187,9 @@ class ConstituencyQueryObject
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
     	  OPTIONAL {
           ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
           OPTIONAL {
     	      ?seatIncumbency parl:seatIncumbencyHasMember ?member .
-            FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
             OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
         	  OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
         	  OPTIONAL { ?member parl:personGivenName ?givenName . }
@@ -203,7 +211,7 @@ class ConstituencyQueryObject
     	?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
         ?contactPoint a parl:ContactPoint ;
         			  parl:email ?email ;
-                      parl:phoneNumber ?phoneNumber ;
+                parl:phoneNumber ?phoneNumber ;
         			  parl:faxNumber ?faxNumber ;
     			      parl:contactForm ?contactForm ;
     	              parl:contactPointHasPostalAddress ?postalAddress .
