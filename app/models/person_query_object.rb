@@ -47,7 +47,7 @@ class PersonQueryObject
               a parl:Person ;
               parl:personDateOfBirth ?dateOfBirth ;
               parl:personGivenName ?givenName ;
-              parl:personOtherName ?otherName ;
+              parl:personOtherNames ?otherName ;
               parl:personFamilyName ?familyName ;
     		      parl:personHasGenderIdentity ?genderIdentity ;
               parl:partyMemberHasPartyMembership ?partyMembership ;
