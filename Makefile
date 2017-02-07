@@ -1,4 +1,4 @@
-IMAGE = 165162103257.dkr.ecr.eu-west-1.amazonaws.com/membersprototype-api
+IMAGE = 165162103257.dkr.ecr.eu-west-1.amazonaws.com/memberserviceapi
 
 # GO_PIPELINE_COUNTER is the pipeline number, passed from our build agent.
 GO_PIPELINE_COUNTER?="unknown"
@@ -8,11 +8,13 @@ VERSION=0.2.$(GO_PIPELINE_COUNTER)
 
 # ECS-related
 ECS_CLUSTER = ci
-ECS_APP_NAME = membersprototype-api
+ECS_APP_NAME = memberserviceapi
 AWS_REGION = eu-west-1
 
 build :
-	docker build -t $(IMAGE):$(VERSION) -t $(IMAGE):latest .
+	docker build -t $(IMAGE):$(VERSION) -t $(IMAGE):latest \
+		--build-arg UKPDS_DATA_URI_PREFIX=$(UKPDS_DATA_URI_PREFIX) --build-arg UKPDS_DATA_ENDPOINT=$(UKPDS_DATA_ENDPOINT) \
+		.
 
 run:
 	docker run -p 80:3000 $(IMAGE)
