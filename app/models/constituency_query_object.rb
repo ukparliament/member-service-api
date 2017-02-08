@@ -207,8 +207,10 @@ class ConstituencyQueryObject
       	?constituencyGroup a parl:ConstituencyGroup ;
         				parl:constituencyGroupHasHouseSeat ?houseSeat ;
         				parl:constituencyGroupName ?name .
-        ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
+        ?houseSeat a parl:HouseSeat ;
+                parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	?seatIncumbency a parl:SeatIncumbency ;
+                parl:seatIncumbencyHasContactPoint ?contactPoint .
         ?contactPoint a parl:ContactPoint ;
         			  parl:email ?email ;
                 parl:phoneNumber ?phoneNumber ;
