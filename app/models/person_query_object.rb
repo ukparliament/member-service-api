@@ -262,15 +262,14 @@ class PersonQueryObject
       CONSTRUCT {
     	?person a parl:Person ;
               parl:personGivenName ?givenName ;
-              parl:personFamilyName ?familyName ;
-        	    parl:partyMemberHasPartyMembership ?partyMembership .
+              parl:personFamilyName ?familyName .
       ?party
         	  a parl:Party ;
-            parl:partyName ?partyName .
+            parl:partyName ?partyName ;
+            parl:partyHasPartyMembership ?partyMembership .
     	?partyMembership
             a parl:PartyMembership ;
-        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
-        	  parl:partyMembershipHasParty ?party .
+        	  parl:partyMembershipStartDate ?partyMembershipStartDate .
        }
        WHERE {
           BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
