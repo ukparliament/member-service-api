@@ -33,5 +33,5 @@ push:
 
 # http://serverfault.com/questions/682340/update-the-container-of-a-service-in-amazon-ecs?rq=1
 deploy-ci:
-	aws ecs register-task-definition --cli-input-json file://./aws_ecs/membersprototype.json
+	aws ecs register-task-definition --cli-input-json file://./aws_ecs/memberserviceapi.json
 	aws ecs update-service --service $(ECS_APP_NAME) --cluster $(ECS_CLUSTER) --region $(AWS_REGION) --task-definition $(ECS_APP_NAME)
