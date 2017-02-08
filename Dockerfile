@@ -9,7 +9,7 @@ RUN set -x \
         && groupadd -g 5000 $APP_USER \
         && adduser --disabled-password --uid 5000 --gid 5000 --gecos '' $APP_USER
 
-ENV RAILS_ROOT /opt/membersprototype-api
+ENV RAILS_ROOT /opt/memberserviceapi
 ENV UKPDS_DATA_URI_PREFIX $UKPDS_DATA_URI_PREFIX
 ENV UKPDS_DATA_ENDPOINT $UKPDS_DATA_ENDPOINT
 
