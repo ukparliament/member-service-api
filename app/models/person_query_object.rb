@@ -193,19 +193,18 @@ class PersonQueryObject
         ?person
               a parl:Person ;
               parl:personGivenName ?givenName ;
-              parl:personFamilyName ?familyName ;
-        	    parl:memberHasSeatIncumbency ?seatIncumbency .
+              parl:personFamilyName ?familyName .
     	 ?constituency
         	  a parl:ConstituencyGroup ;
             parl:constituencyGroupName ?constituencyName ;
-        	  parl:constituencyGroupStartDate ?constituencyStartDate .
+        	  parl:constituencyGroupStartDate ?constituencyStartDate ;
+            parl:constituencyGroupHasHouseSeat ?seat .
     	  ?seat
         	  a parl:HouseSeat ;
-        	  parl:houseSeatHasConstituencyGroup ?constituency .
+        	  parl:houseSeatHasSeatIncumbency ?seatIncumbency .
     	  ?seatIncumbency
             a parl:SeatIncumbency ;
-        	  parl:seatIncumbencyStartDate ?seatIncumbencyStartDate ;
-            parl:seatIncumbencyHasHouseSeat ?seat .
+        	  parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
       }
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
