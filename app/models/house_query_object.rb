@@ -56,7 +56,8 @@ class HouseQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
 
-      	?house parl:houseHasHouseSeat ?seat.
+        ?house parl:houseName ?houseName .
+      	?house parl:houseHasHouseSeat ?seat .
         ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
         ?seatIncumbency parl:seatIncumbencyHasMember ?person .
         OPTIONAL { ?person parl:personGivenName ?givenName . }
@@ -87,7 +88,8 @@ class HouseQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
 
-      	?house parl:houseHasHouseSeat ?seat.
+        ?house parl:houseName ?houseName .
+      	?house parl:houseHasHouseSeat ?seat .
         ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
         ?seatIncumbency parl:seatIncumbencyHasMember ?person .
         OPTIONAL { ?person parl:personGivenName ?givenName . }
@@ -132,6 +134,7 @@ class HouseQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
 
+        ?house parl:houseName ?houseName .
       	?house parl:houseHasHouseSeat ?seat .
         ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
     	  FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
@@ -182,6 +185,7 @@ class HouseQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
 
+        ?house parl:houseName ?houseName .
       	?house parl:houseHasHouseSeat ?seat .
         ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
     	  FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
