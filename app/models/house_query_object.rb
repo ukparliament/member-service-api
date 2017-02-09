@@ -268,6 +268,29 @@ class HouseQueryObject
      ")
   end
 
+  def self.party(house_id, party_id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+          ?house
+            a parl:House ;
+            parl:houseName ?houseName .
+          ?party
+            a parl:Party ;
+            parl:partyName ?partyName .
+      }
+      WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
+
+          ?house
+            parl:houseName ?houseName .
+          ?party
+            parl:partyName ?partyName .
+      }")
+  end
+
   def self.party_members(house_id, party_id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>

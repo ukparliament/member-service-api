@@ -48,6 +48,13 @@ class HousesController < ApplicationController
     response_streamer(uri)
   end
 
+  def party
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    uri = HouseQueryObject.party(house_id, party_id)
+    response_streamer(uri)
+  end
+
   def party_members
     house_id = params[:house_id]
     party_id = params[:party_id]

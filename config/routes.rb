@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     get '/members', to: 'houses#members'
     get '/members/current', to: 'houses#current_members'
     get '/parties', to: 'houses#parties'
+    get '/parties/:party_id', to: 'houses#party'
     get '/parties/current', to: 'houses#current_parties'
     match '/members/:letter', to: 'houses#members_letters', letter: /[A-Za-z]/, via: [:get]
     match '/members/current/:letter', to: 'houses#current_members_letters', letter: /[A-Za-z]/, via: [:get]
