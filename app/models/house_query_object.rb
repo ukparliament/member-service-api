@@ -274,8 +274,8 @@ class HouseQueryObject
       CONSTRUCT {
     	?person
         	a parl:Person ;
-        	parl:personGivenName ?givenname ;
-            parl:personFamilyName ?familyName ;
+        	parl:personGivenName ?givenName ;
+          parl:personFamilyName ?familyName ;
         	parl:partyMemberHasPartyMembership ?partyMembership ;
         	parl:memberHasSeatIncumbency ?seatIncumbency .
     	?house
@@ -322,7 +322,7 @@ class HouseQueryObject
       CONSTRUCT {
     	?person
         	a parl:Person ;
-        	parl:personGivenName ?givenname ;
+        	parl:personGivenName ?givenName ;
           parl:personFamilyName ?familyName ;
         	parl:partyMemberHasPartyMembership ?partyMembership ;
         	parl:memberHasSeatIncumbency ?seatIncumbency .
@@ -372,7 +372,7 @@ class HouseQueryObject
       CONSTRUCT {
     	?person
         	a parl:Person ;
-        	parl:personGivenName ?givenname ;
+        	parl:personGivenName ?givenName ;
           parl:personFamilyName ?familyName ;
         	parl:partyMemberHasPartyMembership ?partyMembership ;
         	parl:memberHasSeatIncumbency ?seatIncumbency .
@@ -418,7 +418,7 @@ class HouseQueryObject
       CONSTRUCT {
     	?person
         	a parl:Person ;
-        	parl:personGivenName ?givenname ;
+        	parl:personGivenName ?givenName ;
           parl:personFamilyName ?familyName ;
         	parl:partyMemberHasPartyMembership ?partyMembership ;
         	parl:memberHasSeatIncumbency ?seatIncumbency .

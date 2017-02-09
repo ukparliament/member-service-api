@@ -51,9 +51,9 @@ Rails.application.routes.draw do
     match '/members/:letter', to: 'houses#members_letters', letter: /[a-z]/, via: [:get]
     match '/members/current/:letter', to: 'houses#current_members_letters', letter: /[a-z]/, via: [:get]
     get '/parties/:party_id/members', to: 'houses#party_members'
-    get '/parties/:party_id/members/:letter', to: 'houses#party_members_letters', letter: /[a-z]/, via: [:get]
+    match '/parties/:party_id/members/:letter', to: 'houses#party_members_letters', letter: /[a-z]/, via: [:get]
     get '/parties/:party_id/members/current', to: 'houses#current_party_members'
-    get '/parties/:party_id/members/current/:letter', to: 'houses#current_party_members_letters', letter: /[a-z]/, via: [:get]
+    match '/parties/:party_id/members/current/:letter', to: 'houses#current_party_members_letters', letter: /[a-z]/, via: [:get]
   end
 
 end
