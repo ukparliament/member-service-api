@@ -15,16 +15,16 @@ ENV UKPDS_DATA_ENDPOINT $UKPDS_DATA_ENDPOINT
 
 RUN mkdir -p $RAILS_ROOT
 
-# add project
-COPY . $RAILS_ROOT
-RUN chown -R $APP_USER:$APP_USER $RAILS_ROOT
-
 # cache the gems
 COPY Gemfile $RAILS_ROOT/Gemfile
 COPY Gemfile.lock $RAILS_ROOT/Gemfile.lock
 RUN cd $RAILS_ROOT && gem install bundler
 RUN cd $RAILS_ROOT && env NOKOGIRI_USE_SYSTEM_LIBRARIES=true bundle install \
   	&& chown -R $APP_USER:$APP_USER $GEM_HOME
+
+# add project
+COPY . $RAILS_ROOT
+RUN chown -R $APP_USER:$APP_USER $RAILS_ROOT
 
 USER $USER
 WORKDIR $RAILS_ROOT
