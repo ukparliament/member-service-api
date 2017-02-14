@@ -282,12 +282,17 @@ class HouseQueryObject
       }
       WHERE {
           BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
-          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
-          ?house
-            parl:houseName ?houseName .
-          ?party
-            parl:partyName ?partyName .
+          OPTIONAL {
+            BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
+
+            ?house parl:houseHasHouseSeat ?seat .
+            ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            ?seatIncumbency parl:seatIncumbencyHasMember ?member .
+            ?member parl:partyMemberHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?party parl:partyName ?partyName .
+          }
       }")
   end
 
@@ -318,23 +323,27 @@ class HouseQueryObject
       }
       WHERE {
       	BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
-      	BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
     	  ?house parl:houseName ?houseName .
-    	  ?house parl:houseHasHouseSeat ?seat .
-    	  ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
-    	  OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
 
-    	  ?seatIncumbency parl:seatIncumbencyHasMember ?person .
-    	  ?person parl:personGivenName ?givenName .
-    	  ?person parl:personFamilyName ?familyName .
+        OPTIONAL {
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
-    	  ?person parl:partyMemberHasPartyMembership ?partyMembership .
-    	  ?partyMembership parl:partyMembershipHasParty ?party .
-    	  ?party parl:partyName ?partyName .
-    	  ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
-    	  OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+    	    ?house parl:houseHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	    ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
+    	    OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
+
+    	    ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+    	    OPTIONAL { ?person parl:personGivenName ?givenName . }
+    	    OPTIONAL { ?person parl:personFamilyName ?familyName . }
+
+    	    ?person parl:partyMemberHasPartyMembership ?partyMembership .
+    	    ?partyMembership parl:partyMembershipHasParty ?party .
+    	    ?party parl:partyName ?partyName .
+    	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+    	    OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+        }
       }
     ")
   end
@@ -366,25 +375,29 @@ class HouseQueryObject
       }
       WHERE {
       	BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
-      	BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
     	  ?house parl:houseName ?houseName .
-    	  ?house parl:houseHasHouseSeat ?seat .
-    	  ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
-    	  OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
 
-    	  ?seatIncumbency parl:seatIncumbencyHasMember ?person .
-    	  ?person parl:personGivenName ?givenName .
-    	  ?person parl:personFamilyName ?familyName .
+        OPTIONAL {
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
-    	  ?person parl:partyMemberHasPartyMembership ?partyMembership .
-    	  ?partyMembership parl:partyMembershipHasParty ?party .
-    	  ?party parl:partyName ?partyName .
-    	  ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
-    	  OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+    	    ?house parl:houseHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	    ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
+    	    OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+    	    ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+    	    OPTIONAL { ?person parl:personGivenName ?givenName . }
+    	    OPTIONAL { ?person parl:personFamilyName ?familyName . }
+
+    	    ?person parl:partyMemberHasPartyMembership ?partyMembership .
+    	    ?partyMembership parl:partyMembershipHasParty ?party .
+    	    ?party parl:partyName ?partyName .
+    	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+    	    OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+
+          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        }
       }
     ")
   end
@@ -414,23 +427,27 @@ class HouseQueryObject
       }
       WHERE {
       	BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
-      	BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
     	  ?house parl:houseName ?houseName .
-    	  ?house parl:houseHasHouseSeat ?seat .
-    	  ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
-    	  ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
 
-    	  ?seatIncumbency parl:seatIncumbencyHasMember ?person .
-    	  ?person parl:personGivenName ?givenName .
-    	  ?person parl:personFamilyName ?familyName .
+        OPTIONAL {
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
-    	  ?person parl:partyMemberHasPartyMembership ?partyMembership .
-        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-    	  ?partyMembership parl:partyMembershipHasParty ?party .
-    	  ?party parl:partyName ?partyName .
-    	  ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+    	    ?house parl:houseHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+    	    ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
+
+    	    ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+    	    OPTIONAL { ?person parl:personGivenName ?givenName . }
+    	    OPTIONAL { ?person parl:personFamilyName ?familyName . }
+
+    	    ?person parl:partyMemberHasPartyMembership ?partyMembership .
+          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+    	    ?partyMembership parl:partyMembershipHasParty ?party .
+    	    ?party parl:partyName ?partyName .
+    	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+        }
       }
     ")
   end
@@ -460,25 +477,29 @@ class HouseQueryObject
       }
       WHERE {
       	BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
-      	BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
     	  ?house parl:houseName ?houseName .
-    	  ?house parl:houseHasHouseSeat ?seat .
-    	  ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
-    	  ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
 
-    	  ?seatIncumbency parl:seatIncumbencyHasMember ?person .
-    	  ?person parl:personGivenName ?givenName .
-    	  ?person parl:personFamilyName ?familyName .
+        OPTIONAL {
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
 
-    	  ?person parl:partyMemberHasPartyMembership ?partyMembership .
-        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-    	  ?partyMembership parl:partyMembershipHasParty ?party .
-    	  ?party parl:partyName ?partyName .
-    	  ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+    	    ?house parl:houseHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+    	    ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+    	    ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+    	    OPTIONAL { ?person parl:personGivenName ?givenName . }
+    	    OPTIONAL { ?person parl:personFamilyName ?familyName . }
+
+    	    ?person parl:partyMemberHasPartyMembership ?partyMembership .
+          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+    	    ?partyMembership parl:partyMembershipHasParty ?party .
+    	    ?party parl:partyName ?partyName .
+    	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+
+          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        }
       }
     ")
   end
