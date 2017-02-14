@@ -73,6 +73,17 @@ class ConstituencyQueryObject
     ")
   end
 
+  def self.by_identifier(source, id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+	      ?constituency a parl:Constituency .
+      }
+      WHERE {
+	      ?constituency parl:#{source} \"#{id}\" .
+      }")
+  end
+
   def self.all_current
     self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
