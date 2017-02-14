@@ -87,14 +87,17 @@ class PartyQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
 
-      	?party parl:partyName ?partyName ;
-          		parl:partyHasPartyMembership ?partyMembership .
-        ?partyMembership parl:partyMembershipHasPartyMember ?person .
-        ?partyMembership parl:partyMembershipStartDate ?startDate .
-        OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?endDate . }
+      	?party parl:partyName ?partyName .
 
-        OPTIONAL { ?person parl:personGivenName ?givenName . }
-        OPTIONAL { ?person parl:personFamilyName ?familyName . }
+        OPTIONAL {
+          ?party parl:partyHasPartyMembership ?partyMembership .
+          ?partyMembership parl:partyMembershipHasPartyMember ?person .
+          ?partyMembership parl:partyMembershipStartDate ?startDate .
+          OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?endDate . }
+
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
+        }
       }
     ")
   end
@@ -116,21 +119,21 @@ class PartyQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
 
-      	?party parl:partyName ?partyName ;
-          		parl:partyHasPartyMembership ?partyMembership .
-        ?partyMembership parl:partyMembershipHasPartyMember ?person .
-        ?partyMembership parl:partyMembershipStartDate ?startDate .
-        OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?endDate . }
+      	?party parl:partyName ?partyName .
+        OPTIONAL {
+          ?party parl:partyHasPartyMembership ?partyMembership .
+          ?partyMembership parl:partyMembershipHasPartyMember ?person .
+          ?partyMembership parl:partyMembershipStartDate ?startDate .
+          OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?endDate . }
 
-        OPTIONAL { ?person parl:personGivenName ?givenName . }
-        OPTIONAL { ?person parl:personFamilyName ?familyName . }
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        }
       }
     ")
   end
-
-  # TODO: Once the full data is populated run this query to check number of party memberships is correct
 
   def self.current_members(id)
     self.uri_builder("
@@ -148,14 +151,19 @@ class PartyQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
 
-      	?party parl:partyName ?partyName ;
-          		parl:partyHasPartyMembership ?partyMembership .
-        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-        ?partyMembership parl:partyMembershipHasPartyMember ?person .
-        ?partyMembership parl:partyMembershipStartDate ?startDate .
+      	?party parl:partyName ?partyName .
 
-        OPTIONAL { ?person parl:personGivenName ?givenName . }
-        OPTIONAL { ?person parl:personFamilyName ?familyName . }
+        OPTIONAL {
+          ?party parl:partyHasPartyMembership ?partyMembership .
+          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+          ?partyMembership parl:partyMembershipHasPartyMember ?person .
+          ?person parl:memberHasSeatIncumbency ?seatIncumbency .
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?partyMembership parl:partyMembershipStartDate ?startDate .
+
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
+        }
       }
       ")
   end
@@ -176,16 +184,21 @@ class PartyQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
 
-      	?party parl:partyName ?partyName ;
-          		parl:partyHasPartyMembership ?partyMembership .
-        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-        ?partyMembership parl:partyMembershipHasPartyMember ?person .
-        ?partyMembership parl:partyMembershipStartDate ?startDate .
+      	?party parl:partyName ?partyName .
 
-        OPTIONAL { ?person parl:personGivenName ?givenName . }
-        OPTIONAL { ?person parl:personFamilyName ?familyName . }
+        OPTIONAL {
+          ?party parl:partyHasPartyMembership ?partyMembership .
+          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+          ?partyMembership parl:partyMembershipHasPartyMember ?person .
+          ?person parl:memberHasSeatIncumbency ?seatIncumbency .
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?partyMembership parl:partyMembershipStartDate ?startDate .
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
+
+          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        }
        }
      ")
   end

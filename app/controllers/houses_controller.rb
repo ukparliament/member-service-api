@@ -47,4 +47,41 @@ class HousesController < ApplicationController
     uri = HouseQueryObject.current_members_by_letter(id, letter)
     response_streamer(uri)
   end
+
+  def party
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    uri = HouseQueryObject.party(house_id, party_id)
+    response_streamer(uri)
+  end
+
+  def party_members
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    uri = HouseQueryObject.party_members(house_id, party_id)
+    response_streamer(uri)
+  end
+
+  def party_members_letters
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    letter = params[:letter]
+    uri = HouseQueryObject.party_members_letters(house_id, party_id, letter)
+    response_streamer(uri)
+  end
+
+  def current_party_members
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    uri = HouseQueryObject.current_party_members(house_id, party_id)
+    response_streamer(uri)
+  end
+
+  def current_party_members_letters
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    letter = params[:letter]
+    uri = HouseQueryObject.current_party_members_letters(house_id, party_id, letter)
+    response_streamer(uri)
+  end
 end
