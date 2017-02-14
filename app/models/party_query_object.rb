@@ -152,6 +152,8 @@ class PartyQueryObject
           		parl:partyHasPartyMembership ?partyMembership .
         FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
         ?partyMembership parl:partyMembershipHasPartyMember ?person .
+        ?person parl:memberHasSeatIncumbency ?seatIncumbency .
+        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
         ?partyMembership parl:partyMembershipStartDate ?startDate .
 
         OPTIONAL { ?person parl:personGivenName ?givenName . }
@@ -180,6 +182,8 @@ class PartyQueryObject
           		parl:partyHasPartyMembership ?partyMembership .
         FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
         ?partyMembership parl:partyMembershipHasPartyMember ?person .
+        ?person parl:memberHasSeatIncumbency ?seatIncumbency .
+        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
         ?partyMembership parl:partyMembershipStartDate ?startDate .
 
         OPTIONAL { ?person parl:personGivenName ?givenName . }
