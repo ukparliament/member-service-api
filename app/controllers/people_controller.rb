@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
   end
 
   def show
-    id = params[:id]
+    id = params[:person]
     uri = PersonQueryObject.find(id)
     response_streamer(uri)
   end
@@ -65,6 +65,12 @@ class PeopleController < ApplicationController
   def letters
     letter = params[:letter]
     uri = PersonQueryObject.all_by_letter(letter)
+    response_streamer(uri)
+  end
+
+  def search_by_letters
+    letters = params[:letters]
+    uri = PersonQueryObject.search_by_letters(letters)
     response_streamer(uri)
   end
 end

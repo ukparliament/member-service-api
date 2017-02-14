@@ -514,4 +514,21 @@ class HouseQueryObject
       }
     ")
   end
+
+  def self.search_by_letters(letters)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?house
+        	a parl:House ;
+         	parl:houseName ?houseName .
+      }
+      WHERE {
+        ?house a parl:House .
+        ?house parl:houseName ?houseName .
+
+    	  FILTER(regex(str(?houseName), \"#{letters}\", 'i')) .
+      }
+    ")
+  end
 end
