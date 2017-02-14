@@ -36,6 +36,17 @@ class HouseQueryObject
       }")
   end
 
+  def self.by_identifier(source, id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+	      ?house a parl:House .
+      }
+      WHERE {
+	      ?house parl:#{source} \"#{id}\" .
+      }")
+  end
+
   def self.members(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>

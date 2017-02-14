@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   match '/people/:person', to: 'people#show', person: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   match '/people/:letter', to: 'people#letters', letter: /[A-Za-z]/, via: [:get]
   get '/people/:letters', to: 'people#search_by_letters'
+  get 'people/by', to: 'people#by_identifier'
 
   get '/people/members', to: 'members#index'
   get '/people/members/current', to: 'members#current'
@@ -14,17 +15,23 @@ Rails.application.routes.draw do
 
   match '/constituencies/:constituency', to: 'constituencies#show', constituency: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   get '/constituencies/:letters', to: 'constituencies#search_by_letters'
+  get '/constituencies/by', to: 'constituencies#by_identifier'
   get '/constituencies/current', to: 'constituencies#current'
   match '/constituencies/:letter', to: 'constituencies#letters', letter: /[A-Za-z]/, via: [:get]
   match '/constituencies/current/:letter', to: 'constituencies#current_letters', letter: /[A-Za-z]/, via: [:get]
 
   match '/parties/:party', to: 'parties#show', party: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   get '/parties/:letters', to: 'parties#search_by_letters'
+  get '/parties/by', to: 'parties#by_identifier'
   get '/parties/current', to: 'parties#current'
   match '/parties/:letter', to: 'parties#letters', letter: /[A-Za-z]/, via: [:get]
 
+
   match '/houses/:house', to: 'houses#show', house: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   get '/houses/:letters', to: 'houses#search_by_letters'
+  get '/houses/by', to: 'houses#by_identifier'
+
+  get '/contact_points/by', to: 'contact_points#by_identifier'
 
   resources :people, only: [:index] do
     get '/constituencies', to: 'people#constituencies'

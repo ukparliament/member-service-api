@@ -70,6 +70,17 @@ class PartyQueryObject
     ")
   end
 
+  def self.by_identifier(source, id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+	      ?party a parl:Party .
+      }
+      WHERE {
+	      ?party parl:#{source} \"#{id}\" .
+      }")
+  end
+
   def self.members(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
