@@ -10,10 +10,9 @@ class ContactPointQueryObject
                parl:email ?email ;
                parl:phoneNumber ?phoneNumber ;
                parl:faxNumber ?faxNumber ;
-               parl:contactForm ?contactForm ;
-               parl:addressLocality ?addressLocality ;
                parl:contactPointHasPostalAddress ?postalAddress .
-            ?postalAddress parl:postCode ?postCode ;
+            ?postalAddress a parl:PostalAddress ;
+                       parl:postCode ?postCode ;
                			   parl:addressLine1 ?addressLine1 ;
                			   parl:addressLine2 ?addressLine2 ;
                			   parl:addressLine3 ?addressLine3 ;
@@ -25,7 +24,6 @@ class ContactPointQueryObject
         	OPTIONAL{ ?contactPoint parl:email ?email . }
         	OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
         	OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-        	OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
         	OPTIONAL{
                 ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
                 OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
@@ -48,17 +46,17 @@ class ContactPointQueryObject
                parl:email ?email ;
                parl:phoneNumber ?phoneNumber ;
                parl:faxNumber ?faxNumber ;
-               parl:contactForm ?contactForm ;
-               parl:addressLocality ?addressLocality ;
                parl:contactPointHasPostalAddress ?postalAddress ;
-    		   parl:contactPointHasPerson ?person .
-            ?postalAddress parl:postCode ?postCode ;
+    		       parl:contactPointHasPerson ?person .
+            ?postalAddress a parl:PostalAddress ;
+                       parl:postCode ?postCode ;
                			   parl:addressLine1 ?addressLine1 ;
                			   parl:addressLine2 ?addressLine2 ;
                			   parl:addressLine3 ?addressLine3 ;
                			   parl:addressLine4 ?addressLine4 ;
                			   parl:addressLine5 ?addressLine5 .
-    		?person parl:personGivenName ?givenName ;
+    		?person a parl:Person ;
+              parl:personGivenName ?givenName ;
         			parl:personFamilyName ?familyName .
         }
         WHERE {
@@ -67,7 +65,6 @@ class ContactPointQueryObject
         	OPTIONAL{ ?contactPoint parl:email ?email . }
         	OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
         	OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-        	OPTIONAL{ ?contactPoint parl:contactForm ?contactForm . }
         	OPTIONAL{
                 ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
                 OPTIONAL{ ?postalAddress parl:postCode ?postCode . }
