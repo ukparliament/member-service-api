@@ -253,4 +253,21 @@ class ConstituencyQueryObject
       }
     ")
   end
+
+  def self.search_by_letters(letters)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?constituency
+        	a parl:Constituency ;
+         	parl:constituencyGroupName ?constituencyName .
+      }
+      WHERE {
+        ?constituency a parl:ConstituencyGroup .
+        ?constituency parl:constituencyGroupName ?constituencyName .
+
+    	  FILTER(regex(str(?constituencyName), \"#{letters}\", 'i')) .
+      }
+    ")
+  end
 end

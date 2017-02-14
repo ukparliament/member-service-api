@@ -203,4 +203,20 @@ class PartyQueryObject
      ")
   end
 
+  def self.search_by_letters(letters)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?party
+        	a parl:Party ;
+         	parl:partyName ?partyName .
+      }
+      WHERE {
+        ?party a parl:Party .
+        ?party parl:partyName ?partyName .
+
+    	  FILTER(regex(str(?partyName), \"#{letters}\", 'i')) .
+      }
+    ")
+  end
 end

@@ -10,7 +10,7 @@ class PartiesController < ApplicationController
   end
 
   def show
-    id = params[:id]
+    id = params[:party]
     uri = PartyQueryObject.find(id)
     response_streamer(uri)
   end
@@ -44,6 +44,12 @@ class PartiesController < ApplicationController
     letter = params[:letter]
     id = params[:party_id]
     uri = PartyQueryObject.current_members_by_letter(id, letter)
+    response_streamer(uri)
+  end
+
+  def search_by_letters
+    letters = params[:letters]
+    uri = PartyQueryObject.search_by_letters(letters)
     response_streamer(uri)
   end
 end
