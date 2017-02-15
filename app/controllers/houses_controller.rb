@@ -5,7 +5,7 @@ class HousesController < ApplicationController
   end
 
   def show
-    id = params[:id]
+    id = params[:house]
     uri = HouseQueryObject.find(id)
     response_streamer(uri)
   end
@@ -89,6 +89,12 @@ class HousesController < ApplicationController
     party_id = params[:party_id]
     letter = params[:letter]
     uri = HouseQueryObject.current_party_members_letters(house_id, party_id, letter)
+    response_streamer(uri)
+  end
+
+  def lookup_by_letters
+    letters = params[:letters]
+    uri = HouseQueryObject.lookup_by_letters(letters)
     response_streamer(uri)
   end
 end

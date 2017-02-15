@@ -508,9 +508,25 @@ class HouseQueryObject
     	    ?partyMembership parl:partyMembershipHasParty ?party .
     	    ?party parl:partyName ?partyName .
     	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
-
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
         }
+        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+      }
+    ")
+  end
+
+  def self.lookup_by_letters(letters)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+        ?house
+        	a parl:House ;
+         	parl:houseName ?houseName .
+      }
+      WHERE {
+        ?house a parl:House .
+        ?house parl:houseName ?houseName .
+
+    	  FILTER(regex(str(?houseName), \"#{letters}\", 'i')) .
       }
     ")
   end

@@ -5,7 +5,7 @@ class ConstituenciesController < ApplicationController
   end
 
   def show
-    constituency_id = params[:id]
+    constituency_id = params[:constituency]
     uri = ConstituencyQueryObject.find(constituency_id)
     response_streamer(uri)
   end
@@ -49,6 +49,12 @@ class ConstituenciesController < ApplicationController
   def current_letters
     letter = params[:letter]
     uri = ConstituencyQueryObject.all_current_by_letter(letter)
+    response_streamer(uri)
+  end
+
+  def lookup_by_letters
+    letters = params[:letters]
+    uri = ConstituencyQueryObject.lookup_by_letters(letters)
     response_streamer(uri)
   end
 end
