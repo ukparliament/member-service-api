@@ -430,7 +430,7 @@ class PersonQueryObject
     ")
   end
 
-  def self.search_by_letters(letters)
+  def self.lookup_by_letters(letters)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
@@ -444,7 +444,7 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
 
-    	  FILTER(regex(str(?familyName), \"^#{letters}\", 'i') || regex(str(?givenName), \"^#{letters}\", 'i')) .
+    	  FILTER(regex(str(?familyName), \"#{letters}\", 'i') || regex(str(?givenName), \"#{letters}\", 'i')) .
       }
     ")
   end

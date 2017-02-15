@@ -214,7 +214,7 @@ class PartyQueryObject
      ")
   end
 
-  def self.search_by_letters(letters)
+  def self.lookup_by_letters(letters)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {

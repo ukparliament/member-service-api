@@ -68,9 +68,9 @@ class PeopleController < ApplicationController
     response_streamer(uri)
   end
 
-  def search_by_letters
+  def lookup_by_letters
     letters = params[:letters]
-    uri = PersonQueryObject.search_by_letters(letters)
+    uri = PersonQueryObject.lookup_by_letters(letters)
     response_streamer(uri)
   end
 end

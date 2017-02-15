@@ -265,12 +265,12 @@ class ConstituencyQueryObject
     ")
   end
 
-  def self.search_by_letters(letters)
+  def self.lookup_by_letters(letters)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?constituency
-        	a parl:Constituency ;
+        	a parl:ConstituencyGroup ;
          	parl:constituencyGroupName ?constituencyName .
       }
       WHERE {

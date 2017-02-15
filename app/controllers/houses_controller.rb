@@ -92,9 +92,9 @@ class HousesController < ApplicationController
     response_streamer(uri)
   end
 
-  def search_by_letters
+  def lookup_by_letters
     letters = params[:letters]
-    uri = HouseQueryObject.search_by_letters(letters)
+    uri = HouseQueryObject.lookup_by_letters(letters)
     response_streamer(uri)
   end
 end

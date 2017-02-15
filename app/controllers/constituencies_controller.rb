@@ -52,9 +52,9 @@ class ConstituenciesController < ApplicationController
     response_streamer(uri)
   end
 
-  def search_by_letters
+  def lookup_by_letters
     letters = params[:letters]
-    uri = ConstituencyQueryObject.search_by_letters(letters)
+    uri = ConstituencyQueryObject.lookup_by_letters(letters)
     response_streamer(uri)
   end
 end

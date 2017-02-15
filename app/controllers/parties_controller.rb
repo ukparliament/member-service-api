@@ -54,9 +54,9 @@ class PartiesController < ApplicationController
     response_streamer(uri)
   end
 
-  def search_by_letters
+  def lookup_by_letters
     letters = params[:letters]
-    uri = PartyQueryObject.search_by_letters(letters)
+    uri = PartyQueryObject.lookup_by_letters(letters)
     response_streamer(uri)
   end
 end
