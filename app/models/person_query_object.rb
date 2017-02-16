@@ -335,12 +335,13 @@ class PersonQueryObject
 
     	  OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
-	      ?person parl:personHasContactPoint ?contactPoint .
-        OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
-        OPTIONAL { ?contactPoint parl:email ?email . }
-        OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }
-
         OPTIONAL {
+	        ?person parl:personHasContactPoint ?contactPoint .
+          OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
+          OPTIONAL { ?contactPoint parl:email ?email . }
+          OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }
+
+          OPTIONAL {
         	    ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
 				      OPTIONAL { ?postalAddress parl:addressLine1 ?addressLine1 . }
 				      OPTIONAL { ?postalAddress parl:addressLine2 ?addressLine2 . }
@@ -349,6 +350,7 @@ class PersonQueryObject
         		  OPTIONAL { ?postalAddress parl:addressLine5 ?addressLine5 . }
         		  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
         	}
+        }
       }
     ")
   end
