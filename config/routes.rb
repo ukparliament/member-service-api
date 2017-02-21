@@ -14,14 +14,14 @@ Rails.application.routes.draw do
 
   match '/constituencies/:constituency', to: 'constituencies#show', constituency: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   match '/constituencies/:letter', to: 'constituencies#letters', letter: /[A-Za-z]/, via: [:get]
-  get '/constituencies/:letters', to: 'constituencies#lookup_by_letters'
   get '/constituencies/current', to: 'constituencies#current'
+  get '/constituencies/:letters', to: 'constituencies#lookup_by_letters'
   match '/constituencies/current/:letter', to: 'constituencies#current_letters', letter: /[A-Za-z]/, via: [:get]
 
   match '/parties/:party', to: 'parties#show', party: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   get '/parties/:letter', to: 'parties#letters', letter: /[A-Za-z]/, via: [:get]
-  get '/parties/:letters', to: 'parties#lookup_by_letters'
   get '/parties/current', to: 'parties#current'
+  get '/parties/:letters', to: 'parties#lookup_by_letters'
 
   match '/houses/:house', to: 'houses#show', house: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   get '/houses/:letters', to: 'houses#lookup_by_letters'
