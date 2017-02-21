@@ -207,9 +207,8 @@ class PartyQueryObject
 
           OPTIONAL { ?person parl:personGivenName ?givenName . }
           OPTIONAL { ?person parl:personFamilyName ?familyName . }
-
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
         }
+          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
        }
      ")
   end
