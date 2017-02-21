@@ -1,8 +1,10 @@
 class PersonQueryObject
   extend QueryObject
 
-  def self.all
-    self.uri_builder('
+  def self.all(source, id)
+    queryString = "?person parl:#{source} \"#{id}\" ." if source && id
+
+    self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
       CONSTRUCT {
         ?person
@@ -12,10 +14,10 @@ class PersonQueryObject
       }
       WHERE {
         ?person a parl:Person .
+        #{queryString}
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
-      }'
-    )
+      }")
   end
 
   def self.all_by_letter(letter)
