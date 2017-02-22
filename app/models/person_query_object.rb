@@ -2,7 +2,7 @@ class PersonQueryObject
   extend QueryObject
 
   def self.all(source, id)
-    queryString = "?person parl:#{source} \"#{id}\" ." if source && id
+    source_query_string = "?person parl:#{source} \"#{id}\" ." if source && id
 
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -14,7 +14,7 @@ class PersonQueryObject
       }
       WHERE {
         ?person a parl:Person .
-        #{queryString}
+        #{source_query_string}
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
       }")
