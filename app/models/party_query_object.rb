@@ -50,7 +50,7 @@ class PartyQueryObject
         ?party a parl:Party ;
               parl:partyName ?partyName .
 
-        FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?partyName), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -140,7 +140,7 @@ class PartyQueryObject
           OPTIONAL { ?person parl:personGivenName ?givenName . }
           OPTIONAL { ?person parl:personFamilyName ?familyName . }
 
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
         }
       }
     ")
@@ -208,7 +208,7 @@ class PartyQueryObject
           OPTIONAL { ?person parl:personGivenName ?givenName . }
           OPTIONAL { ?person parl:personFamilyName ?familyName . }
         }
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
        }
      ")
   end

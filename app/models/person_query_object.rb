@@ -34,7 +34,7 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
 
-    	  FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+    	  FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end

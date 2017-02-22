@@ -114,7 +114,7 @@ class ConstituencyQueryObject
           ?constituencyGroup a parl:ConstituencyGroup .
           FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    		  FILTER regex(str(?name), \"^#{letter.upcase}\") .
+    		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -168,7 +168,7 @@ class ConstituencyQueryObject
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    		  FILTER regex(str(?name), \"^#{letter.upcase}\") .
+    		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }
     ")
   end

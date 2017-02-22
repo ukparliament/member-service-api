@@ -92,7 +92,7 @@ class MemberQueryObject
          ?house parl:houseName ?houseName .
     	 OPTIONAL { ?member parl:personGivenName ?givenName . }
     	 OPTIONAL { ?member parl:personFamilyName ?familyName . }
-    	  FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+    	  FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -191,7 +191,7 @@ class MemberQueryObject
              ?house parl:houseName ?houseName .
            OPTIONAL { ?member parl:personGivenName ?givenName . }
            OPTIONAL { ?member parl:personFamilyName ?familyName . }
-            FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+            FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
           }
     ")
   end

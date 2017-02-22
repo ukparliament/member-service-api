@@ -108,7 +108,7 @@ class HouseQueryObject
         OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
         OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -212,7 +212,7 @@ class HouseQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName . }
         OPTIONAL { ?person parl:personFamilyName ?familyName . }
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -407,7 +407,7 @@ class HouseQueryObject
     	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
     	    OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
 
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
         }
       }
     ")
@@ -509,7 +509,7 @@ class HouseQueryObject
     	    ?party parl:partyName ?partyName .
     	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
         }
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end
