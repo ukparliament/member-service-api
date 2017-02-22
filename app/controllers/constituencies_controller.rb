@@ -4,6 +4,13 @@ class ConstituenciesController < ApplicationController
     response_streamer(uri)
   end
 
+  def lookup
+    source = params['source']
+    id = params['id']
+    uri = ConstituencyQueryObject.lookup(source, id)
+    response_streamer(uri)
+  end
+
   def show
     constituency_id = params[:constituency]
     uri = ConstituencyQueryObject.find(constituency_id)

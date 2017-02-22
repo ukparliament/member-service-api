@@ -18,6 +18,23 @@ class HouseQueryObject
     )
   end
 
+  def self.lookup(source, id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+        ?house
+           a parl:House .
+      }
+      WHERE {
+        BIND(\"#{id}\" AS ?id)
+        BIND(parl:#{source} AS ?source)
+
+	      ?house a parl:House .
+        ?house ?source ?id .
+      }")
+  end
+
   def self.find(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -108,7 +125,7 @@ class HouseQueryObject
         OPTIONAL { ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate . }
         OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -212,7 +229,7 @@ class HouseQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName . }
         OPTIONAL { ?person parl:personFamilyName ?familyName . }
 
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -407,7 +424,7 @@ class HouseQueryObject
     	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
     	    OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
 
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
         }
       }
     ")
@@ -509,7 +526,7 @@ class HouseQueryObject
     	    ?party parl:partyName ?partyName .
     	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
         }
-        FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
   end

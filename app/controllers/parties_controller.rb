@@ -4,6 +4,13 @@ class PartiesController < ApplicationController
     response_streamer(uri)
   end
 
+  def lookup
+    source = params['source']
+    id = params['id']
+    uri = PartyQueryObject.lookup(source, id)
+    response_streamer(uri)
+  end
+
   def current
     uri = PartyQueryObject.all_current
     response_streamer(uri)

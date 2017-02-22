@@ -18,6 +18,23 @@ class PartyQueryObject
     ')
   end
 
+  def self.lookup(source, id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+        ?party
+           a parl:Party .
+      }
+      WHERE {
+        BIND(\"#{id}\" AS ?id)
+        BIND(parl:#{source} AS ?source)
+
+	      ?party a parl:Party .
+        ?party ?source ?id .
+      }")
+  end
+
   def self.all_current
     self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -50,7 +67,7 @@ class PartyQueryObject
         ?party a parl:Party ;
               parl:partyName ?partyName .
 
-        FILTER regex(str(?partyName), \"^#{letter.upcase}\") .
+        FILTER regex(str(?partyName), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -140,7 +157,7 @@ class PartyQueryObject
           OPTIONAL { ?person parl:personGivenName ?givenName . }
           OPTIONAL { ?person parl:personFamilyName ?familyName . }
 
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
         }
       }
     ")
@@ -208,7 +225,7 @@ class PartyQueryObject
           OPTIONAL { ?person parl:personGivenName ?givenName . }
           OPTIONAL { ?person parl:personFamilyName ?familyName . }
         }
-          FILTER regex(str(?familyName), \"^#{letter.upcase}\") .
+          FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
        }
      ")
   end

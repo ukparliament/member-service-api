@@ -17,6 +17,23 @@ class ConstituencyQueryObject
     ')
   end
 
+  def self.lookup(source, id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+        ?constituency
+           a parl:ConstituencyGroup .
+      }
+      WHERE {
+        BIND(\"#{id}\" AS ?id)
+        BIND(parl:#{source} AS ?source)
+
+	      ?constituency a parl:ConstituencyGroup .
+        ?constituency ?source ?id .
+      }")
+  end
+
   def self.find(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -114,7 +131,7 @@ class ConstituencyQueryObject
           ?constituencyGroup a parl:ConstituencyGroup .
           FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    		  FILTER regex(str(?name), \"^#{letter.upcase}\") .
+    		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }
     ")
   end
@@ -168,7 +185,7 @@ class ConstituencyQueryObject
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    		  FILTER regex(str(?name), \"^#{letter.upcase}\") .
+    		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }
     ")
   end

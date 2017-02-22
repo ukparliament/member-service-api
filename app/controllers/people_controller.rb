@@ -7,6 +7,13 @@ class PeopleController < ApplicationController
     response_streamer(uri)
   end
 
+  def lookup
+    source = params['source']
+    id = params['id']
+    uri = PersonQueryObject.lookup(source, id)
+    response_streamer(uri)
+  end
+
   def show
     id = params[:person]
     uri = PersonQueryObject.find(id)
