@@ -18,6 +18,23 @@ class HouseQueryObject
     )
   end
 
+  def self.lookup(source, id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT {
+        ?house
+           a parl:House .
+      }
+      WHERE {
+        BIND(\"#{id}\" AS ?id)
+        BIND(parl:#{source} AS ?source)
+
+	      ?house a parl:House .
+        ?house ?source ?id .
+      }")
+  end
+
   def self.find(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>

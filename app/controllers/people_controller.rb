@@ -3,9 +3,14 @@ require 'uri'
 
 class PeopleController < ApplicationController
   def index
-    source = params['by']
+    uri = PersonQueryObject.all
+    response_streamer(uri)
+  end
+
+  def lookup
+    source = params['source']
     id = params['id']
-    uri = PersonQueryObject.all(source, id)
+    uri = PersonQueryObject.lookup(source, id)
     response_streamer(uri)
   end
 
