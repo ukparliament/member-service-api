@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   match '/people/:person', to: 'people#show', person: /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/, via: [:get]
   get '/people/:letter', to: 'people#letters', letter: /[A-Za-z]/, via: [:get]
   get '/people/lookup', to: 'people#lookup'
+  get '/people/a_z_letters', to: 'people#a_z_letters'
   get '/people/:letters', to: 'people#lookup_by_letters'
 
   get '/people/members/current', to: 'members#current'

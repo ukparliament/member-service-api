@@ -52,6 +52,36 @@ class PersonQueryObject
     ")
   end
 
+  # def self.a_z_letters
+  #   self.uri_builder('
+  #     PREFIX parl: <http://id.ukpds.org/schema/>
+  #     SELECT DISTINCT ?firstLetter WHERE {
+  #      ?s a parl:Person .
+  #       ?s parl:personFamilyName ?familyName .
+  #
+  #       BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+  #     }
+  #     ORDER BY ?firstLetter
+  #   ')
+  # end
+
+  def self.a_z_letters
+    self.uri_builder('
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:letters ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?s a parl:Person .
+          ?s parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ')
+  end
+
   def self.find(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
