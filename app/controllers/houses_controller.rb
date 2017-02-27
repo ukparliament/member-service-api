@@ -55,10 +55,22 @@ class HousesController < ApplicationController
     response_streamer(uri)
   end
 
+  def a_z_letters_members
+    id = params[:house_id]
+    uri = HouseQueryObject.a_z_letters_members(id)
+    response_streamer(uri)
+  end
+
   def current_members_letters
     letter = params[:letter]
     id = params[:house_id]
     uri = HouseQueryObject.current_members_by_letter(id, letter)
+    response_streamer(uri)
+  end
+
+  def a_z_letters_members_current
+    id = params[:house_id]
+    uri = HouseQueryObject.a_z_letters_members_current(id)
     response_streamer(uri)
   end
 
@@ -84,6 +96,13 @@ class HousesController < ApplicationController
     response_streamer(uri)
   end
 
+  def a_z_letters_party_members
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    uri = HouseQueryObject.a_z_letters_party_members(house_id, party_id)
+    response_streamer(uri)
+  end
+
   def current_party_members
     house_id = params[:house_id]
     party_id = params[:party_id]
@@ -96,6 +115,13 @@ class HousesController < ApplicationController
     party_id = params[:party_id]
     letter = params[:letter]
     uri = HouseQueryObject.current_party_members_letters(house_id, party_id, letter)
+    response_streamer(uri)
+  end
+
+  def a_z_letters_party_members_current
+    house_id = params[:house_id]
+    party_id = params[:party_id]
+    uri = HouseQueryObject.a_z_letters_party_members_current(house_id, party_id)
     response_streamer(uri)
   end
 

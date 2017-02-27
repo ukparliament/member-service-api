@@ -53,9 +53,19 @@ class ConstituenciesController < ApplicationController
     response_streamer(uri)
   end
 
+  def a_z_letters
+    uri = ConstituencyQueryObject.a_z_letters
+    response_streamer(uri)
+  end
+
   def current_letters
     letter = params[:letter]
     uri = ConstituencyQueryObject.all_current_by_letter(letter)
+    response_streamer(uri)
+  end
+
+  def a_z_letters_current
+    uri = ConstituencyQueryObject.a_z_letters_current
     response_streamer(uri)
   end
 

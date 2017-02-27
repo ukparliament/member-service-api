@@ -17,6 +17,40 @@ class ConstituencyQueryObject
     ')
   end
 
+  def self.all_by_letter(letter)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+
+      CONSTRUCT{
+          ?constituencyGroup
+              a parl:ConstituencyGroup ;
+              parl:constituencyGroupName ?name .
+      }
+      WHERE {
+          ?constituencyGroup a parl:ConstituencyGroup .
+          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+    		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
+      }
+    ")
+  end
+
+  def self.a_z_letters
+    self.uri_builder('
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?s a parl:ConstituencyGroup .
+          ?s parl:constituencyGroupName ?constituencyName .
+
+          BIND(ucase(SUBSTR(?constituencyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ')
+  end
+
   def self.lookup(source, id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -136,6 +170,24 @@ class ConstituencyQueryObject
     ")
   end
 
+  def self.a_z_letters_current
+    self.uri_builder('
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?s a parl:ConstituencyGroup .
+          FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
+          ?s parl:constituencyGroupName ?constituencyName .
+
+          BIND(ucase(SUBSTR(?constituencyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ')
+  end
+
   def self.members(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -169,23 +221,6 @@ class ConstituencyQueryObject
         	    OPTIONAL { ?member parl:personFamilyName ?familyName . }
           }
         }
-      }
-    ")
-  end
-
-  def self.all_by_letter(letter)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-
-      CONSTRUCT{
-          ?constituencyGroup
-              a parl:ConstituencyGroup ;
-              parl:constituencyGroupName ?name .
-      }
-      WHERE {
-          ?constituencyGroup a parl:ConstituencyGroup .
-          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-    		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }
     ")
   end
