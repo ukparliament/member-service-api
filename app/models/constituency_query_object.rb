@@ -179,7 +179,7 @@ class ConstituencyQueryObject
       WHERE {
         SELECT DISTINCT ?firstLetter WHERE {
 	        ?s a parl:ConstituencyGroup .
-          FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
+          FILTER NOT EXISTS { ?s a parl:PastConstituencyGroup . }
           ?s parl:constituencyGroupName ?constituencyName .
 
           BIND(ucase(SUBSTR(?constituencyName, 1, 1)) as ?firstLetter)
