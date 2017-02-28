@@ -97,6 +97,24 @@ class MemberQueryObject
     ")
   end
 
+  def self.a_z_letters
+    self.uri_builder('
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?seatIncumbency a parl:SeatIncumbency ;
+                        parl:seatIncumbencyHasMember ?member .
+          ?member parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ')
+  end
+
   def self.all_current
     self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -194,5 +212,24 @@ class MemberQueryObject
             FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
           }
     ")
+  end
+
+  def self.a_z_letters_current
+    self.uri_builder('
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?seatIncumbency a parl:SeatIncumbency ;
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency .	}
+          ?seatIncumbency parl:seatIncumbencyHasMember ?member .
+          ?member parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ')
   end
 end

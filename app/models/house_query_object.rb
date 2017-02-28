@@ -130,6 +130,27 @@ class HouseQueryObject
     ")
   end
 
+  def self.a_z_letters_members(id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
+
+	        ?house parl:houseHasHouseSeat ?seat .
+          ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+          ?person parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ")
+  end
+
   def self.current_members(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -230,6 +251,28 @@ class HouseQueryObject
         OPTIONAL { ?person parl:personFamilyName ?familyName . }
 
         FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+      }
+    ")
+  end
+
+  def self.a_z_letters_members_current(id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
+
+	        ?house parl:houseHasHouseSeat ?seat .
+          ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	    FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+          ?person parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
       }
     ")
   end
@@ -430,6 +473,30 @@ class HouseQueryObject
     ")
   end
 
+  def self.a_z_letters_party_members(house_id, party_id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
+
+	        ?house parl:houseHasHouseSeat ?seat .
+          ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+          ?person parl:partyMemberHasPartyMembership ?partyMembership .
+    	    ?partyMembership parl:partyMembershipHasParty ?party .
+          ?person parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ")
+  end
+
   def self.current_party_members(house_id, party_id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -527,6 +594,32 @@ class HouseQueryObject
     	    ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
         }
         FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+      }
+    ")
+  end
+
+  def self.a_z_letters_party_members_current(house_id, party_id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
+
+	        ?house parl:houseHasHouseSeat ?seat .
+          ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	    FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+          ?person parl:partyMemberHasPartyMembership ?partyMembership .
+          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+    	    ?partyMembership parl:partyMembershipHasParty ?party .
+          ?person parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
       }
     ")
   end

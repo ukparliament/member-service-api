@@ -14,6 +14,11 @@ class PeopleController < ApplicationController
     response_streamer(uri)
   end
 
+  def a_z_letters
+    uri = PersonQueryObject.a_z_letters
+    response_streamer(uri)
+  end
+
   def show
     id = params[:person]
     uri = PersonQueryObject.find(id)

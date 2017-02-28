@@ -55,6 +55,28 @@ class PartyQueryObject
     ')
   end
 
+  def self.a_z_letters_current
+    self.uri_builder('
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?seatIncumbency a parl:SeatIncumbency .
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+          ?person parl:partyMemberHasPartyMembership ?partyMembership .
+          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+          ?partyMembership parl:partyMembershipHasParty ?party .
+          ?party parl:partyName ?partyName .
+
+          BIND(ucase(SUBSTR(?partyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ')
+  end
+
   def self.all_by_letter(letter)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -70,6 +92,24 @@ class PartyQueryObject
         FILTER regex(str(?partyName), \"^#{letter}\", 'i') .
       }
     ")
+  end
+
+
+  def self.a_z_letters_all
+    self.uri_builder('
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?s a parl:Party .
+          ?s parl:partyName ?partyName .
+
+          BIND(ucase(SUBSTR(?partyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ')
   end
 
   def self.find(id)
@@ -163,6 +203,26 @@ class PartyQueryObject
     ")
   end
 
+  def self.a_z_letters_members(id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
+	        ?party parl:partyHasPartyMembership ?partyMembership .
+          ?partyMembership parl:partyMembershipHasPartyMember ?person .
+          ?person parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ")
+  end
+
   def self.current_members(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
@@ -228,6 +288,29 @@ class PartyQueryObject
           FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
        }
      ")
+  end
+
+  def self.a_z_letters_members_current(id)
+    self.uri_builder("
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
+         _:x parl:value ?firstLetter .
+      }
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?party)
+
+	        ?party parl:partyHasPartyMembership ?partyMembership .
+          FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+          ?partyMembership parl:partyMembershipHasPartyMember ?person .
+          ?person parl:memberHasSeatIncumbency ?seatIncumbency .
+          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?person parl:personFamilyName ?familyName .
+
+          BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
+        }
+      }
+    ")
   end
 
   def self.lookup_by_letters(letters)

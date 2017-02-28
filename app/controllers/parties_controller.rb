@@ -11,8 +11,18 @@ class PartiesController < ApplicationController
     response_streamer(uri)
   end
 
+  def a_z_letters_all
+    uri = PartyQueryObject.a_z_letters_all
+    response_streamer(uri)
+  end
+
   def current
     uri = PartyQueryObject.all_current
+    response_streamer(uri)
+  end
+
+  def a_z_letters_current
+    uri = PartyQueryObject.a_z_letters_current
     response_streamer(uri)
   end
 
@@ -54,10 +64,22 @@ class PartiesController < ApplicationController
     response_streamer(uri)
   end
 
+  def a_z_letters_members
+    id = params[:party_id]
+    uri = PartyQueryObject.a_z_letters_members(id)
+    response_streamer(uri)
+  end
+
   def current_members_letters
     letter = params[:letter]
     id = params[:party_id]
     uri = PartyQueryObject.current_members_by_letter(id, letter)
+    response_streamer(uri)
+  end
+
+  def a_z_letters_members_current
+    id = params[:party_id]
+    uri = PartyQueryObject.a_z_letters_members_current(id)
     response_streamer(uri)
   end
 
