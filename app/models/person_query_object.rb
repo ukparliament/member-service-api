@@ -82,9 +82,7 @@ class PersonQueryObject
               parl:personOtherNames ?otherName ;
               parl:personFamilyName ?familyName ;
     		      parl:personHasGenderIdentity ?genderIdentity ;
-              parl:partyMemberHasPartyMembership ?partyMembership ;
-              parl:personHasContactPoint ?contactPoint ;
-              parl:memberHasSeatIncumbency ?seatIncumbency .
+              parl:partyMemberHasPartyMembership ?partyMembership .
     		?genderIdentity
         		a parl:GenderIdentity ;
         		parl:genderIdentityHasGender ?gender .
@@ -110,9 +108,16 @@ class PersonQueryObject
              parl:constituencyGroupName ?constituencyName .
     	  ?seatIncumbency
           		a parl:SeatIncumbency ;
-        	  	parl:seatIncumbencyEndDate ?seatIncumbencyEndDate ;
-        	  	parl:seatIncumbencyStartDate ?seatIncumbencyStartDate ;
-				      parl:seatIncumbencyHasHouseSeat ?seat .
+        	  	parl:incumbencyEndDate ?incumbencyEndDate ;
+        	  	parl:incumbencyStartDate ?incumbencyStartDate ;
+				      parl:seatIncumbencyHasHouseSeat ?seat ;
+        		  parl:incumbencyHasContactPoint ?contactPoint .
+    	  ?houseIncumbency
+        		a parl:HouseIncumbency ;
+        		parl:incumbencyEndDate ?incumbencyEndDate ;
+        	  parl:incumbencyStartDate ?incumbencyStartDate ;
+        		parl:houseIncumbencyHasHouse ?house ;
+        		parl:incumbencyHasContactPoint ?contactPoint .
         ?seat
             	a parl:HouseSeat ;
             	parl:houseSeatHasConstituencyGroup ?constituency ;
@@ -131,7 +136,6 @@ class PersonQueryObject
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
 
-        ?person a parl:Person .
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personOtherNames ?otherName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
@@ -141,40 +145,53 @@ class PersonQueryObject
         OPTIONAL { ?gender parl:genderName ?genderName . }
 
     	  OPTIONAL {
-    	      ?person parl:memberHasSeatIncumbency ?seatIncumbency .
-    	  	  ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
-    	  	  ?seat parl:houseSeatHasConstituencyGroup ?constituency .
-    	      ?seat parl:houseSeatHasHouse ?house .
-    	      OPTIONAL { ?seatIncumbency parl:seatIncumbencyEndDate ?seatIncumbencyEndDate . }
-    	      ?seatIncumbency parl:seatIncumbencyStartDate ?seatIncumbencyStartDate .
-    	      ?constituency parl:constituencyGroupName ?constituencyName .
-    	      ?house parl:houseName ?houseName .
-    	  }
+    	      ?person parl:memberHasIncumbency ?incumbency .
+            OPTIONAL { ?incumbency parl:incumbencyEndDate ?incumbencyEndDate . }
+    	      ?incumbency parl:incumbencyStartDate ?incumbencyStartDate .
 
-        OPTIONAL {
-    	    ?person parl:partyMemberHasPartyMembership ?partyMembership .
-          ?partyMembership parl:partyMembershipHasParty ?party .
-          ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
-          OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
-          ?party parl:partyName ?partyName .
+        	  {
+        	      ?incumbency a parl:HouseIncumbency .
+                  BIND(?incumbency AS ?houseIncumbency)
+                  ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
+            	  ?house parl:houseName ?houseName .
+        	  }
+
+        	  UNION {
+        	      ?incumbency a parl:SeatIncumbency .
+                BIND(?incumbency AS ?seatIncumbency)
+                ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
+            	  ?seat parl:houseSeatHasConstituencyGroup ?constituency .
+    	      	  ?seat parl:houseSeatHasHouse ?house .
+            	  ?house parl:houseName ?houseName .
+            	  ?constituency parl:constituencyGroupName ?constituencyName .
+        	  }
+
+            OPTIONAL {
+        	    ?incumbency parl:incumbencyHasContactPoint ?contactPoint .
+        	    OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
+        	    OPTIONAL { ?contactPoint parl:email ?email . }
+        	    OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }
+
+        	    OPTIONAL {
+        	        ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+				          OPTIONAL { ?postalAddress parl:addressLine1 ?addressLine1 . }
+				          OPTIONAL { ?postalAddress parl:addressLine2 ?addressLine2 . }
+        	    	  OPTIONAL { ?postalAddress parl:addressLine3 ?addressLine3 . }
+        	    	  OPTIONAL { ?postalAddress parl:addressLine4 ?addressLine4 . }
+        	    	  OPTIONAL { ?postalAddress parl:addressLine5 ?addressLine5 . }
+        	    	  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
+        	    }
+    	      }
+    	    }
+
+          OPTIONAL {
+    	      ?person parl:partyMemberHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+            OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+            ?party parl:partyName ?partyName .
+          }
         }
-
-    	  OPTIONAL { ?person parl:personHasContactPoint ?contactPoint .
-        	OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
-        	OPTIONAL { ?contactPoint parl:email ?email . }
-        	OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }
-
-        	OPTIONAL {
-        	    ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
-				      OPTIONAL { ?postalAddress parl:addressLine1 ?addressLine1 . }
-				      OPTIONAL { ?postalAddress parl:addressLine2 ?addressLine2 . }
-        		  OPTIONAL { ?postalAddress parl:addressLine3 ?addressLine3 . }
-        		  OPTIONAL { ?postalAddress parl:addressLine4 ?addressLine4 . }
-        		  OPTIONAL { ?postalAddress parl:addressLine5 ?addressLine5 . }
-        		  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
-        	}
-    	  }
-      }
     ")
   end
 
