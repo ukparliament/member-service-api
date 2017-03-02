@@ -185,7 +185,9 @@ class ConstituencyQueryObject
     	   	?constituencyGroup
             a parl:ConstituencyGroup ;
          		parl:constituencyGroupName ?name ;
-         		parl:constituencyGroupHasHouseSeat ?houseSeat .
+         		parl:constituencyGroupHasHouseSeat ?houseSeat ;
+            parl:constituencyGroupStartDate ?constituencyGroupStartDate ;
+            parl:constituencyGroupEndDate ?constituencyGroupEndDate .
          	?houseSeat a parl:HouseSeat ;
             parl:houseSeatHasSeatIncumbency ?seatIncumbency .
     	  	?seatIncumbency a parl:SeatIncumbency ;
@@ -200,6 +202,8 @@ class ConstituencyQueryObject
         BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
     	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+        OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?constituencyGroupEndDate . }
+        OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?constituencyGroupStartDate . }
     	  OPTIONAL {
           ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
           OPTIONAL {
@@ -222,6 +226,7 @@ class ConstituencyQueryObject
     	   	?constituencyGroup
             	a parl:ConstituencyGroup ;
          		  parl:constituencyGroupName ?name ;
+              parl:constituencyGroupStartDate ?constituencyGroupStartDate ;
          		  parl:constituencyGroupHasHouseSeat ?houseSeat .
          	?houseSeat a parl:HouseSeat ;
                      parl:houseSeatHasSeatIncumbency ?seatIncumbency .
@@ -237,6 +242,7 @@ class ConstituencyQueryObject
         BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
     	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+        OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?constituencyGroupStartDate . }
     	  OPTIONAL {
           ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
           FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
