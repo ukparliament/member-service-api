@@ -440,7 +440,7 @@ class PersonQueryObject
             a parl:House ;
     			  parl:houseName ?houseName ;
             parl:houseHasHouseSeat ?houseSeat ;
-            parl:houseHasHouseIncumbency .
+            parl:houseHasHouseIncumbency ?houseIncumbency .
     	  ?seatIncumbency
             a parl:SeatIncumbency ;
         	  parl:incumbencyStartDate ?incumbencyStartDate .
