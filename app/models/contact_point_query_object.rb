@@ -83,14 +83,5 @@ class ContactPointQueryObject
     ")
   end
 
-  def self.by_identifier(source, id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
-	      ?contactPoint a parl:ContactPoint .
-      }
-      WHERE {
-	      ?contactPoint parl:#{source} \"#{id}\" .
-      }")
-  end
+
 end

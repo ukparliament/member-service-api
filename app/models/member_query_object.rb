@@ -4,94 +4,119 @@ class MemberQueryObject
   def self.all
     self.uri_builder('
         PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT{
-         ?seatIncumbency
-           a parl:SeatIncumbency ;
-           parl:seatIncumbencyHasMember ?member ;
-           parl:seatIncumbencyHasHouseSeat ?houseSeat .
-         ?member
-           a parl:Person ;
-           parl:personGivenName ?givenName ;
-           parl:personFamilyName ?familyName ;
-           parl:partyMemberHasPartyMembership ?partyMembership .
-         ?partyMembership
-           a parl:PartyMembership ;
-           parl:partyMembershipHasParty ?party .
-         ?party
-           a parl:Party ;
-           parl:partyName ?partyName .
+      CONSTRUCT {
          ?houseSeat
-           a parl:HouseSeat ;
-           parl:houseSeatHasHouse ?house ;
-           parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-         ?house
-           a parl:House ;
-           parl:houseName ?houseName .
-         ?constituencyGroup
-           a parl:ConstituencyGroup ;
-           parl:constituencyGroupName ?constituencyGroupName .
+         a parl:HouseSeat ;
+         parl:houseSeatHasHouse ?house ;
+         parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        ?person
+         a parl:Person ;
+         parl:personGivenName ?givenName ;
+         parl:personFamilyName ?familyName ;
+         parl:memberHasIncumbency ?incumbency ;
+         parl:partyMemberHasPartyMembership ?partyMembership .
+        ?seatIncumbency
+         a parl:SeatIncumbency ;
+         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+    	?houseIncumbency
+         a parl:HouseIncumbency ;
+         parl:houseIncumbencyHasHouse ?house .
+        ?house
+         a parl:House ;
+         parl:houseName ?houseName .
+        ?constituencyGroup
+        a parl:ConstituencyGroup;
+        parl:constituencyGroupName ?constituencyName .
+            ?partyMembership
+        a parl:partyMembership ;
+        parl:partyMembershipHasParty ?party .
+        ?party
+        a parl:Party ;
+        parl:partyName ?partyName .
       }
       WHERE {
-        ?seatIncumbency a parl:SeatIncumbency ;
-                        parl:seatIncumbencyHasMember ?member ;
-                        parl:seatIncumbencyHasHouseSeat ?houseSeat .
-        ?member parl:partyMemberHasPartyMembership ?partyMembership .
+    	?person a parl:Person ;
+          parl:memberHasIncumbency ?incumbency .
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
+           { ?incumbency a parl:HouseIncumbency .
+                 BIND(?incumbency AS ?houseIncumbency)
+               ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
+                ?house parl:houseName ?houseName .
+   		   }
+           UNION {
+   ?incumbency a parl:SeatIncumbency .
+          BIND(?incumbency AS ?seatIncumbency)
+          ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+        			?houseSeat parl:houseSeatHasHouse ?house .
+                     ?house parl:houseName ?houseName .
+    				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        					?constituencyGroup parl:constituencyGroupName ?constituencyName . }
+   				}
+
+    	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
          ?party parl:partyName ?partyName .
-         ?houseSeat parl:houseSeatHasHouse ?house ;
-                    parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-         ?constituencyGroup parl:constituencyGroupName ?constituencyGroupName .
-         ?house parl:houseName ?houseName .
-    	 OPTIONAL { ?member parl:personGivenName ?givenName . }
-    	 OPTIONAL { ?member parl:personFamilyName ?familyName . }
-      }
+        }
     ')
   end
 
   def self.all_by_letter(letter)
     self.uri_builder("
-    PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT{
-         ?seatIncumbency
-           a parl:SeatIncumbency ;
-           parl:seatIncumbencyHasMember ?member ;
-           parl:seatIncumbencyHasHouseSeat ?houseSeat .
-         ?member
-           a parl:Person ;
-           parl:personGivenName ?givenName ;
-           parl:personFamilyName ?familyName ;
-           parl:partyMemberHasPartyMembership ?partyMembership .
-         ?partyMembership
-           a parl:PartyMembership ;
-           parl:partyMembershipHasParty ?party .
-         ?party
-           a parl:Party ;
-           parl:partyName ?partyName .
+      PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
          ?houseSeat
-           a parl:HouseSeat ;
-           parl:houseSeatHasHouse ?house ;
-           parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-         ?house
-           a parl:House ;
-           parl:houseName ?houseName .
-         ?constituencyGroup
-           a parl:ConstituencyGroup ;
-           parl:constituencyGroupName ?constituencyGroupName .
-
+         a parl:HouseSeat ;
+         parl:houseSeatHasHouse ?house ;
+         parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        ?person
+         a parl:Person ;
+         parl:personGivenName ?givenName ;
+         parl:personFamilyName ?familyName ;
+         parl:memberHasIncumbency ?incumbency ;
+         parl:partyMemberHasPartyMembership ?partyMembership .
+        ?seatIncumbency
+         a parl:SeatIncumbency ;
+         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+    	?houseIncumbency
+         a parl:HouseIncumbency ;
+         parl:houseIncumbencyHasHouse ?house .
+        ?house
+         a parl:House ;
+         parl:houseName ?houseName .
+        ?constituencyGroup
+        a parl:ConstituencyGroup;
+        parl:constituencyGroupName ?constituencyName .
+            ?partyMembership
+        a parl:partyMembership ;
+        parl:partyMembershipHasParty ?party .
+        ?party
+        a parl:Party ;
+        parl:partyName ?partyName .
       }
       WHERE {
-        ?seatIncumbency a parl:SeatIncumbency ;
-                        parl:seatIncumbencyHasMember ?member ;
-                        parl:seatIncumbencyHasHouseSeat ?houseSeat .
-        ?member parl:partyMemberHasPartyMembership ?partyMembership .
+    	?person a parl:Person ;
+          parl:memberHasIncumbency ?incumbency .
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
+           { ?incumbency a parl:HouseIncumbency .
+                 BIND(?incumbency AS ?houseIncumbency)
+               ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
+                ?house parl:houseName ?houseName .
+   		   }
+           UNION {
+   ?incumbency a parl:SeatIncumbency .
+          BIND(?incumbency AS ?seatIncumbency)
+          ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+        			?houseSeat parl:houseSeatHasHouse ?house .
+                     ?house parl:houseName ?houseName .
+    				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        					?constituencyGroup parl:constituencyGroupName ?constituencyName . }
+   				}
+    	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
          ?party parl:partyName ?partyName .
-         ?houseSeat parl:houseSeatHasHouse ?house ;
-                    parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-         ?constituencyGroup parl:constituencyGroupName ?constituencyGroupName .
-         ?house parl:houseName ?houseName .
-    	 OPTIONAL { ?member parl:personGivenName ?givenName . }
-    	 OPTIONAL { ?member parl:personFamilyName ?familyName . }
+         }
     	  FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
     ")
@@ -100,14 +125,14 @@ class MemberQueryObject
   def self.a_z_letters
     self.uri_builder('
       PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
+     CONSTRUCT {
          _:x parl:value ?firstLetter .
       }
       WHERE {
         SELECT DISTINCT ?firstLetter WHERE {
-	        ?seatIncumbency a parl:SeatIncumbency ;
-                        parl:seatIncumbencyHasMember ?member .
-          ?member parl:personFamilyName ?familyName .
+	        ?Incumbency a parl:Incumbency ;
+                        parl:incumbencyHasMember ?person .
+          ?person parl:personFamilyName ?familyName .
 
           BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
         }
@@ -117,49 +142,60 @@ class MemberQueryObject
 
   def self.all_current
     self.uri_builder('
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT{
-         ?seatIncumbency
-           a parl:SeatIncumbency ;
-           parl:seatIncumbencyHasHouseSeat ?houseSeat .
-         ?member
-           a parl:Person ;
-           parl:personGivenName ?givenName ;
-           parl:personFamilyName ?familyName ;
-           parl:partyMemberHasPartyMembership ?partyMembership ;
-           parl:memberHasSeatIncumbency ?seatIncumbency .
-         ?partyMembership
-           a parl:PartyMembership ;
-           parl:partyMembershipHasParty ?party .
-         ?party
-           a parl:Party ;
-           parl:partyName ?partyName .
+       PREFIX parl: <http://id.ukpds.org/schema/>
+      CONSTRUCT {
          ?houseSeat
-           a parl:HouseSeat ;
-           parl:houseSeatHasHouse ?house ;
-           parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-         ?house
-           a parl:House ;
-           parl:houseName ?houseName .
-         ?constituencyGroup
-           a parl:ConstituencyGroup ;
-           parl:constituencyGroupName ?constituencyGroupName .
+         a parl:HouseSeat ;
+         parl:houseSeatHasHouse ?house ;
+         parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        ?person
+         a parl:Person ;
+         parl:personGivenName ?givenName ;
+         parl:personFamilyName ?familyName ;
+         parl:memberHasIncumbency ?incumbency ;
+         parl:partyMemberHasPartyMembership ?partyMembership .
+        ?seatIncumbency
+         a parl:SeatIncumbency ;
+         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+    	?houseIncumbency
+         a parl:HouseIncumbency ;
+         parl:houseIncumbencyHasHouse ?house .
+        ?house
+         a parl:House ;
+         parl:houseName ?houseName .
+        ?constituencyGroup
+        a parl:ConstituencyGroup;
+        parl:constituencyGroupName ?constituencyName .
+            ?partyMembership
+        a parl:partyMembership ;
+        parl:partyMembershipHasParty ?party .
+        ?party
+        a parl:Party ;
+        parl:partyName ?partyName .
       }
       WHERE {
-        ?seatIncumbency a parl:SeatIncumbency ;
-        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency .	}
-        ?seatIncumbency parl:seatIncumbencyHasMember ?member ;
-                        parl:seatIncumbencyHasHouseSeat ?houseSeat .
-        ?member parl:partyMemberHasPartyMembership ?partyMembership .
-        FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership .	}
+    	?person a parl:Person ;
+          parl:memberHasIncumbency ?incumbency .
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
+           { ?incumbency a parl:HouseIncumbency .
+                 BIND(?incumbency AS ?houseIncumbency)
+               ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
+                ?house parl:houseName ?houseName .
+   		   }
+           UNION {
+      ?incumbency a parl:SeatIncumbency .
+          BIND(?incumbency AS ?seatIncumbency)
+          ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+        			?houseSeat parl:houseSeatHasHouse ?house .
+                     ?house parl:houseName ?houseName .
+    				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        					?constituencyGroup parl:constituencyGroupName ?constituencyName . }
+   				}
+    	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
          ?party parl:partyName ?partyName .
-         ?houseSeat parl:houseSeatHasHouse ?house ;
-                    parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-         ?constituencyGroup parl:constituencyGroupName ?constituencyGroupName .
-         ?house parl:houseName ?houseName .
-    	 OPTIONAL { ?member parl:personGivenName ?givenName . }
-    	 OPTIONAL { ?member parl:personFamilyName ?familyName . }
+    FILTER NOT EXISTS {?incumbency a parl:PastIncumbency}
       }
     ')
   end
@@ -167,48 +203,59 @@ class MemberQueryObject
   def self.all_current_by_letter(letter)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
-          CONSTRUCT{
-             ?seatIncumbency
-               a parl:SeatIncumbency ;
-               parl:seatIncumbencyHasHouseSeat ?houseSeat .
-             ?member
-               a parl:Person ;
-               parl:personGivenName ?givenName ;
-               parl:personFamilyName ?familyName ;
-               parl:partyMemberHasPartyMembership ?partyMembership ;
-               parl:memberHasSeatIncumbency ?seatIncumbency .
-             ?partyMembership
-               a parl:PartyMembership ;
-               parl:partyMembershipHasParty ?party .
-             ?party
-               a parl:Party ;
-               parl:partyName ?partyName .
-             ?houseSeat
-               a parl:HouseSeat ;
-               parl:houseSeatHasHouse ?house ;
-               parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-             ?house
-               a parl:House ;
-               parl:houseName ?houseName .
-             ?constituencyGroup
-               a parl:ConstituencyGroup ;
-               parl:constituencyGroupName ?constituencyGroupName .
-          }
-          WHERE {
-            ?seatIncumbency a parl:SeatIncumbency ;
-            FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency .	}
-            ?seatIncumbency parl:seatIncumbencyHasMember ?member ;
-                            parl:seatIncumbencyHasHouseSeat ?houseSeat .
-            ?member parl:partyMemberHasPartyMembership ?partyMembership .
-            FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership .	}
-             ?partyMembership parl:partyMembershipHasParty ?party .
-             ?party parl:partyName ?partyName .
-             ?houseSeat parl:houseSeatHasHouse ?house ;
-                        parl:houseSeatHasConstituencyGroup ?constituencyGroup .
-             ?constituencyGroup parl:constituencyGroupName ?constituencyGroupName .
-             ?house parl:houseName ?houseName .
-           OPTIONAL { ?member parl:personGivenName ?givenName . }
-           OPTIONAL { ?member parl:personFamilyName ?familyName . }
+      CONSTRUCT {
+         ?houseSeat
+         a parl:HouseSeat ;
+         parl:houseSeatHasHouse ?house ;
+         parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        ?person
+         a parl:Person ;
+         parl:personGivenName ?givenName ;
+         parl:personFamilyName ?familyName ;
+         parl:memberHasIncumbency ?incumbency ;
+         parl:partyMemberHasPartyMembership ?partyMembership .
+        ?seatIncumbency
+         a parl:SeatIncumbency ;
+         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+    	?houseIncumbency
+         a parl:HouseIncumbency ;
+         parl:houseIncumbencyHasHouse ?house .
+        ?house
+         a parl:House ;
+         parl:houseName ?houseName .
+        ?constituencyGroup
+        a parl:ConstituencyGroup;
+        parl:constituencyGroupName ?constituencyName .
+            ?partyMembership
+        a parl:partyMembership ;
+        parl:partyMembershipHasParty ?party .
+        ?party
+        a parl:Party ;
+        parl:partyName ?partyName .
+      }
+      WHERE {
+    	?person a parl:Person ;
+          parl:memberHasIncumbency ?incumbency .
+          OPTIONAL { ?person parl:personGivenName ?givenName . }
+          OPTIONAL { ?person parl:personFamilyName ?familyName . }
+           { ?incumbency a parl:HouseIncumbency .
+                 BIND(?incumbency AS ?houseIncumbency)
+               ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
+                ?house parl:houseName ?houseName .
+   		   }
+           UNION {
+   ?incumbency a parl:SeatIncumbency .
+          BIND(?incumbency AS ?seatIncumbency)
+          ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+        			?houseSeat parl:houseSeatHasHouse ?house .
+                     ?house parl:houseName ?houseName .
+    				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+        					?constituencyGroup parl:constituencyGroupName ?constituencyName . }
+   				}
+    	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
+         ?partyMembership parl:partyMembershipHasParty ?party .
+         ?party parl:partyName ?partyName .
+          FILTER NOT EXISTS {?incumbency a parl:PastIncumbency}
             FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
           }
     ")
@@ -222,11 +269,10 @@ class MemberQueryObject
       }
       WHERE {
         SELECT DISTINCT ?firstLetter WHERE {
-	        ?seatIncumbency a parl:SeatIncumbency ;
-          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency .	}
-          ?seatIncumbency parl:seatIncumbencyHasMember ?member .
-          ?member parl:personFamilyName ?familyName .
-
+	        ?incumbency a parl:Incumbency ;
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency .	}
+          ?incumbency parl:incumbencyHasMember ?person .
+          ?person parl:personFamilyName ?familyName .
           BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)
         }
       }

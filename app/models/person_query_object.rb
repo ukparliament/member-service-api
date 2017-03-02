@@ -178,17 +178,6 @@ class PersonQueryObject
     ")
   end
 
-  def self.by_identifier(source, id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
-	      ?person a parl:Person .
-      }
-      WHERE {
-	      ?person parl:#{source} \"#{id}\" .
-      }")
-  end
-
   def self.constituencies(id)
     self.uri_builder("
        PREFIX parl: <http://id.ukpds.org/schema/>
