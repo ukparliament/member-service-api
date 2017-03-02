@@ -382,7 +382,8 @@ class PersonQueryObject
     	  ?house
             a parl:House ;
     			  parl:houseName ?houseName ;
-            parl:houseHasHouseSeat ?houseSeat .
+            parl:houseHasHouseSeat ?houseSeat ;
+            parl:houseHasHouseIncumbency ?houseIncumbency .
     	  ?seatIncumbency
             a parl:SeatIncumbency ;
         	  parl:incumbencyEndDate ?incumbencyEndDate ;
@@ -393,7 +394,7 @@ class PersonQueryObject
     		?houseIncumbency
         		a parl:HouseIncumbency ;
         		parl:incumbencyEndDate ?incumbencyEndDate ;
-        	  	parl:incumbencyStartDate ?incumbencyStartDate ;
+        	  parl:incumbencyStartDate ?incumbencyStartDate ;
         		parl:houseIncumbencyHasHouse ?house .
       }
       WHERE {
