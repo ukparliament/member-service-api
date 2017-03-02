@@ -439,7 +439,8 @@ class PersonQueryObject
     	  ?house
             a parl:House ;
     			  parl:houseName ?houseName ;
-            parl:houseHasHouseSeat ?houseSeat .
+            parl:houseHasHouseSeat ?houseSeat ;
+            parl:houseHasHouseIncumbency .
     	  ?seatIncumbency
             a parl:SeatIncumbency ;
         	  parl:incumbencyStartDate ?incumbencyStartDate .
@@ -448,8 +449,7 @@ class PersonQueryObject
         		parl:houseSeatHasSeatIncumbency ?seatIncumbency .
     		?houseIncumbency
         		a parl:HouseIncumbency ;
-        	  parl:incumbencyStartDate ?incumbencyStartDate ;
-        		parl:houseIncumbencyHasHouse ?house .
+        	  parl:incumbencyStartDate ?incumbencyStartDate .
       }
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
