@@ -69,6 +69,8 @@ class PersonQueryObject
     ')
   end
 
+  # This will need editing again for Lords data
+
   def self.find(id)
     self.uri_builder("
      PREFIX parl: <http://id.ukpds.org/schema/>
@@ -80,11 +82,8 @@ class PersonQueryObject
               parl:personOtherNames ?otherName ;
               parl:personFamilyName ?familyName ;
     		      parl:personHasGenderIdentity ?genderIdentity ;
-              parl:partyMemberHasPartyMembership ?partyMembership .
-    		?genderIdentity a parl:GenderIdentity ;
-        		parl:genderIdentityHasGender ?gender .
-    		?gender a parl:Gender ;
-        		parl:genderName ?genderName .
+              parl:partyMemberHasPartyMembership ?partyMembership ;
+              parl:memberHasIncumbency ?incumbency .
      	  ?contactPoint a parl:ContactPoint ;
         	  parl:email ?email ;
         	  parl:phoneNumber ?phoneNumber ;
@@ -104,7 +103,7 @@ class PersonQueryObject
         	  	parl:incumbencyStartDate ?incumbencyStartDate ;
 				      parl:seatIncumbencyHasHouseSeat ?seat ;
         		  parl:incumbencyHasContactPoint ?contactPoint .
-    	?houseIncumbency a parl:HouseIncumbency ;
+    	  ?houseIncumbency a parl:HouseIncumbency ;
         		parl:incumbencyEndDate ?incumbencyEndDate ;
         	  parl:incumbencyStartDate ?incumbencyStartDate ;
         		parl:houseIncumbencyHasHouse ?house ;
@@ -123,6 +122,7 @@ class PersonQueryObject
       }
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personOtherNames ?otherName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
@@ -159,7 +159,8 @@ class PersonQueryObject
         	    	  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
         	    }
     	      }
-          } OPTIONAL {
+          }
+          OPTIONAL {
     	      ?person parl:partyMemberHasPartyMembership ?partyMembership .
             ?partyMembership parl:partyMembershipHasParty ?party .
             ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
@@ -329,7 +330,10 @@ class PersonQueryObject
           a parl:Person ;
           parl:personGivenName ?givenName ;
           parl:personFamilyName ?familyName ;
-          parl:personHasContactPoint ?contactPoint .
+          parl:memberHasIncumbency ?seatIncumbency .
+    	  ?seatIncumbency
+        	a parl:SeatIncumbency ;
+        	parl:seatIncumbencyHasContactPoint ?contactPoint .
         ?contactPoint
             a parl:ContactPoint ;
         	  parl:email ?email ;
@@ -351,7 +355,8 @@ class PersonQueryObject
     	  OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         OPTIONAL {
-	        ?person parl:personHasContactPoint ?contactPoint .
+        	?person parl:memberHasIncumbency ?seatIncumbency .
+	        ?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
           OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
           OPTIONAL { ?contactPoint parl:email ?email . }
           OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }
