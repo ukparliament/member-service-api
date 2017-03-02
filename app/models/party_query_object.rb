@@ -45,9 +45,9 @@ class PartyQueryObject
             	parl:partyName ?partyName .
       }
       WHERE {
-      	?seatIncumbency a parl:SeatIncumbency .
-        FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
-        ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+      	?incumbency a parl:Incumbency .
+        FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
+        ?incumbency parl:incumbencyHasMember ?person .
         ?person parl:partyMemberHasPartyMembership ?partyMembership .
         FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
         ?partyMembership parl:partyMembershipHasParty ?party .
@@ -64,9 +64,9 @@ class PartyQueryObject
       }
       WHERE {
         SELECT DISTINCT ?firstLetter WHERE {
-	        ?seatIncumbency a parl:SeatIncumbency .
-          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
-          ?seatIncumbency parl:seatIncumbencyHasMember ?person .
+      	  ?incumbency a parl:Incumbency .
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
+          ?incumbency parl:incumbencyHasMember ?person .
           ?person parl:partyMemberHasPartyMembership ?partyMembership .
           FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
           ?partyMembership parl:partyMembershipHasParty ?party .
@@ -237,8 +237,8 @@ class PartyQueryObject
           ?party parl:partyHasPartyMembership ?partyMembership .
           FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
           ?partyMembership parl:partyMembershipHasPartyMember ?person .
-          ?person parl:memberHasSeatIncumbency ?seatIncumbency .
-          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?person parl:memberHasIncumbency ?incumbency .
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
           ?partyMembership parl:partyMembershipStartDate ?startDate .
 
           OPTIONAL { ?person parl:personGivenName ?givenName . }
@@ -270,8 +270,8 @@ class PartyQueryObject
           ?party parl:partyHasPartyMembership ?partyMembership .
           FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
           ?partyMembership parl:partyMembershipHasPartyMember ?person .
-          ?person parl:memberHasSeatIncumbency ?seatIncumbency .
-          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?person parl:memberHasIncumbency ?incumbency .
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
           ?partyMembership parl:partyMembershipStartDate ?startDate .
 
           OPTIONAL { ?person parl:personGivenName ?givenName . }
@@ -295,8 +295,8 @@ class PartyQueryObject
 	        ?party parl:partyHasPartyMembership ?partyMembership .
           FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
           ?partyMembership parl:partyMembershipHasPartyMember ?person .
-          ?person parl:memberHasSeatIncumbency ?seatIncumbency .
-          FILTER NOT EXISTS { ?seatIncumbency a parl:PastSeatIncumbency . }
+          ?person parl:memberHasIncumbency ?incumbency .
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
           ?person parl:personFamilyName ?familyName .
 
           BIND(ucase(SUBSTR(?familyName, 1, 1)) as ?firstLetter)

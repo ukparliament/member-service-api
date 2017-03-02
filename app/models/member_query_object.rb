@@ -17,7 +17,9 @@ class MemberQueryObject
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
-         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+         parl:seatIncumbencyHasHouseSeat ?houseSeat ;
+         parl:incumbencyStartDate ?seatIncumbencyStartDate ;
+         parl:incumbencyEndDate ?seatIncumbencyEndDate .
     	  ?houseIncumbency
          a parl:HouseIncumbency ;
          parl:houseIncumbencyHasHouse ?house .
@@ -27,9 +29,11 @@ class MemberQueryObject
         ?constituencyGroup
         a parl:ConstituencyGroup;
         parl:constituencyGroupName ?constituencyName .
-            ?partyMembership
-        a parl:partyMembership ;
-        parl:partyMembershipHasParty ?party .
+        ?partyMembership
+        a parl:PartyMembership ;
+        parl:partyMembershipHasParty ?party ;
+        parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        parl:partyMembershipEndDate ?partyMembershipEndDate .
         ?party
         a parl:Party ;
         parl:partyName ?partyName .
@@ -48,6 +52,8 @@ class MemberQueryObject
    ?incumbency a parl:SeatIncumbency .
           BIND(?incumbency AS ?seatIncumbency)
           ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+          ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+         OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
         			?houseSeat parl:houseSeatHasHouse ?house .
                      ?house parl:houseName ?houseName .
     				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
@@ -56,6 +62,8 @@ class MemberQueryObject
 
     	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
+         ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+         OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
          ?party parl:partyName ?partyName .
         }
     ')
@@ -77,7 +85,9 @@ class MemberQueryObject
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
-         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+         parl:seatIncumbencyHasHouseSeat ?houseSeat ;
+         parl:incumbencyStartDate ?seatIncumbencyStartDate ;
+         parl:incumbencyEndDate ?seatIncumbencyEndDate .
     	?houseIncumbency
          a parl:HouseIncumbency ;
          parl:houseIncumbencyHasHouse ?house .
@@ -88,8 +98,10 @@ class MemberQueryObject
         a parl:ConstituencyGroup;
         parl:constituencyGroupName ?constituencyName .
             ?partyMembership
-        a parl:partyMembership ;
-        parl:partyMembershipHasParty ?party .
+        a parl:PartyMembership ;
+        parl:partyMembershipHasParty ?party ;
+        parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        parl:partyMembershipEndDate ?partyMembershipEndDate .
         ?party
         a parl:Party ;
         parl:partyName ?partyName .
@@ -108,6 +120,8 @@ class MemberQueryObject
    ?incumbency a parl:SeatIncumbency .
           BIND(?incumbency AS ?seatIncumbency)
           ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+          ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+         OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
         			?houseSeat parl:houseSeatHasHouse ?house .
                      ?house parl:houseName ?houseName .
     				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
@@ -116,6 +130,8 @@ class MemberQueryObject
     	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
          ?party parl:partyName ?partyName .
+         ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+         OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
          }
     	  FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
       }
@@ -156,7 +172,9 @@ class MemberQueryObject
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
-         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+         parl:seatIncumbencyHasHouseSeat ?houseSeat ;
+         parl:incumbencyStartDate ?seatIncumbencyStartDate ;
+         parl:incumbencyEndDate ?seatIncumbencyEndDate .
     	?houseIncumbency
          a parl:HouseIncumbency ;
          parl:houseIncumbencyHasHouse ?house .
@@ -167,8 +185,10 @@ class MemberQueryObject
         a parl:ConstituencyGroup;
         parl:constituencyGroupName ?constituencyName .
             ?partyMembership
-        a parl:partyMembership ;
-        parl:partyMembershipHasParty ?party .
+        a parl:PartyMembership ;
+        parl:partyMembershipHasParty ?party ;
+        parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        parl:partyMembershipEndDate ?partyMembershipEndDate .
         ?party
         a parl:Party ;
         parl:partyName ?partyName .
@@ -187,6 +207,8 @@ class MemberQueryObject
       ?incumbency a parl:SeatIncumbency .
           BIND(?incumbency AS ?seatIncumbency)
           ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+          ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+         OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
         			?houseSeat parl:houseSeatHasHouse ?house .
                      ?house parl:houseName ?houseName .
     				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
@@ -195,6 +217,8 @@ class MemberQueryObject
     	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
          ?party parl:partyName ?partyName .
+         ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+         OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
     FILTER NOT EXISTS {?incumbency a parl:PastIncumbency}
       }
     ')
@@ -216,7 +240,9 @@ class MemberQueryObject
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
-         parl:seatIncumbencyHasHouseSeat ?houseSeat .
+         parl:seatIncumbencyHasHouseSeat ?houseSeat ;
+         parl:incumbencyStartDate ?seatIncumbencyStartDate ;
+         parl:incumbencyEndDate ?seatIncumbencyEndDate .
     	?houseIncumbency
          a parl:HouseIncumbency ;
          parl:houseIncumbencyHasHouse ?house .
@@ -227,8 +253,10 @@ class MemberQueryObject
         a parl:ConstituencyGroup;
         parl:constituencyGroupName ?constituencyName .
             ?partyMembership
-        a parl:partyMembership ;
-        parl:partyMembershipHasParty ?party .
+        a parl:PartyMembership ;
+        parl:partyMembershipHasParty ?party ;
+        parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        parl:partyMembershipEndDate ?partyMembershipEndDate .
         ?party
         a parl:Party ;
         parl:partyName ?partyName .
@@ -247,6 +275,8 @@ class MemberQueryObject
    ?incumbency a parl:SeatIncumbency .
           BIND(?incumbency AS ?seatIncumbency)
           ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+          ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+         OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
         			?houseSeat parl:houseSeatHasHouse ?house .
                      ?house parl:houseName ?houseName .
     				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
@@ -255,6 +285,8 @@ class MemberQueryObject
     	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
          ?party parl:partyName ?partyName .
+         ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+         OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
           FILTER NOT EXISTS {?incumbency a parl:PastIncumbency}
             FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
           }
