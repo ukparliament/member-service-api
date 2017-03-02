@@ -13,12 +13,12 @@ class MemberQueryObject
          a parl:Person ;
          parl:personGivenName ?givenName ;
          parl:personFamilyName ?familyName ;
-         parl:memberHasIncumbency ?incumbency ;
+         parl:memberHasIncumbency ?seatIncumbency ;
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
          parl:seatIncumbencyHasHouseSeat ?houseSeat .
-    	?houseIncumbency
+    	  ?houseIncumbency
          a parl:HouseIncumbency ;
          parl:houseIncumbencyHasHouse ?house .
         ?house
@@ -43,7 +43,7 @@ class MemberQueryObject
                  BIND(?incumbency AS ?houseIncumbency)
                ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
                 ?house parl:houseName ?houseName .
-   		   }
+   		      }
            UNION {
    ?incumbency a parl:SeatIncumbency .
           BIND(?incumbency AS ?seatIncumbency)
@@ -73,7 +73,7 @@ class MemberQueryObject
          a parl:Person ;
          parl:personGivenName ?givenName ;
          parl:personFamilyName ?familyName ;
-         parl:memberHasIncumbency ?incumbency ;
+         parl:memberHasIncumbency ?seatIncumbency ;
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
@@ -152,7 +152,7 @@ class MemberQueryObject
          a parl:Person ;
          parl:personGivenName ?givenName ;
          parl:personFamilyName ?familyName ;
-         parl:memberHasIncumbency ?incumbency ;
+         parl:memberHasIncumbency ?seatIncumbency ;
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
@@ -212,7 +212,7 @@ class MemberQueryObject
          a parl:Person ;
          parl:personGivenName ?givenName ;
          parl:personFamilyName ?familyName ;
-         parl:memberHasIncumbency ?incumbency ;
+         parl:memberHasIncumbency ?seatIncumbency ;
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
