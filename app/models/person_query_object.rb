@@ -373,7 +373,6 @@ class PersonQueryObject
   def self.houses(id)
     self.uri_builder("
       PREFIX parl: <http://id.ukpds.org/schema/>
-
       CONSTRUCT {
         ?person
             a parl:Person ;
@@ -417,9 +416,9 @@ class PersonQueryObject
             OPTIONAL {
         	    ?incumbency a parl:SeatIncumbency .
               BIND(?incumbency AS ?seatIncumbency )
-              ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
-            	?seat parl:houseSeatHasConstituencyGroup ?constituency .
-    	      	?seat parl:houseSeatHasHouse ?house .
+              ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+            	?houseSeat parl:houseSeatHasConstituencyGroup ?constituency .
+    	      	?houseSeat parl:houseSeatHasHouse ?house .
             	?house parl:houseName ?houseName .
             	?constituency parl:constituencyGroupName ?constituencyName .
         	  }
