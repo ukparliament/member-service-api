@@ -69,8 +69,6 @@ class PersonQueryObject
     ')
   end
 
-  # This will need editing again for Lords data
-
   def self.find(id)
     self.uri_builder("
      PREFIX parl: <http://id.ukpds.org/schema/>
@@ -98,17 +96,20 @@ class PersonQueryObject
         	  parl:postCode ?postCode .
     	  ?constituency a parl:ConstituencyGroup ;
              parl:constituencyGroupName ?constituencyName .
-    	  ?seatIncumbency a parl:SeatIncumbency ;
+    	  ?seatIncumbency
+          		a parl:SeatIncumbency ;
         	  	parl:incumbencyEndDate ?incumbencyEndDate ;
         	  	parl:incumbencyStartDate ?incumbencyStartDate ;
-				      parl:seatIncumbencyHasHouseSeat ?seat ;
-        		  parl:incumbencyHasContactPoint ?contactPoint .
-    	  ?houseIncumbency a parl:HouseIncumbency ;
+				parl:seatIncumbencyHasHouseSeat ?seat ;
+        		parl:incumbencyHasContactPoint ?contactPoint .
+    	?houseIncumbency
+        		a parl:HouseIncumbency ;
         		parl:incumbencyEndDate ?incumbencyEndDate ;
         	  parl:incumbencyStartDate ?incumbencyStartDate ;
         		parl:houseIncumbencyHasHouse ?house ;
         		parl:incumbencyHasContactPoint ?contactPoint .
         ?seat a parl:HouseSeat ;
+            	a parl:HouseSeat ;
             	parl:houseSeatHasConstituencyGroup ?constituency ;
             	parl:houseSeatHasHouse ?house .
     		?party a parl:Party ;
@@ -168,6 +169,7 @@ class PersonQueryObject
             ?party parl:partyName ?partyName .
           }
         }
+
     ")
   end
 
@@ -330,10 +332,10 @@ class PersonQueryObject
           a parl:Person ;
           parl:personGivenName ?givenName ;
           parl:personFamilyName ?familyName ;
-          parl:memberHasIncumbency ?seatIncumbency .
-    	  ?seatIncumbency
-        	a parl:SeatIncumbency ;
-        	parl:seatIncumbencyHasContactPoint ?contactPoint .
+          parl:memberHasIncumbency ?incumbency .
+    	  ?incumbency
+        	a parl:Incumbency ;
+        	parl:incumbencyHasContactPoint ?contactPoint .
         ?contactPoint
             a parl:ContactPoint ;
         	  parl:email ?email ;
@@ -355,8 +357,8 @@ class PersonQueryObject
     	  OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         OPTIONAL {
-        	?person parl:memberHasIncumbency ?seatIncumbency .
-	        ?seatIncumbency parl:seatIncumbencyHasContactPoint ?contactPoint .
+        	?person parl:memberHasIncumbency ?incumbency .
+	        ?incumbency parl:incumbencyHasContactPoint ?contactPoint .
           OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
           OPTIONAL { ?contactPoint parl:email ?email . }
           OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }
