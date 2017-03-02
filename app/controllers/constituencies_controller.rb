@@ -17,12 +17,7 @@ class ConstituenciesController < ApplicationController
     response_streamer(uri)
   end
 
-  def by_identifier
-    id = params.values.first
-    source = params.keys.first
-    uri = ConstituencyQueryObject.by_identifier(source, id)
-    response_streamer(uri)
-  end
+
 
   def current
     uri = ConstituencyQueryObject.all_current
