@@ -13,6 +13,7 @@ class PartyQueryObject
       WHERE {
 	      ?party
           a parl:Party ;
+          parl:partyHasPartyMembership ?partyMembership ;
           parl:partyName ?partyName .
       }
     ')
@@ -87,6 +88,7 @@ class PartyQueryObject
       }
       WHERE {
         ?party a parl:Party ;
+              parl:partyHasPartyMembership ?partyMembership ;
               parl:partyName ?partyName .
 
         FILTER regex(str(?partyName), \"^#{letter}\", 'i') .
@@ -103,8 +105,9 @@ class PartyQueryObject
       }
       WHERE {
         SELECT DISTINCT ?firstLetter WHERE {
-	        ?s a parl:Party .
-          ?s parl:partyName ?partyName .
+	        ?s a parl:Party ;
+            parl:partyHasPartyMembership ?partyMembership ;
+            parl:partyName ?partyName .
 
           BIND(ucase(SUBSTR(?partyName, 1, 1)) as ?firstLetter)
         }
