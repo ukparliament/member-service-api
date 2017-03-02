@@ -96,20 +96,17 @@ class PersonQueryObject
         	  parl:postCode ?postCode .
     	  ?constituency a parl:ConstituencyGroup ;
              parl:constituencyGroupName ?constituencyName .
-    	  ?seatIncumbency
-          		a parl:SeatIncumbency ;
+    	  ?seatIncumbency a parl:SeatIncumbency ;
         	  	parl:incumbencyEndDate ?incumbencyEndDate ;
         	  	parl:incumbencyStartDate ?incumbencyStartDate ;
-				parl:seatIncumbencyHasHouseSeat ?seat ;
-        		parl:incumbencyHasContactPoint ?contactPoint .
-    	?houseIncumbency
-        		a parl:HouseIncumbency ;
+				      parl:seatIncumbencyHasHouseSeat ?seat ;
+        		  parl:incumbencyHasContactPoint ?contactPoint .
+    	?houseIncumbency a parl:HouseIncumbency ;
         		parl:incumbencyEndDate ?incumbencyEndDate ;
         	  parl:incumbencyStartDate ?incumbencyStartDate ;
         		parl:houseIncumbencyHasHouse ?house ;
         		parl:incumbencyHasContactPoint ?contactPoint .
         ?seat a parl:HouseSeat ;
-            	a parl:HouseSeat ;
             	parl:houseSeatHasConstituencyGroup ?constituency ;
             	parl:houseSeatHasHouse ?house .
     		?party a parl:Party ;
@@ -123,7 +120,6 @@ class PersonQueryObject
       }
       WHERE {
         BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
-
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personOtherNames ?otherName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
@@ -160,17 +156,14 @@ class PersonQueryObject
         	    	  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
         	    }
     	      }
-          }
-          OPTIONAL {
+          } OPTIONAL {
     	      ?person parl:partyMemberHasPartyMembership ?partyMembership .
             ?partyMembership parl:partyMembershipHasParty ?party .
             ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
             OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
             ?party parl:partyName ?partyName .
           }
-        }
-
-    ")
+        }")
   end
 
   def self.constituencies(id)
@@ -358,6 +351,7 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         OPTIONAL {
         	?person parl:memberHasIncumbency ?incumbency .
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
 	        ?incumbency parl:incumbencyHasContactPoint ?contactPoint .
           OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
           OPTIONAL { ?contactPoint parl:email ?email . }
