@@ -377,29 +377,30 @@ class HouseQueryObject
         	parl:houseName ?houseName .
         ?party
           a parl:Party ;
-          parl:partyName ?partyName .
+          parl:partyName ?partyName ;
+    	    parl:count ?memberCount .
       }
-          WHERE {
-        	  BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
+       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?house)
 
-            ?house parl:houseName ?houseName .
-            ?person a parl:Member .
-        	  ?incumbency parl:incumbencyHasMember ?person .
-            FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
-    		    ?person parl:partyMemberHasPartyMembership ?partyMembership .
-            FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
-    		    ?partyMembership parl:partyMembershipHasParty ?party .
-    		    ?party parl:partyName ?partyName .
+         ?house parl:houseName ?houseName .
+         ?person a parl:Member .
+         ?incumbency parl:incumbencyHasMember ?person .
+         FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
+    		 ?person parl:partyMemberHasPartyMembership ?partyMembership .
+         FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+    		 ?partyMembership parl:partyMembershipHasParty ?party .
+    		 ?party parl:partyName ?partyName .
 
-    			  {
-    			      ?incumbency parl:houseIncumbencyHasHouse ?house .
-    			  }
+    		{
+    		    ?incumbency parl:houseIncumbencyHasHouse ?house .
+    		}
 
-    		    UNION {
-            		?incumbency parl:seatIncumbencyHasHouseSeat ?seat .
-            		?seat parl:houseSeatHasHouse ?house .
-    		    }
-         }
+    		UNION {
+        		?incumbency parl:seatIncumbencyHasHouseSeat ?seat .
+        		?seat parl:houseSeatHasHouse ?house .
+    		}
+       }
      ")
   end
 
