@@ -13,7 +13,7 @@ class MemberQueryObject
          a parl:Person ;
          parl:personGivenName ?givenName ;
          parl:personFamilyName ?familyName ;
-         parl:memberHasIncumbency ?seatIncumbency ;
+         parl:memberHasIncumbency ?incumbency ;
          parl:partyMemberHasPartyMembership ?partyMembership .
         ?seatIncumbency
          a parl:SeatIncumbency ;
@@ -22,7 +22,9 @@ class MemberQueryObject
          parl:incumbencyEndDate ?seatIncumbencyEndDate .
     	  ?houseIncumbency
          a parl:HouseIncumbency ;
-         parl:houseIncumbencyHasHouse ?house .
+         parl:houseIncumbencyHasHouse ?house ;
+         parl:incumbencyStartDate ?seatIncumbencyStartDate ;
+         parl:incumbencyEndDate ?seatIncumbencyEndDate .
         ?house
          a parl:House ;
          parl:houseName ?houseName .
@@ -44,21 +46,23 @@ class MemberQueryObject
           OPTIONAL { ?person parl:personGivenName ?givenName . }
           OPTIONAL { ?person parl:personFamilyName ?familyName . }
            { ?incumbency a parl:HouseIncumbency .
-                 BIND(?incumbency AS ?houseIncumbency)
-               ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
-                ?house parl:houseName ?houseName .
+              BIND(?incumbency AS ?houseIncumbency)
+              ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
+              ?house parl:houseName ?houseName .
+              ?houseIncumbency parl:incumbencyStartDate ?houseIncumbencyStartDate .
+              OPTIONAL { ?houseIncumbency parl:incumbencyEndDate ?houseIncumbencyEndDate . }
    		      }
            UNION {
-   ?incumbency a parl:SeatIncumbency .
-          BIND(?incumbency AS ?seatIncumbency)
-          ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
-          ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
-         OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
-        			?houseSeat parl:houseSeatHasHouse ?house .
-                     ?house parl:houseName ?houseName .
-    				OPTIONAL {?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
+            ?incumbency a parl:SeatIncumbency .
+            BIND(?incumbency AS ?seatIncumbency)
+            ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+            ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+            OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
+        		?houseSeat parl:houseSeatHasHouse ?house .
+            ?house parl:houseName ?houseName .
+    				OPTIONAL { ?houseSeat parl:houseSeatHasConstituencyGroup ?constituencyGroup .
         					?constituencyGroup parl:constituencyGroupName ?constituencyName . }
-   				}
+   				  }
 
     	 ?person parl:partyMemberHasPartyMembership ?partyMembership .
          ?partyMembership parl:partyMembershipHasParty ?party .
