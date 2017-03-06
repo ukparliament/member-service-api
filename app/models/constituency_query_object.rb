@@ -266,7 +266,7 @@ class ConstituencyQueryObject
         				parl:constituencyGroupHasHouseSeat ?houseSeat ;
         				parl:constituencyGroupName ?name .
         ?houseSeat a parl:HouseSeat ;
-                parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+                parl:houseSeatHasSeatIncumbency ?incumbency .
     	  ?incumbency a parl:SeatIncumbency ;
                 parl:incumbencyHasContactPoint ?contactPoint .
         ?contactPoint a parl:ContactPoint ;
@@ -276,8 +276,8 @@ class ConstituencyQueryObject
     			      parl:contactForm ?contactForm ;
     	          parl:contactPointHasPostalAddress ?postalAddress .
         ?postalAddress a parl:PostalAddress ;
-        			   parl:postCode ?postCode ;
-       				   parl:addressLine1 ?addressLine1 ;
+        			 parl:postCode ?postCode ;
+       				 parl:addressLine1 ?addressLine1 ;
     				   parl:addressLine2 ?addressLine2 ;
     				   parl:addressLine3 ?addressLine3 ;
     				   parl:addressLine4 ?addressLine4 ;

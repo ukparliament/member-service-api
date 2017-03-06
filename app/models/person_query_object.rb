@@ -80,11 +80,8 @@ class PersonQueryObject
               parl:personOtherNames ?otherName ;
               parl:personFamilyName ?familyName ;
     		      parl:personHasGenderIdentity ?genderIdentity ;
-              parl:partyMemberHasPartyMembership ?partyMembership .
-    		?genderIdentity a parl:GenderIdentity ;
-        		parl:genderIdentityHasGender ?gender .
-    		?gender a parl:Gender ;
-        		parl:genderName ?genderName .
+              parl:partyMemberHasPartyMembership ?partyMembership ;
+              parl:memberHasIncumbency ?incumbency .
      	  ?contactPoint a parl:ContactPoint ;
         	  parl:email ?email ;
         	  parl:phoneNumber ?phoneNumber ;
@@ -166,8 +163,7 @@ class PersonQueryObject
             OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
             ?party parl:partyName ?partyName .
           }
-        }
-    ")
+        }")
   end
 
   def self.constituencies(id)
@@ -329,7 +325,10 @@ class PersonQueryObject
           a parl:Person ;
           parl:personGivenName ?givenName ;
           parl:personFamilyName ?familyName ;
-          parl:personHasContactPoint ?contactPoint .
+          parl:memberHasIncumbency ?incumbency .
+    	  ?incumbency
+        	a parl:Incumbency ;
+        	parl:incumbencyHasContactPoint ?contactPoint .
         ?contactPoint
             a parl:ContactPoint ;
         	  parl:email ?email ;
@@ -351,7 +350,9 @@ class PersonQueryObject
     	  OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         OPTIONAL {
-	        ?person parl:personHasContactPoint ?contactPoint .
+        	?person parl:memberHasIncumbency ?incumbency .
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
+	        ?incumbency parl:incumbencyHasContactPoint ?contactPoint .
           OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
           OPTIONAL { ?contactPoint parl:email ?email . }
           OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }

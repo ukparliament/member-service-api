@@ -47,20 +47,25 @@ class ContactPointQueryObject
                parl:phoneNumber ?phoneNumber ;
                parl:faxNumber ?faxNumber ;
                parl:contactPointHasPostalAddress ?postalAddress ;
-    		       parl:contactPointHasPerson ?person .
-            ?postalAddress a parl:PostalAddress ;
-                       parl:postCode ?postCode ;
-               			   parl:addressLine1 ?addressLine1 ;
-               			   parl:addressLine2 ?addressLine2 ;
-               			   parl:addressLine3 ?addressLine3 ;
-               			   parl:addressLine4 ?addressLine4 ;
-               			   parl:addressLine5 ?addressLine5 .
-    		?person a parl:Person ;
+    		       parl:contactPointHasIncumbency ?incumbency .
+    		?incumbency
+        		a parl:Incumbency ;
+        		parl:incumbencyHasMember ?person .
+            ?postalAddress
+                a parl:PostalAddress ;
+                parl:postCode ?postCode ;
+                parl:addressLine1 ?addressLine1 ;
+                parl:addressLine2 ?addressLine2 ;
+                parl:addressLine3 ?addressLine3 ;
+                parl:addressLine4 ?addressLine4 ;
+                parl:addressLine5 ?addressLine5 .
+    		?person
+              a parl:Person ;
               parl:personGivenName ?givenName ;
         			parl:personFamilyName ?familyName .
         }
         WHERE {
-    		BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?contactPoint )
+    		BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?contactPoint )
         	?contactPoint a parl:ContactPoint ;
         	OPTIONAL{ ?contactPoint parl:email ?email . }
         	OPTIONAL{ ?contactPoint parl:phoneNumber ?phoneNumber . }
@@ -75,9 +80,10 @@ class ContactPointQueryObject
                	OPTIONAL{ ?postalAddress parl:addressLine5 ?addressLine5 . }
           	}
             OPTIONAL{
-				?contactPoint parl:contactPointHasPerson ?person .
-        		OPTIONAL { ?person parl:personFamilyName ?familyName . }
-        		OPTIONAL { ?person parl:personGivenName ?givenName . }
+				      ?contactPoint parl:contactPointHasIncumbency ?incumbency .
+        		  ?incumbency parl:incumbencyHasMember ?person .
+        		  OPTIONAL { ?person parl:personFamilyName ?familyName . }
+        		  OPTIONAL { ?person parl:personGivenName ?givenName . }
             }
       }
     ")
