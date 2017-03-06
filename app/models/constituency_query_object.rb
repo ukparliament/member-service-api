@@ -266,7 +266,7 @@ class ConstituencyQueryObject
         				parl:constituencyGroupHasHouseSeat ?houseSeat ;
         				parl:constituencyGroupName ?name .
         ?houseSeat a parl:HouseSeat ;
-                parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+                parl:houseSeatHasSeatIncumbency ?incumbency .
     	  ?incumbency a parl:SeatIncumbency ;
                 parl:incumbencyHasContactPoint ?contactPoint .
         ?contactPoint a parl:ContactPoint ;
