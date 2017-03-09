@@ -122,12 +122,29 @@ class ConstituencyQueryObject
      CONSTRUCT{
           ?constituencyGroup
               a parl:ConstituencyGroup ;
-              parl:constituencyGroupName ?name .
+              parl:constituencyGroupName ?name ;
+        	  parl:constituencyGroupHasHouseSeat ?seat .
+    	  ?seat
+        	a parl:HouseSeat ;
+        	parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	  ?seatIncumbency
+        	a parl:SeatIncumbency ;
+        	parl:incumbencyHasMember ?member .
+    	  ?member
+        	a parl:Person ;
+        	parl:personGivenName ?givenName ;
+        	parl:personFamilyName ?familyName .
       }
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
           FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+    	    ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	    FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
+    	    ?seatIncumbency parl:incumbencyHasMember ?member .
+    	    OPTIONAL { ?member parl:personGivenName ?givenName . }
+          OPTIONAL { ?member parl:personFamilyName ?familyName . }
       }'
   end
 
@@ -136,12 +153,30 @@ class ConstituencyQueryObject
      CONSTRUCT{
           ?constituencyGroup
               a parl:ConstituencyGroup ;
-              parl:constituencyGroupName ?name .
+              parl:constituencyGroupName ?name ;
+        	    parl:constituencyGroupHasHouseSeat ?seat .
+    	  ?seat
+        	a parl:HouseSeat ;
+        	parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	  ?seatIncumbency
+        	a parl:SeatIncumbency ;
+        	parl:incumbencyHasMember ?member .
+    	  ?member
+        	a parl:Person ;
+        	parl:personGivenName ?givenName ;
+        	parl:personFamilyName ?familyName .
       }
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
           FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
+    	    ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	    FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
+    	    ?seatIncumbency parl:incumbencyHasMember ?member .
+    	    OPTIONAL { ?member parl:personGivenName ?givenName . }
+          OPTIONAL { ?member parl:personFamilyName ?familyName . }
+
     		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }"
   end
