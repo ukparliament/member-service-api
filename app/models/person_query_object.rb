@@ -72,6 +72,8 @@ class PersonQueryObject
               parl:personGivenName ?givenName ;
               parl:personOtherNames ?otherName ;
               parl:personFamilyName ?familyName ;
+        	  <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+        	  <http://example.com/D79B0BAC513C4A9A87C9D5AFF1FC632F> ?fullTitle ;
               parl:partyMemberHasPartyMembership ?partyMembership ;
               parl:memberHasIncumbency ?incumbency .
      	  ?contactPoint a parl:ContactPoint ;
@@ -117,6 +119,8 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personOtherNames ?otherName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+        OPTIONAL { ?person <http://example.com/D79B0BAC513C4A9A87C9D5AFF1FC632F> ?fullTitle } .
     	  OPTIONAL {
     	      ?person parl:memberHasIncumbency ?incumbency .
             OPTIONAL
