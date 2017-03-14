@@ -498,14 +498,16 @@ class PersonQueryObject
         ?person
         	a parl:Person ;
          	parl:personGivenName ?givenName ;
-         	parl:personFamilyName ?familyName .
+         	parl:personFamilyName ?familyName ;
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs
       }
       WHERE {
         ?person a parl:Person .
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
+        OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
 
-    	  FILTER(regex(str(?familyName), \"#{letters}\", 'i') || regex(str(?givenName), \"#{letters}\", 'i')) .
+    	  FILTER(regex(str(?displayAs), \"#{letters}\", 'i')) .
       }"
   end
 end

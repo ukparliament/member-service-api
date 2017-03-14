@@ -339,11 +339,13 @@ class ConstituencyQueryObject
      CONSTRUCT {
         ?constituency
         	a parl:ConstituencyGroup ;
-         	parl:constituencyGroupName ?constituencyName .
+         	parl:constituencyGroupName ?constituencyName ;
+          parl:constituencyGroupEndDate ?endDate .
       }
       WHERE {
         ?constituency a parl:ConstituencyGroup .
         ?constituency parl:constituencyGroupName ?constituencyName .
+        OPTIONAL { ?constituency parl:constituencyGroupEndDate ?endDate . }
 
     	  FILTER(regex(str(?constituencyName), \"#{letters}\", 'i')) .
       }"

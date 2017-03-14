@@ -135,7 +135,7 @@ class MemberQueryObject
          OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
          ?party parl:partyName ?partyName .
 
-    	   FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+    	   FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
       }"
   end
 
@@ -278,7 +278,7 @@ class MemberQueryObject
           OPTIONAL { ?person parl:personGivenName ?givenName . }
           OPTIONAL { ?person parl:personFamilyName ?familyName . }
           OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
-          OPTIONAL { ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs } .
+          ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
 
            { ?incumbency a parl:HouseIncumbency .
               BIND(?incumbency AS ?houseIncumbency)
@@ -306,7 +306,7 @@ class MemberQueryObject
          ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
          OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
          FILTER NOT EXISTS {?incumbency a parl:PastIncumbency}
-         FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+         FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
        }"
   end
 
