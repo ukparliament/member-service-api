@@ -16,7 +16,7 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
-        OPTIONAL { ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs } .
+        ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
       }"
   end
 
@@ -50,7 +50,7 @@ class PersonQueryObject
         OPTIONAL { ?person parl:personGivenName ?givenName } .
         OPTIONAL { ?person parl:personFamilyName ?familyName } .
         OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
-        OPTIONAL { ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs } .
+        ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
 
     	  FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
       }"
@@ -423,7 +423,7 @@ class PersonQueryObject
         	   ?incumbency a parl:HouseIncumbency .
              BIND(?incumbency AS ?houseIncumbency )
              ?houseIncumbency parl:houseIncumbencyHasHouse ?house2 .
-             ?house parl:houseName ?houseName2 .
+             ?house2 parl:houseName ?houseName2 .
         	 }
             OPTIONAL {
         	    ?incumbency a parl:SeatIncumbency .
@@ -431,7 +431,7 @@ class PersonQueryObject
               ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
             	?houseSeat parl:houseSeatHasConstituencyGroup ?constituency .
     	      	?houseSeat parl:houseSeatHasHouse ?house1 .
-            	?house parl:houseName ?houseName1 .
+            	?house1 parl:houseName ?houseName1 .
             	?constituency parl:constituencyGroupName ?constituencyName .
         	  }
         }
