@@ -343,7 +343,7 @@ class ConstituencyQueryObject
           parl:constituencyGroupEndDate ?endDate .
       }
       WHERE {
-        ?contactPoint a parl:ConstituencyGroup .
+        ?constituency a parl:ConstituencyGroup .
         ?constituency parl:constituencyGroupName ?constituencyName .
         OPTIONAL { ?constituency parl:constituencyGroupEndDate ?endDate . }
 
