@@ -335,19 +335,6 @@ class ConstituencyQueryObject
   end
 
   def self.lookup_by_letters(letters)
-    "PREFIX parl: <http://id.ukpds.org/schema/>
-     CONSTRUCT {
-        ?constituency
-        	a parl:ConstituencyGroup ;
-         	parl:constituencyGroupName ?constituencyName ;
-          parl:constituencyGroupEndDate ?endDate .
-      }
-      WHERE {
-        ?constituency a parl:ConstituencyGroup .
-        ?constituency parl:constituencyGroupName ?constituencyName .
-        OPTIONAL { ?constituency parl:constituencyGroupEndDate ?endDate . }
-
-    	  FILTER(regex(str(?constituencyName), \"#{letters}\", 'i')) .
-      }"
+    # this would be the query to lookup contact_points by letters
   end
 end
