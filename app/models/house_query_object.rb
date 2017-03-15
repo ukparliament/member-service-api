@@ -128,7 +128,7 @@ class HouseQueryObject
           	?seat parl:houseSeatHasHouse ?house .
     	  }
 
-        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+        FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
       }"
   end
 
@@ -294,7 +294,7 @@ class HouseQueryObject
         OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
         ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
 
-        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+        FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
       }"
   end
 
@@ -553,7 +553,7 @@ class HouseQueryObject
         			?incumbency parl:seatIncumbencyHasHouseSeat ?seat .
         			?seat parl:houseSeatHasHouse ?house .
     			}
-          FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+          FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
         }
       }"
   end
@@ -707,7 +707,7 @@ class HouseQueryObject
         			?seat parl:houseSeatHasHouse ?house .
     			}
         }
-        FILTER regex(str(?familyName), \"^#{letter}\", 'i') .
+        FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
       }"
   end
 
