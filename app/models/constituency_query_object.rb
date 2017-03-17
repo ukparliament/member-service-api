@@ -225,7 +225,9 @@ class ConstituencyQueryObject
       }
       WHERE {
         BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
-    	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+
+        ?constituencyGroup a parl:ConstituencyGroup ;
+    	                    parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
         OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?constituencyGroupEndDate . }
         OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?constituencyGroupStartDate . }
@@ -264,7 +266,9 @@ class ConstituencyQueryObject
       }
       WHERE {
         BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
-    	  ?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
+
+        ?constituencyGroup a parl:ConstituencyGroup ;
+    	                     parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
         OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?constituencyGroupStartDate . }
     	  OPTIONAL {
@@ -308,6 +312,8 @@ class ConstituencyQueryObject
       }
       WHERE {
     	BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
+
+      ?constituencyGroup a parl:ConstituencyGroup .
       	 OPTIONAL {
         	?constituencyGroup parl:constituencyGroupHasHouseSeat ?houseSeat .
         	OPTIONAL {
