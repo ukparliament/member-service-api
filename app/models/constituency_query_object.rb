@@ -252,6 +252,7 @@ class ConstituencyQueryObject
             	a parl:ConstituencyGroup ;
          		  parl:constituencyGroupName ?name ;
               parl:constituencyGroupStartDate ?constituencyGroupStartDate ;
+              parl:constituencyGroupEndDate ?constituencyGroupEndDate ;
          		  parl:constituencyGroupHasHouseSeat ?houseSeat .
          	?houseSeat a parl:HouseSeat ;
                      parl:houseSeatHasSeatIncumbency ?seatIncumbency .
@@ -271,6 +272,7 @@ class ConstituencyQueryObject
     	                     parl:constituencyGroupHasHouseSeat ?houseSeat .
     	  OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
         OPTIONAL { ?constituencyGroup parl:constituencyGroupStartDate ?constituencyGroupStartDate . }
+        OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?constituencyGroupEndDate . }
     	  OPTIONAL {
           ?houseSeat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
           FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
