@@ -71,7 +71,9 @@ class HousesController < ApplicationController
     house_id = params[:house_id]
     party_id = params[:party_id]
     query = HouseQueryObject.party(house_id, party_id)
+    count_query = HouseQueryObject.count_party_members_current(house_id, party_id)
     response_streamer(query)
+    response_streamer(count_query)
   end
 
   def party_members

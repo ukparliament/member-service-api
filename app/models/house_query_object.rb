@@ -443,6 +443,40 @@ class HouseQueryObject
       }"
   end
 
+  def self.count_party_members_current(house_id, party_id)
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+         ?party parl:count ?currentMemberCount .
+      }
+      WHERE {
+    	SELECT ?party (COUNT(?currentMember) AS ?currentMemberCount) WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{house_id}> AS ?house)
+          BIND(<#{DATA_URI_PREFIX}/#{party_id}> AS ?party)
+
+          ?house a parl:House .
+          ?party a parl:Party .
+
+          OPTIONAL {
+    	      ?party parl:partyHasPartyMembership ?partyMembership .
+    	      FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+    	      ?partyMembership parl:partyMembershipHasPartyMember ?currentMember .
+    	      ?currentMember parl:memberHasIncumbency ?incumbency .
+    	      FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
+
+            {
+    	          ?incumbency parl:houseIncumbencyHasHouse ?house .
+    	      }
+
+    	      UNION {
+              	?incumbency parl:seatIncumbencyHasHouseSeat ?seat .
+              	?seat parl:houseSeatHasHouse ?house .
+    	      }
+          }
+        }
+        GROUP BY ?party
+      }"
+  end
+
   def self.party_members(house_id, party_id)
     "PREFIX parl: <http://id.ukpds.org/schema/>
      CONSTRUCT {
