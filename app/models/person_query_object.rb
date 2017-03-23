@@ -2,256 +2,521 @@ class PersonQueryObject
   extend QueryObject
 
   def self.all
-    self.uri_builder('
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
         ?person
-          parl:forename ?forename ;
-          parl:surname ?surname ;
+        	a parl:Person ;
+         	parl:personGivenName ?givenName ;
+         	parl:personFamilyName ?familyName ;
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+          <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
       }
       WHERE {
         ?person a parl:Person .
-        OPTIONAL { ?person parl:forename ?forename } .
-        OPTIONAL { ?person parl:surname ?surname } .
-      }'
-    )
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+        OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+        ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
+      }"
+  end
+
+  def self.lookup(source, id)
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+        ?person
+        	a parl:Person .
+      }
+      WHERE {
+        BIND(\"#{id}\" AS ?id)
+        BIND(parl:#{source} AS ?source)
+
+        ?person a parl:Person .
+        ?person ?source ?id .
+      }"
   end
 
   def self.all_by_letter(letter)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
         ?person
-          parl:forename ?forename ;
-          parl:surname ?surname ;
+        	a parl:Person ;
+         	parl:personGivenName ?givenName ;
+         	parl:personFamilyName ?familyName ;
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+          <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
       }
       WHERE {
         ?person a parl:Person .
-        OPTIONAL { ?person parl:forename ?forename } .
-        OPTIONAL { ?person parl:surname ?surname } .
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+        OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+        ?person <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
 
-    	  FILTER regex(str(?surname), \"^#{letter.upcase}\") .
+    	  FILTER regex(str(?listAs), \"^#{letter}\", 'i') .
+      }"
+  end
+
+  def self.a_z_letters
+    'PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+         _:x parl:value ?firstLetter .
       }
-    ")
+      WHERE {
+        SELECT DISTINCT ?firstLetter WHERE {
+	        ?s a parl:Person .
+          ?s <http://example.com/A5EE13ABE03C4D3A8F1A274F57097B6C> ?listAs .
+
+          BIND(ucase(SUBSTR(?listAs, 1, 1)) as ?firstLetter)
+        }
+      }'
   end
 
   def self.find(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      PREFIX schema: <http://schema.org/>
-      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-      CONSTRUCT {
-          ?person
-              parl:dateOfBirth ?dateOfBirth ;
-              parl:forename ?forename ;
-              parl:middleName ?middleName ;
-              parl:surname ?surname ;
-              parl:gender ?gender .
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+     CONSTRUCT {
+        ?person a parl:Person ;
+              parl:personDateOfBirth ?dateOfBirth ;
+              parl:personGivenName ?givenName ;
+              parl:personOtherNames ?otherName ;
+              parl:personFamilyName ?familyName ;
+        	    <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+        	    <http://example.com/D79B0BAC513C4A9A87C9D5AFF1FC632F> ?fullTitle ;
+              parl:partyMemberHasPartyMembership ?partyMembership ;
+              parl:memberHasIncumbency ?incumbency .
+     	  ?contactPoint a parl:ContactPoint ;
+        	  parl:email ?email ;
+        	  parl:phoneNumber ?phoneNumber ;
+    		    parl:contactPointHasPostalAddress ?postalAddress .
+    	  ?postalAddress a parl:PostalAddress ;
+            parl:addressLine1 ?addressLine1 ;
+            parl:addressLine2 ?addressLine2 ;
+            parl:addressLine3 ?addressLine3 ;
+            parl:addressLine4 ?addressLine4 ;
+            parl:addressLine5 ?addressLine5 ;
+            parl:faxNumber ?faxNumber ;
+        	  parl:postCode ?postCode .
+    	  ?constituency a parl:ConstituencyGroup ;
+             parl:constituencyGroupName ?constituencyName .
+    	  ?seatIncumbency a parl:SeatIncumbency ;
+        	  	parl:incumbencyEndDate ?seatIncumbencyEndDate ;
+        	  	parl:incumbencyStartDate ?seatIncumbencyStartDate ;
+				      parl:seatIncumbencyHasHouseSeat ?seat ;
+        		  parl:incumbencyHasContactPoint ?contactPoint .
+    	  ?houseIncumbency a parl:HouseIncumbency ;
+        		parl:incumbencyEndDate ?houseIncumbencyEndDate ;
+        	  parl:incumbencyStartDate ?houseIncumbencyStartDate ;
+        		parl:houseIncumbencyHasHouse ?house1 ;
+        		parl:incumbencyHasContactPoint ?contactPoint .
+        ?seat a parl:HouseSeat ;
+            	parl:houseSeatHasConstituencyGroup ?constituency ;
+            	parl:houseSeatHasHouse ?house2 .
+    		?party a parl:Party ;
+             	parl:partyName ?partyName .
+    		?partyMembership a parl:PartyMembership ;
+        	  	parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        	  	parl:partyMembershipEndDate ?partyMembershipEndDate ;
+				      parl:partyMembershipHasParty ?party .
+    		?house1 a parl:House ;
+            	parl:houseName ?houseName1 .
+        ?house2 a parl:House ;
+            	parl:houseName ?houseName2 .
       }
       WHERE {
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
         ?person a parl:Person .
-        OPTIONAL { ?person parl:forename ?forename } .
-        OPTIONAL { ?person parl:middleName ?middleName } .
-        OPTIONAL { ?person parl:surname ?surname } .
-        OPTIONAL { ?person parl:dateOfBirth ?dateOfBirth } .
-          ?gender rdfs:subClassOf parl:HasGender .
-          ?person a ?gender .
-          FILTER NOT EXISTS { ?gender rdfs:seeAlso schema:GenderType } .
-        FILTER (?person = <#{DATA_URI_PREFIX}/#{id}> )
-      }
-    ")
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personOtherNames ?otherName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	  OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+        OPTIONAL { ?person <http://example.com/D79B0BAC513C4A9A87C9D5AFF1FC632F> ?fullTitle } .
+    	  OPTIONAL {
+    	      ?person parl:memberHasIncumbency ?incumbency .
+            OPTIONAL
+        	    {
+        	      ?incumbency a parl:HouseIncumbency .
+                BIND(?incumbency AS ?houseIncumbency)
+                ?houseIncumbency parl:houseIncumbencyHasHouse ?house1 .
+            	  ?house1 parl:houseName ?houseName1 .
+                ?houseIncumbency parl:incumbencyStartDate ?houseIncumbencyStartDate .
+                OPTIONAL { ?houseIncumbency parl:incumbencyEndDate ?houseIncumbencyEndDate . }
+        	    }
+              OPTIONAL {
+        	      ?incumbency a parl:SeatIncumbency .
+                BIND(?incumbency AS ?seatIncumbency)
+                ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
+            	  ?seat parl:houseSeatHasConstituencyGroup ?constituency .
+    	      	  ?seat parl:houseSeatHasHouse ?house2 .
+            	  ?house2 parl:houseName ?houseName2 .
+            	  ?constituency parl:constituencyGroupName ?constituencyName .
+                ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+                OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
+        	    }
+              OPTIONAL {
+        	        ?incumbency parl:incumbencyHasContactPoint ?contactPoint .
+        	        OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
+        	        OPTIONAL { ?contactPoint parl:email ?email . }
+        	        OPTIONAL {
+        	          ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+				            OPTIONAL { ?postalAddress parl:addressLine1 ?addressLine1 . }
+				            OPTIONAL { ?postalAddress parl:addressLine2 ?addressLine2 . }
+        	    	    OPTIONAL { ?postalAddress parl:addressLine3 ?addressLine3 . }
+        	    	    OPTIONAL { ?postalAddress parl:addressLine4 ?addressLine4 . }
+        	    	    OPTIONAL { ?postalAddress parl:addressLine5 ?addressLine5 . }
+        	    	    OPTIONAL { ?postalAddress parl:faxNumber ?faxNumber . }
+        	    	    OPTIONAL { ?postalAddress parl:postCode ?postCode . }
+        	        }
+    	          }
+            }
+            OPTIONAL {
+    	        ?person parl:partyMemberHasPartyMembership ?partyMembership .
+              ?partyMembership parl:partyMembershipHasParty ?party .
+              ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+              OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+              ?party parl:partyName ?partyName .
+            }
+          }"
   end
 
   def self.constituencies(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-
-      CONSTRUCT {
-    	 ?constituency a parl:Constituency ;
-                       parl:constituencyName ?constituencyName ;
-        		           parl:constituencyStartDate ?constituencyStartDate ;
-        		           parl:constituencyEndDate ?constituencyEndDate .
-    	_:x
-        	parl:sittingEndDate ?sittingEndDate ;
-        	parl:sittingStartDate ?sittingStartDate ;
-       		parl:connect ?constituency ;
-          parl:objectId ?sitting .
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+        ?person a parl:Person ;
+              parl:personGivenName ?givenName ;
+              parl:personFamilyName ?familyName ;
+              <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+    	 ?constituency
+        	  a parl:ConstituencyGroup ;
+            parl:constituencyGroupName ?constituencyName ;
+        	  parl:constituencyGroupStartDate ?constituencyStartDate ;
+        	  parl:constituencyGroupEndDate ?constituencyEndDate .
+    	  ?seat
+        	  a parl:HouseSeat ;
+        	  parl:houseSeatHasConstituencyGroup ?constituency .
+    	  ?seatIncumbency
+            a parl:SeatIncumbency ;
+        	  parl:incumbencyEndDate ?seatIncumbencyEndDate ;
+        	  parl:incumbencyStartDate ?seatIncumbencyStartDate ;
+            parl:seatIncumbencyHasHouseSeat ?seat .
       }
       WHERE {
-    	  ?member parl:personHasSitting ?sitting .
-    	  ?sitting parl:sittingHasSeat ?seat .
-    	  ?seat parl:seatHasConstituency ?constituency .
-        	OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-        	OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        	OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
-        	OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
-		      OPTIONAL { ?constituency parl:constituencyEndDate ?constituencyEndDate . }
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
 
-        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-      }
-    ")
+        ?person a parl:Person .
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	  OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+
+        OPTIONAL {
+    	    ?person parl:memberHasIncumbency ?seatIncumbency .
+        	?seatIncumbency a parl:SeatIncumbency .
+    	    ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasConstituencyGroup ?constituency .
+          OPTIONAL { ?seatIncumbency parl:incumbencyEndDate ?seatIncumbencyEndDate . }
+          ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+          ?constituency parl:constituencyGroupName ?constituencyName .
+          ?constituency parl:constituencyGroupStartDate ?constituencyStartDate .
+		      OPTIONAL { ?constituency parl:constituencyGroupEndDate ?constituencyEndDate . }
+        }
+      }"
   end
 
   def self.current_constituency(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-
-      CONSTRUCT {
-    	 ?constituency a parl:Constituency ;
-                       parl:constituencyName ?constituencyName ;
-        		           parl:constituencyStartDate ?constituencyStartDate .
-    	_:x
-        	parl:sittingStartDate ?sittingStartDate ;
-       		parl:connect ?constituency ;
-          parl:objectId ?sitting .
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+        ?person
+              a parl:Person ;
+              parl:personGivenName ?givenName ;
+              parl:personFamilyName ?familyName ;
+              <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+    	  ?constituency
+        	  a parl:ConstituencyGroup ;
+            parl:constituencyGroupName ?constituencyName ;
+        	  parl:constituencyGroupStartDate ?constituencyStartDate ;
+            parl:constituencyGroupHasHouseSeat ?seat .
+    	  ?seat
+        	  a parl:HouseSeat ;
+        	  parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    	  ?seatIncumbency
+            a parl:SeatIncumbency ;
+        	  parl:incumbencyStartDate ?seatIncumbencyStartDate .
       }
       WHERE {
-    	  ?member parl:personHasSitting ?sitting .
-    	  ?sitting parl:sittingHasSeat ?seat .
-    	  MINUS { ?sitting a parl:PastSitting . }
-    	  ?seat parl:seatHasConstituency ?constituency .
-        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
-        OPTIONAL { ?constituency parl:constituencyName ?constituencyName . }
-        OPTIONAL { ?constituency parl:constituencyStartDate ?constituencyStartDate . }
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
 
-        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-      }
-    ")
+        ?person a parl:Person .
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	  OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+
+        OPTIONAL {
+    	    ?person parl:memberHasIncumbency ?seatIncumbency .
+        	?seatIncumbency a parl:SeatIncumbency .
+    	    FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
+    	    ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?seat .
+    	    ?seat parl:houseSeatHasConstituencyGroup ?constituency .
+          ?seatIncumbency parl:incumbencyStartDate ?seatIncumbencyStartDate .
+          ?constituency parl:constituencyGroupName ?constituencyName .
+          ?constituency parl:constituencyGroupStartDate ?constituencyStartDate .
+        }
+      }"
   end
 
   def self.parties(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-
-      CONSTRUCT {
-        ?party a parl:Party ;
-                 parl:partyName ?partyName .
-    	  _:x
-        	parl:partyMembershipStartDate ?partyMembershipStartDate ;
-        	parl:partyMembershipEndDate ?partyMembershipEndDate ;
-       		parl:connect ?party ;
-          parl:objectId ?partyMembership .
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+    	?person a parl:Person ;
+              parl:personGivenName ?givenName ;
+              parl:personFamilyName ?familyName ;
+              <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+      ?party
+        	  a parl:Party ;
+            parl:partyName ?partyName .
+    	?partyMembership
+            a parl:PartyMembership ;
+        	  parl:partyMembershipStartDate ?partyMembershipStartDate ;
+        	  parl:partyMembershipEndDate ?partyMembershipEndDate ;
+            parl:partyMembershipHasParty ?party .
        }
        WHERE {
-         ?member parl:personHasPartyMembership ?partyMembership .
-         ?partyMembership parl:partyMembershipHasParty ?party .
-         OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-         OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
-         OPTIONAL { ?party parl:partyName ?partyName . }
-         FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-       }
-     ")
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
+
+          ?person a parl:Person .
+          OPTIONAL { ?person parl:personGivenName ?givenName } .
+          OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	    OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+
+          OPTIONAL {
+            ?person parl:partyMemberHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+            OPTIONAL { ?partyMembership parl:partyMembershipEndDate ?partyMembershipEndDate . }
+            ?party parl:partyName ?partyName .
+          }
+       }"
   end
 
   def self.current_party(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+    	?person a parl:Person ;
+              parl:personGivenName ?givenName ;
+              parl:personFamilyName ?familyName ;
+              <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+      ?party
+        	  a parl:Party ;
+            parl:partyName ?partyName ;
+            parl:partyHasPartyMembership ?partyMembership .
+    	?partyMembership
+            a parl:PartyMembership ;
+        	  parl:partyMembershipStartDate ?partyMembershipStartDate .
+       }
+       WHERE {
+          BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
 
-      CONSTRUCT {
-        ?party a parl:Party ;
-                 parl:partyName ?partyName .
-    	_:x
-        	parl:partyMembershipStartDate ?partyMembershipStartDate ;
-       		parl:connect ?party ;
-          parl:objectId ?partyMembership .
-        }
-        WHERE {
-          ?member parl:personHasPartyMembership ?partyMembership .
-    	  ?partyMembership parl:partyMembershipHasParty ?party .
-    		FILTER NOT EXISTS { ?partyMembership a parl:PastThing . }
-        	OPTIONAL { ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate . }
-        	OPTIONAL { ?party parl:partyName ?partyName . }
-          FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-      }
-    ")
+          ?person a parl:Person .
+          OPTIONAL { ?person parl:personGivenName ?givenName } .
+          OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	    OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+
+          OPTIONAL {
+            ?person parl:partyMemberHasPartyMembership ?partyMembership .
+    	      FILTER NOT EXISTS { ?partyMembership a parl:PastPartyMembership . }
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?partyMembership parl:partyMembershipStartDate ?partyMembershipStartDate .
+            ?party parl:partyName ?partyName .
+    	    }
+       }"
   end
 
   def self.contact_points(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
-        ?contactPoint parl:email ?email ;
-        			parl:telephone ?telephone ;
-        			parl:faxNumber ?faxNumber ;
-        			parl:streetAddress ?streetAddress ;
-        			parl:addressLocality ?addressLocality ;
-        			parl:postalCode ?postalCode .
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+        ?person
+          a parl:Person ;
+          parl:personGivenName ?givenName ;
+          parl:personFamilyName ?familyName ;
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+          parl:memberHasIncumbency ?incumbency .
+    	  ?incumbency
+        	a parl:Incumbency ;
+        	parl:incumbencyHasContactPoint ?contactPoint .
+        ?contactPoint
+            a parl:ContactPoint ;
+        	  parl:email ?email ;
+        	  parl:phoneNumber ?phoneNumber ;
+        	  parl:faxNumber ?faxNumber ;
+    		    parl:contactPointHasPostalAddress ?postalAddress .
+    	  ?postalAddress
+        	  a parl:PostalAddress ;
+        	  parl:addressLine1 ?addressLine1 ;
+			      parl:addressLine2 ?addressLine2 ;
+        	  parl:addressLine3 ?addressLine3 ;
+        	  parl:addressLine4 ?addressLine4 ;
+        	  parl:addressLine5 ?addressLine5 ;
+        	  parl:postCode ?postCode .
       }
       WHERE {
-	      ?member parl:personHasSitting ?sitting .
-        ?sitting parl:sittingHasContactPoint ?contactPoint .
-        OPTIONAL{ ?contactPoint parl:email ?email . }
-        OPTIONAL{ ?contactPoint parl:telephone ?telephone . }
-        OPTIONAL{ ?contactPoint parl:faxNumber ?faxNumber . }
-        OPTIONAL{ ?contactPoint parl:streetAddress ?streetAddress . }
-        OPTIONAL{ ?contactPoint parl:addressLocality ?addressLocality . }
-        OPTIONAL{ ?contactPoint parl:postalCode ?postalCode . }
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
 
-        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-      }
-    ")
+        ?person a parl:Person .
+    	  OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	  OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+
+        OPTIONAL {
+        	?person parl:memberHasIncumbency ?incumbency .
+          FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
+	        ?incumbency parl:incumbencyHasContactPoint ?contactPoint .
+          OPTIONAL { ?contactPoint parl:phoneNumber ?phoneNumber . }
+          OPTIONAL { ?contactPoint parl:email ?email . }
+          OPTIONAL { ?contactPoint parl:faxNumber ?faxNumber . }
+
+          OPTIONAL {
+        	    ?contactPoint parl:contactPointHasPostalAddress ?postalAddress .
+				      OPTIONAL { ?postalAddress parl:addressLine1 ?addressLine1 . }
+				      OPTIONAL { ?postalAddress parl:addressLine2 ?addressLine2 . }
+        		  OPTIONAL { ?postalAddress parl:addressLine3 ?addressLine3 . }
+        		  OPTIONAL { ?postalAddress parl:addressLine4 ?addressLine4 . }
+        		  OPTIONAL { ?postalAddress parl:addressLine5 ?addressLine5 . }
+        		  OPTIONAL { ?postalAddress parl:postCode ?postCode . }
+        	}
+        }
+      }"
   end
 
   def self.houses(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-
-      CONSTRUCT {
-    	 ?house a parl:House .
-    	_:x
-        	parl:sittingEndDate ?sittingEndDate ;
-        	parl:sittingStartDate ?sittingStartDate ;
-       		parl:connect ?house ;
-          parl:objectId ?sitting .
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+        ?person
+            a parl:Person ;
+            parl:personGivenName ?givenName ;
+            parl:personFamilyName ?familyName ;
+            <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+    	  ?house1
+            a parl:House ;
+    			  parl:houseName ?houseName1 .
+        ?house2
+            a parl:House ;
+    			  parl:houseName ?houseName2 .
+    	  ?seatIncumbency
+            a parl:Incumbency ;
+        	  parl:incumbencyEndDate ?incumbencyEndDate ;
+        	  parl:incumbencyStartDate ?incumbencyStartDate ;
+            parl:seatIncumbencyHasHouseSeat ?houseSeat .
+    		?houseSeat
+        		a parl:HouseSeat ;
+        		parl:houseSeatHasHouse ?house1 .
+    		?houseIncumbency
+        		a parl:Incumbency ;
+        		parl:incumbencyEndDate ?incumbencyEndDate ;
+        	  parl:incumbencyStartDate ?incumbencyStartDate ;
+        		parl:houseIncumbencyHasHouse ?house2 .
       }
       WHERE {
-    	  ?member parl:personHasSitting ?sitting .
-    	  ?sitting parl:sittingHasSeat ?seat .
-    	  ?seat parl:seatHasHouse ?house .
-        OPTIONAL { ?sitting parl:endDate ?sittingEndDate . }
-        OPTIONAL { ?sitting parl:startDate ?sittingStartDate . }
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
 
+        ?person a parl:Person .
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	  OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
 
-        FILTER(?member=<#{DATA_URI_PREFIX}/#{id}>)
-      }
-    ")
+        OPTIONAL {
+    	     ?person parl:memberHasIncumbency ?incumbency .
+           OPTIONAL { ?incumbency parl:incumbencyEndDate ?incumbencyEndDate . }
+    	     ?incumbency parl:incumbencyStartDate ?incumbencyStartDate .
+
+           OPTIONAL {
+        	   ?incumbency a parl:HouseIncumbency .
+             BIND(?incumbency AS ?houseIncumbency )
+             ?houseIncumbency parl:houseIncumbencyHasHouse ?house2 .
+             ?house2 parl:houseName ?houseName2 .
+        	 }
+            OPTIONAL {
+        	    ?incumbency a parl:SeatIncumbency .
+              BIND(?incumbency AS ?seatIncumbency )
+              ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+            	?houseSeat parl:houseSeatHasConstituencyGroup ?constituency .
+    	      	?houseSeat parl:houseSeatHasHouse ?house1 .
+            	?house1 parl:houseName ?houseName1 .
+            	?constituency parl:constituencyGroupName ?constituencyName .
+        	  }
+        }
+      }"
   end
 
   def self.current_house(id)
-    self.uri_builder("
-          PREFIX parl: <http://id.ukpds.org/schema/>
-          CONSTRUCT{
-          ?house a parl:House .
-          _:x
-            parl:sittingStartDate ?sittingStartDate ;
-            parl:connect ?house ;
-            parl:objectId ?sitting .
-          }
-          WHERE {
-            ?sitting a parl:Sitting .
-          FILTER NOT EXISTS { ?sitting a parl:PastSitting . }
-            ?sitting parl:sittingHasPerson <#{DATA_URI_PREFIX}/#{id}> .
-          ?sitting parl:sittingHasSeat ?seat ;
-              parl:sittingStartDate ?sittingStartDate .
-          ?seat parl:seatHasHouse ?house .
-          }
-        ")
-  end
-
-  def self.sittings(id)
-    self.uri_builder("
-      PREFIX parl: <http://id.ukpds.org/schema/>
-      CONSTRUCT {
-          ?sitting parl:sittingStartDate ?sittingStartDate ;
-        			parl:sittingEndDate ?sittingEndDate .
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+        ?person
+            a parl:Person ;
+            parl:personGivenName ?givenName ;
+            parl:personFamilyName ?familyName ;
+            <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+    	  ?house
+            a parl:House ;
+    			  parl:houseName ?houseName ;
+            parl:houseHasHouseSeat ?houseSeat ;
+            parl:houseHasHouseIncumbency ?houseIncumbency .
+    	  ?seatIncumbency
+            a parl:SeatIncumbency ;
+        	  parl:incumbencyStartDate ?incumbencyStartDate .
+    		?houseSeat
+        		a parl:HouseSeat ;
+        		parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+    		?houseIncumbency
+        		a parl:HouseIncumbency ;
+        	  parl:incumbencyStartDate ?incumbencyStartDate .
       }
       WHERE {
-      	?member parl:personHasSitting ?sitting .
-        OPTIONAL { ?sitting parl:sittingStartDate ?sittingStartDate . }
-        OPTIONAL { ?sitting parl:sittingEndDate ?sittingEndDate . }
+        BIND(<#{DATA_URI_PREFIX}/#{id}> AS ?person)
 
-        FILTER(?member = <#{DATA_URI_PREFIX}/#{id}>)
+        ?person a parl:Person .
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+    	  OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+
+        OPTIONAL {
+    	     ?person parl:memberHasIncumbency ?incumbency .
+           FILTER NOT EXISTS { ?incumbency a parl:PastIncumbency . }
+    	     ?incumbency parl:incumbencyStartDate ?incumbencyStartDate .
+
+           OPTIONAL {
+        	   ?incumbency a parl:HouseIncumbency .
+             BIND(?incumbency AS ?houseIncumbency )
+             ?houseIncumbency parl:houseIncumbencyHasHouse ?house .
+             ?house parl:houseName ?houseName .
+        	 }
+            OPTIONAL {
+        	    ?incumbency a parl:SeatIncumbency .
+              BIND(?incumbency AS ?seatIncumbency )
+              ?seatIncumbency parl:seatIncumbencyHasHouseSeat ?houseSeat .
+            	?houseSeat parl:houseSeatHasConstituencyGroup ?constituency .
+    	      	?houseSeat parl:houseSeatHasHouse ?house .
+            	?house parl:houseName ?houseName .
+            	?constituency parl:constituencyGroupName ?constituencyName .
+        	  }
+        }
+      }"
+  end
+
+  def self.lookup_by_letters(letters)
+    "PREFIX parl: <http://id.ukpds.org/schema/>
+     CONSTRUCT {
+        ?person
+        	a parl:Person ;
+         	parl:personGivenName ?givenName ;
+         	parl:personFamilyName ?familyName ;
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs
       }
-    ")
+      WHERE {
+        ?person a parl:Person .
+        OPTIONAL { ?person parl:personGivenName ?givenName } .
+        OPTIONAL { ?person parl:personFamilyName ?familyName } .
+        OPTIONAL { ?person <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+
+    	  FILTER(regex(str(?displayAs), \"#{letters}\", 'i')) .
+      }"
   end
 end
