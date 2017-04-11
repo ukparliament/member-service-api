@@ -136,8 +136,14 @@ class ConstituencyQueryObject
         	a parl:Person ;
         	parl:personGivenName ?givenName ;
         	parl:personFamilyName ?familyName ;
-          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
-      }
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+          parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership 
+          a parl:PartyMembership ;
+          parl:partyMembershipHasParty ?party .
+        ?party 
+          a parl:Party ;
+          parl:partyName ?partyName ;      }
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
           FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
@@ -150,6 +156,9 @@ class ConstituencyQueryObject
     	      OPTIONAL { ?member parl:personGivenName ?givenName . }
             OPTIONAL { ?member parl:personFamilyName ?familyName . }
             OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+            ?member parl:partyMemberHasPartyMembership ?partyMembership . 
+            ?partyMembership parl:partyMembershipHasParty ?party . 
+            OPTIONAL { ?party parl:partyName ?partyName . } 
           }
       }'
   end
@@ -160,32 +169,41 @@ class ConstituencyQueryObject
           ?constituencyGroup
               a parl:ConstituencyGroup ;
               parl:constituencyGroupName ?name ;
-        	    parl:constituencyGroupHasHouseSeat ?seat .
-    	  ?seat
-        	a parl:HouseSeat ;
-        	parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  ?seatIncumbency
-        	a parl:SeatIncumbency ;
-        	parl:incumbencyHasMember ?member .
-    	  ?member
-        	a parl:Person ;
-        	parl:personGivenName ?givenName ;
-        	parl:personFamilyName ?familyName ;
-          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
-      }
+              parl:constituencyGroupHasHouseSeat ?seat .
+        ?seat
+          a parl:HouseSeat ;
+          parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+        ?seatIncumbency
+          a parl:SeatIncumbency ;
+          parl:incumbencyHasMember ?member .
+        ?member
+          a parl:Person ;
+          parl:personGivenName ?givenName ;
+          parl:personFamilyName ?familyName ;
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+          parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership 
+          a parl:PartyMembership ;
+          parl:partyMembershipHasParty ?party .
+        ?party 
+          a parl:Party ;
+          parl:partyName ?partyName ;      }
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
           FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
           OPTIONAL {
-    	      ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
-    	      ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	      FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
-    	      ?seatIncumbency parl:incumbencyHasMember ?member .
-    	      OPTIONAL { ?member parl:personGivenName ?givenName . }
+            ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
+            ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
+            ?seatIncumbency parl:incumbencyHasMember ?member .
+            OPTIONAL { ?member parl:personGivenName ?givenName . }
             OPTIONAL { ?member parl:personFamilyName ?familyName . }
             OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
-           }
+            ?member parl:partyMemberHasPartyMembership ?partyMembership . 
+            ?partyMembership parl:partyMembershipHasParty ?party . 
+            OPTIONAL { ?party parl:partyName ?partyName . } 
+          }
 
     		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }"
