@@ -3,16 +3,60 @@ class ConstituencyQueryObject
 
   def self.all
     'PREFIX parl: <http://id.ukpds.org/schema/>
-     CONSTRUCT{
-          ?constituencyGroup
-            a parl:ConstituencyGroup ;
-            parl:constituencyGroupName ?name ;
-            parl:constituencyGroupEndDate ?endDate .
+      CONSTRUCT {
+      ?constituencyGroup
+      a parl:ConstituencyGroup ;
+      parl:constituencyGroupName ?name ;
+      parl:constituencyGroupEndDate ?endDate ;
+      parl:constituencyGroupHasHouseSeat ?seat ;
+      parl:constituencyGroupHasConstituencyArea ?constituencyArea .
+      ?constituencyArea
+      a parl:ConstituencyArea ;
+      parl:constituencyAreaLongitude ?longitude ;
+      parl:constituencyAreaLatitude ?latitude .
+      ?seat
+      a parl:HouseSeat ;
+      parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+      ?seatIncumbency
+      a parl:SeatIncumbency ;
+      parl:incumbencyHasMember ?member .
+      ?member
+      a parl:Person;
+      parl:personGivenName ?givenName ;
+      parl:personFamilyName ?familyName ;
+      <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+      parl:partyMemberHasPartyMembership ?partyMembership .
+      ?partyMembership
+      a parl:PartyMembership ;
+      parl:partyMembershipHasParty ?party .
+      ?party
+      a parl:Party ;
+      parl:partyName ?partyName .
       }
-      WHERE {
-      	?constituencyGroup a parl:ConstituencyGroup .
-          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-          OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?endDate . }
+    WHERE {
+    ?constituencyGroup a parl:ConstituencyGroup .
+    OPTIONAL {?constituencyGroup parl:constituencyGroupName ?name . }
+    OPTIONAL {?constituencyGroup parl:constituencyGroupEndDate ?endDate . }
+    OPTIONAL {
+            ?constituencyGroup parl:constituencyGroupHasConstituencyArea ?constituencyArea .
+            ?constituencyArea a parl:ConstituencyArea .
+            OPTIONAL { ?constituencyArea parl:constituencyAreaLatitude ?latitude . }
+            OPTIONAL { ?constituencyArea parl:constituencyAreaLongitude ?longitude . }
+            OPTIONAL { ?constituencyArea parl:constituencyAreaExtent ?polygon . }
+          }
+    OPTIONAL {
+            ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
+            ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            FILTER NOT EXISTS {?seatIncumbency a parl:PastIncumbency . }
+            ?seatIncumbency parl:incumbencyHasMember ?member .
+            OPTIONAL { ?member parl:personGivenName ?givenName . }
+            OPTIONAL { ?member parl:personFamilyName ?familyName . }
+            OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+            ?member parl:partyMemberHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            FILTER NOT EXISTS {?partyMembership a parl:PastPartyMembership . }
+            ?party parl:partyName ?partyName .
+           }
 
       }'
   end
@@ -24,11 +68,41 @@ class ConstituencyQueryObject
               a parl:ConstituencyGroup ;
               parl:constituencyGroupName ?name ;
               parl:constituencyGroupEndDate ?endDate .
+          ?seat
+      		a parl:HouseSeat ;
+            parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+          ?seatIncumbency
+            a parl:SeatIncumbency ;
+            parl:incumbencyHasMember ?member .
+          ?member
+            a parl:Person;
+            parl:personGivenName ?givenName ;
+            parl:personFamilyName ?familyName ;
+            <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+            parl:partyMemberHasPartyMembership ?partyMembership .
+          ?partyMembership
+           a parl:PartyMembership ;
+           parl:partyMembershipHasParty ?party .
+          ?party
+           a parl:Party ;
+           parl:partyName ?partyName .
       }
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
           OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
           OPTIONAL { ?constituencyGroup parl:constituencyGroupEndDate ?endDate . }
+          OPTIONAL {
+            ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
+            ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            OPTIONAL {?seatIncumbency a parl:PastIncumbency . }
+            ?seatIncumbency parl:incumbencyHasMember ?member .
+            OPTIONAL { ?member parl:personGivenName ?givenName . }
+            OPTIONAL { ?member parl:personFamilyName ?familyName . }
+            OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+            ?member parl:partyMemberHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?party parl:partyName ?partyName .
+           }
 
     		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }"
@@ -89,7 +163,12 @@ class ConstituencyQueryObject
           ?member a parl:Person ;
                     parl:personGivenName ?givenName ;
                     parl:personFamilyName ?familyName ;
-                    <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+                    <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+                    parl:partyMemberHasPartyMembership ?partyMembership .
+          ?partyMembership a parl:PartyMembership ;
+                             parl:partyMembershipHasParty ?party .
+          ?party a parl:Party ;
+                   parl:partyName ?partyName .
       }
       WHERE {
           BIND( <#{DATA_URI_PREFIX}/#{id}> AS ?constituencyGroup )
@@ -115,42 +194,55 @@ class ConstituencyQueryObject
             OPTIONAL { ?member parl:personGivenName ?givenName . }
             OPTIONAL { ?member parl:personFamilyName ?familyName . }
             OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+            OPTIONAL { ?member parl:partyMemberHasPartyMembership ?partyMembership .}
+            OPTIONAL {?partyMembership parl:partyMembershipHasParty ?party .}
+            OPTIONAL {?party parl:partyName ?partyName .}
           }
       }"
   end
 
   def self.all_current
     'PREFIX parl: <http://id.ukpds.org/schema/>
-     CONSTRUCT{
-          ?constituencyGroup
-              a parl:ConstituencyGroup ;
-              parl:constituencyGroupName ?name ;
-        	    parl:constituencyGroupHasHouseSeat ?seat .
-    	  ?seat
-        	a parl:HouseSeat ;
-        	parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	  ?seatIncumbency
-        	a parl:SeatIncumbency ;
-        	parl:incumbencyHasMember ?member .
-    	  ?member
-        	a parl:Person ;
-        	parl:personGivenName ?givenName ;
-        	parl:personFamilyName ?familyName ;
-          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
-      }
-      WHERE {
-          ?constituencyGroup a parl:ConstituencyGroup .
-          FILTER NOT EXISTS { ?constituencyGroup a parl:PastConstituencyGroup . }
-          OPTIONAL { ?constituencyGroup parl:constituencyGroupName ?name . }
-          OPTIONAL {
-    	      ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
-    	      ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-    	      FILTER NOT EXISTS { ?seatIncumbency a parl:PastIncumbency . }
-    	      ?seatIncumbency parl:incumbencyHasMember ?member .
-    	      OPTIONAL { ?member parl:personGivenName ?givenName . }
+     CONSTRUCT {
+        ?constituencyGroup
+        a parl:ConstituencyGroup ;
+          parl:constituencyGroupName ?name ;
+          parl:constituencyGroupHasHouseSeat ?seat .
+        ?seat
+        a parl:HouseSeat ;
+        parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+        ?seatIncumbency
+        a parl:SeatIncumbency ;
+        parl:incumbencyHasMember ?member .
+        ?member
+        a parl:Person;
+        parl:personGivenName ?givenName ;
+        parl:personFamilyName ?familyName ;
+        <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+        parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership
+        a parl:PartyMembership ;
+        parl:partyMembershipHasParty ?party .
+        ?party
+        a parl:Party ;
+        parl:partyName ?partyName .
+        }
+        WHERE {
+         ?constituencyGroup a parl:ConstituencyGroup .
+         FILTER NOT EXISTS {?constituencyGroup a parl:PastConstituencyGroup . }
+         OPTIONAL {?constituencyGroup parl:constituencyGroupName ?name . }
+         OPTIONAL {
+            ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
+            ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
+            FILTER NOT EXISTS {?seatIncumbency a parl:PastIncumbency . }
+            ?seatIncumbency parl:incumbencyHasMember ?member .
+            OPTIONAL { ?member parl:personGivenName ?givenName . }
             OPTIONAL { ?member parl:personFamilyName ?familyName . }
             OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
-          }
+            ?member parl:partyMemberHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?party parl:partyName ?partyName .
+           }
       }'
   end
 
@@ -171,7 +263,14 @@ class ConstituencyQueryObject
         	a parl:Person ;
         	parl:personGivenName ?givenName ;
         	parl:personFamilyName ?familyName ;
-          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs .
+          <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs ;
+          parl:partyMemberHasPartyMembership ?partyMembership .
+        ?partyMembership
+          a parl:PartyMembership ;
+          parl:partyMembershipHasParty ?party .
+        ?party
+          a parl:Party ;
+          parl:partyName ?partyName .
       }
       WHERE {
           ?constituencyGroup a parl:ConstituencyGroup .
@@ -185,8 +284,10 @@ class ConstituencyQueryObject
     	      OPTIONAL { ?member parl:personGivenName ?givenName . }
             OPTIONAL { ?member parl:personFamilyName ?familyName . }
             OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
+            ?member parl:partyMemberHasPartyMembership ?partyMembership .
+            ?partyMembership parl:partyMembershipHasParty ?party .
+            ?party parl:partyName ?partyName .
            }
-
     		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }"
   end
