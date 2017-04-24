@@ -8,12 +8,8 @@ class ConstituencyQueryObject
       a parl:ConstituencyGroup ;
       parl:constituencyGroupName ?name ;
       parl:constituencyGroupEndDate ?endDate ;
-      parl:constituencyGroupHasHouseSeat ?seat ;
-      parl:constituencyGroupHasConstituencyArea ?constituencyArea .
-      ?constituencyArea
-      a parl:ConstituencyArea ;
-      parl:constituencyAreaLongitude ?longitude ;
-      parl:constituencyAreaLatitude ?latitude .
+      parl:constituencyGroupStartDate ?startDate ;
+      parl:constituencyGroupHasHouseSeat ?seat .
       ?seat
       a parl:HouseSeat ;
       parl:houseSeatHasSeatIncumbency ?seatIncumbency .
@@ -35,26 +31,19 @@ class ConstituencyQueryObject
       }
     WHERE {
     ?constituencyGroup a parl:ConstituencyGroup .
-    OPTIONAL {?constituencyGroup parl:constituencyGroupName ?name . }
-    OPTIONAL {?constituencyGroup parl:constituencyGroupEndDate ?endDate . }
-    OPTIONAL {
-            ?constituencyGroup parl:constituencyGroupHasConstituencyArea ?constituencyArea .
-            ?constituencyArea a parl:ConstituencyArea .
-            OPTIONAL { ?constituencyArea parl:constituencyAreaLatitude ?latitude . }
-            OPTIONAL { ?constituencyArea parl:constituencyAreaLongitude ?longitude . }
-            OPTIONAL { ?constituencyArea parl:constituencyAreaExtent ?polygon . }
-          }
+    ?constituencyGroup parl:constituencyGroupName ?name .
+    ?constituencyGroup parl:constituencyGroupEndDate ?endDate .
+    ?constituencyGroup parl:constituencyGroupStartDate ?startDate .
     OPTIONAL {
             ?constituencyGroup parl:constituencyGroupHasHouseSeat ?seat .
             ?seat parl:houseSeatHasSeatIncumbency ?seatIncumbency .
-            FILTER NOT EXISTS {?seatIncumbency a parl:PastIncumbency . }
+            ?seatIncumbency a parl:PastIncumbency .
             ?seatIncumbency parl:incumbencyHasMember ?member .
             OPTIONAL { ?member parl:personGivenName ?givenName . }
             OPTIONAL { ?member parl:personFamilyName ?familyName . }
             OPTIONAL { ?member <http://example.com/F31CBD81AD8343898B49DC65743F0BDF> ?displayAs } .
             ?member parl:partyMemberHasPartyMembership ?partyMembership .
             ?partyMembership parl:partyMembershipHasParty ?party .
-            FILTER NOT EXISTS {?partyMembership a parl:PastPartyMembership . }
             ?party parl:partyName ?partyName .
            }
 
@@ -103,7 +92,6 @@ class ConstituencyQueryObject
             ?partyMembership parl:partyMembershipHasParty ?party .
             ?party parl:partyName ?partyName .
            }
-
     		  FILTER regex(str(?name), \"^#{letter}\", 'i') .
       }"
   end
