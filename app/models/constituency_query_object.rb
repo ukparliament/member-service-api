@@ -56,7 +56,8 @@ class ConstituencyQueryObject
           ?constituencyGroup
               a parl:ConstituencyGroup ;
               parl:constituencyGroupName ?name ;
-              parl:constituencyGroupEndDate ?endDate .
+              parl:constituencyGroupEndDate ?endDate ;
+              parl:constituencyGroupHasHouseSeat ?seat .
           ?seat
       		a parl:HouseSeat ;
             parl:houseSeatHasSeatIncumbency ?seatIncumbency .
@@ -447,7 +448,6 @@ class ConstituencyQueryObject
         ?constituency a parl:ConstituencyGroup .
         ?constituency parl:constituencyGroupName ?constituencyName .
         OPTIONAL { ?constituency parl:constituencyGroupEndDate ?endDate . }
-
     	  FILTER(regex(str(?constituencyName), \"#{letters}\", 'i')) .
       }"
   end
