@@ -4,6 +4,8 @@ ARG UKPDS_DATA_ENDPOINT
 
 ENV APP_USER parliament
 
+RUN apt-get update && apt-get -y upgrade
+
 # create user to run app in user space
 RUN set -x \
         && groupadd -g 5000 $APP_USER \
